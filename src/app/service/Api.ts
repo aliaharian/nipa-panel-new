@@ -1,16 +1,16 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { setApiLoading } from "../redux/app/actions";
 import store from "../redux/store";
-import SnackbarUtils from "../utils/SnackbarUtils";
+// import SnackbarUtils from "../utils/SnackbarUtils";
 
 const Api = () => {
   const instance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: process.env.REACT_APP_BASE_URL,
     headers: localStorage.getItem(process.env.REACT_APP_AUTH_STORAGE || "")
       ? {
           "Content-Type": "application/json",
           Accept: "application/json",
-          site: process.env.REACT_APP_SITE_CODE || "",
+          // site: process.env.REACT_APP_SITE_CODE || "",
           authorization:
             "Bearer " +
             localStorage.getItem(process.env.REACT_APP_AUTH_STORAGE || ""),
@@ -18,7 +18,7 @@ const Api = () => {
       : {
           "Content-Type": "application/json",
           Accept: "application/json",
-          site: process.env.REACT_APP_SITE_CODE || "",
+          // site: process.env.REACT_APP_SITE_CODE || "",
         },
   });
 
@@ -47,9 +47,9 @@ const Api = () => {
     function (error) {
       // Do something with response error
 
-      SnackbarUtils.error(
-        error.response.data.message || error.response.data.msg
-      );
+      // SnackbarUtils.error(
+      //   error.response.data.message || error.response.data.msg
+      // );
       store.dispatch(setApiLoading(false));
       return Promise.reject(error);
     }

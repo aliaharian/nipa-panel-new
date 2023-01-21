@@ -6,8 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./app/redux/store";
 import { BrowserRouter } from "react-router-dom";
-import { SnackbarProvider } from "notistack";
-import { SnackbarUtilsConfigurator } from "./app/utils/SnackbarUtils";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,10 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      {/* <SnackbarProvider maxSnack={3}> */}
-        {/* <SnackbarUtilsConfigurator /> */}
         <App />
-      {/* </SnackbarProvider> */}
     </BrowserRouter>
   </Provider>
 );

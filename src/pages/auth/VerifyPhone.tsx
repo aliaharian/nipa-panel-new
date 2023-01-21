@@ -8,22 +8,26 @@ import { sendOtp } from "../../app/redux/users/actions";
 import { useNavigate } from "react-router-dom";
 
 interface initialValues {
-  mobile: string;
+  mobile?: string | null;
+  code: string;
 }
+
 const validationSchema = Yup.object().shape({
   mobile: Yup.string()
     .min(11, "شماره موبایل صحیح نیست")
     .max(11, "شماره موبایل صحیح نیست ")
     .required("شماره موبایل الزامی است"),
 });
-const EnterPhone = () => {
+const VerifyPhone = () => {
   //formik
+  const mobile = useAppSelector((state) => state.users.mobile);
+
   const initialValues: initialValues = {
-    mobile: "",
+    mobile: mobile,
+    code: "",
   };
   const Navigate = useNavigate();
   const Dispatch = useAppDispatch();
-  const mobile = useAppSelector((state) => state.users.mobile);
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -32,15 +36,14 @@ const EnterPhone = () => {
     },
   });
 
-  console.log("mobile", mobile);
   useEffect(() => {
-    mobile && Navigate("/auth/verify", { replace: true });
-  }, [mobile]);
+    !mobile && Navigate("/auth/login", { replace: true });
+  }, []);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <h1 className="text-xl font-bold mb-7">ورود / ثبت نام</h1>
-      <p className="text-text-500">برای ادامه شماره موبایل خود را وارد کنید.</p>
+      <h1 className="text-xl font-bold mb-7">کد تایید را وارد کنید</h1>
+      <p className="text-text-500">کد ۵ رقمی به شماره {mobile} ارسال شد.</p>
 
       <form onSubmit={formik.handleSubmit} className="w-full px-[80px]">
         <div className="mt-7 w-full">
@@ -55,10 +58,9 @@ const EnterPhone = () => {
         </div>
         <div className="mt-20">
           <Button text="تایید و دریافت کد" type="submit" />
-          <Button text="ورود با کلمه عبور" href={"/auth/verify"} simple/>
         </div>
       </form>
     </div>
   );
 };
-export default EnterPhone;
+export default VerifyPhone;

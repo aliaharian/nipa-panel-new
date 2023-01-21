@@ -34,13 +34,7 @@ export interface blogSliceModel {
   blogCategories?: any[];
 }
 export interface usersSliceModel {
-  userInfo?: userModel;
-  rolesList?: roleModel[];
-  countriesList?: countryModel[];
-  usersListResponse?: any;
-  contacts?: contactModel[];
-  dialogs?: any[];
-  messages?: any[];
+  mobile?:string | null;
 }
 export interface usersSliceModel {
   userInfo?: userModel;

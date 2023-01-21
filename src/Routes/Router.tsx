@@ -5,6 +5,7 @@ import {
   PrivateRoute,
   PublicRoute,
 } from "../app/utils/routeUtils";
+import VerifyPhone from "../pages/auth/VerifyPhone";
 
 const MainLayout = React.lazy(
   () => import("../components/templates/MainLayout")
@@ -29,6 +30,7 @@ const Router = (): JSX.Element => {
           <Route element={<AuthLayout />}>
             <Route path="/auth/*" element={<Navigate to="/auth/login" />} />
             <Route path="/auth/login" element={<EnterPhone />} />
+            <Route path="/auth/verify" element={<VerifyPhone />} />
           </Route>
         </Route>
       </Routes>
