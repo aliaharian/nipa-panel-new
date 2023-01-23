@@ -6,6 +6,7 @@ import Button from "../../components/button/Button";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { sendOtp } from "../../app/redux/users/actions";
 import { useNavigate } from "react-router-dom";
+import VerifyText from "../../components/form/VerifyText";
 
 interface initialValues {
   mobile?: string | null;
@@ -17,6 +18,10 @@ const validationSchema = Yup.object().shape({
     .min(11, "شماره موبایل صحیح نیست")
     .max(11, "شماره موبایل صحیح نیست ")
     .required("شماره موبایل الزامی است"),
+    code: Yup.string()
+    .min(5, "کد صحیح نیست")
+    .max(5, "کد صحیح نیست ")
+    .required("کد الزامی است"),
 });
 const VerifyPhone = () => {
   //formik
@@ -47,12 +52,8 @@ const VerifyPhone = () => {
 
       <form onSubmit={formik.handleSubmit} className="w-full px-[80px]">
         <div className="mt-7 w-full">
-          <TextField
-            name="mobile"
-            mask="0999 999 9999"
-            label="شماره موبایل"
-            type="tel"
-            placeholder="شماره همراه خود را وارد نمایید"
+          <VerifyText
+            name="code"
             formik={formik}
           />
         </div>

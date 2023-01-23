@@ -25,8 +25,8 @@ const Button = ({
   return (
     <>
       {href && (
-        <Link to={href}>
-          <a className={classNames}>{text}</a>
+        <Link to={href} className={classNames}>
+          {text}
         </Link>
       )}
       {type && (
