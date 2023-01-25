@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { userFilterModel } from "../../../app/models/user";
 import {
+  confirmCodeFormInitialValues,
   LoginFormInitialValues,
   sendCodeFormInitialValues,
 } from "../../../app/models/auth";
@@ -12,7 +13,16 @@ async function sendOtp(credentials: sendCodeFormInitialValues) {
   });
   return response?.data;
 }
+async function confirmOtp(credentials: confirmCodeFormInitialValues) {
+  console.log('cscscsc', credentials)
+  let response = await Api()?.post("/confirmOtp", {
+    mobile: credentials.mobile,
+    otp: credentials.otp,
+  });
+  return response?.data;
+}
 
 export default {
   sendOtp,
+  confirmOtp,
 };

@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { setApiLoading } from "../redux/app/actions";
 import store from "../redux/store";
+import SnackbarUtils from "../utils/SnackbarUtils";
 // import SnackbarUtils from "../utils/SnackbarUtils";
 
 const Api = () => {
@@ -46,10 +47,24 @@ const Api = () => {
     },
     function (error) {
       // Do something with response error
-
-      // SnackbarUtils.error(
+      // console.warn(
+      //   "qwerty",
       //   error.response.data.message || error.response.data.msg
       // );
+      if (error.response.data.errors) {
+        //map errors object
+        const errors = Object.keys(error.response.data.errors).map((key) => {
+          return error.response.data.errors[key];
+        });
+        //show errors
+        errors.forEach((error) => {
+          SnackbarUtils.error(error);
+        });
+      } else {
+        SnackbarUtils.error(
+          error.response.data.message || error.response.data.msg
+        );
+      }
       store.dispatch(setApiLoading(false));
       return Promise.reject(error);
     }

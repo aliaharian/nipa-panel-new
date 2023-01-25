@@ -10,6 +10,7 @@ import { usersResponseModel } from "../../../app/models/user";
 
 const initialUserState: usersSliceModel = {
   mobile: null,
+  login: null,
 };
 
 const userSlice = createSlice({
@@ -21,6 +22,11 @@ const userSlice = createSlice({
       action: PayloadAction<string | null | undefined>
     ) => {
       state.mobile = action.payload;
+    },
+    setUserLogin: (state, action: PayloadAction<any | null | undefined>) => {
+      state.login = action.payload;
+      // console.log("login", action.payload);
+      localStorage.setItem("nipa_token", action.payload.token || "");
     },
   },
 });

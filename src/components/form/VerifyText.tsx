@@ -64,7 +64,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
     <>
       <div className="flex flex-row-reverse">
         <input
-          className={`w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
+          className={`focus:border-primary-main !outline-none w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
             formik.errors?.[name] && formik.touched?.[name]
               ? "!border-error-primary"
               : ""
@@ -80,7 +80,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
           onChange={handleChange}
         />
         <input
-          className={`w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
+          className={`focus:border-primary-main !outline-none w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
             formik.errors?.[name] && formik.touched?.[name]
               ? "!border-error-primary"
               : ""
@@ -96,7 +96,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
           onChange={handleChange}
         />
         <input
-          className={`w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
+          className={`focus:border-primary-main !outline-none w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
             formik.errors?.[name] && formik.touched?.[name]
               ? "!border-error-primary"
               : ""
@@ -112,7 +112,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
           onChange={handleChange}
         />
         <input
-          className={`w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
+          className={`focus:border-primary-main !outline-none w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
             formik.errors?.[name] && formik.touched?.[name]
               ? "!border-error-primary"
               : ""
@@ -128,7 +128,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
           onChange={handleChange}
         />
         <input
-          className={`w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
+          className={`focus:border-primary-main !outline-none w-12 h-12 border border-text-400 rounded-[8px] flex items-center justify-center outline-none text-center mx-2 ${
             formik.errors?.[name] && formik.touched?.[name]
               ? "!border-error-primary"
               : ""

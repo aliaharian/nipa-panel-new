@@ -3,20 +3,21 @@ module.exports = {
   content: ["./src/**/*.{html,js,ts,tsx}"],
   theme: {
     extend: {
-      boxShadow:{
+      boxShadow: {
         "outline-primary": "0 0 6px 0 rgba(7, 7, 7, 0.12)",
-      }
+      },
     },
     colors: {
       white: "#FFFFFF",
-      transparent:"transparent",
+      transparent: "transparent",
       primary: {
         main: "#5079b8",
-        100:"#f7fafd",
+        100: "#f7fafd",
         200: "#D3DEED",
         300: "#92abd3",
         400: "#395A8D",
         500: "#263C5E",
+        nav: "rgba(47, 98, 176, 0.1)",
       },
       secondary: {
         main: "#F9BE57",
@@ -54,5 +55,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant("svg", "& svg");
+    },
+  ],
 };

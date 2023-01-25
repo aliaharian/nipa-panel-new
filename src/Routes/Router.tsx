@@ -5,7 +5,6 @@ import {
   PrivateRoute,
   PublicRoute,
 } from "../app/utils/routeUtils";
-import VerifyPhone from "../pages/auth/VerifyPhone";
 
 const MainLayout = React.lazy(
   () => import("../components/templates/MainLayout")
@@ -14,6 +13,10 @@ const AuthLayout = React.lazy(
   () => import("../components/templates/AuthLayout")
 );
 const EnterPhone = React.lazy(() => import("../pages/auth/EnterPhone"));
+const VerifyPhone = React.lazy(() => import("../pages/auth/VerifyPhone"));
+
+const Dashboard = React.lazy(() => import("../pages/Dashboard"));
+const Orders = React.lazy(() => import("../pages/Orders"));
 
 const Router = (): JSX.Element => {
   return (
@@ -21,6 +24,10 @@ const Router = (): JSX.Element => {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
+            <Route path="/dashboard" element={<Navigate to="/" />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/orders" element={<Orders />} />
+
             {/* <Route path="/" element={<ChatList />} /> */}
             {/* <Route path="/dialog/:peerId" element={<Dialog />} /> */}
           </Route>

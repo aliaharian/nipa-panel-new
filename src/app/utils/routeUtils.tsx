@@ -4,10 +4,10 @@ import { middlewareModel } from "../models/router";
 import store from "../redux/store";
 
 export const PrivateRoute = () => {
+  const token = localStorage.getItem("nipa_token" || "");
 
-  const auth = 1
   // console.log("auth", auth);
-  if (auth) {
+  if (token) {
     return <Outlet />;
   } else {
     return <Navigate to="/auth/login" />;
@@ -15,17 +15,17 @@ export const PrivateRoute = () => {
 };
 
 export const PublicRoute = () => {
-  // const token = localStorage.getItem(process.env.REACT_APP_AUTH_STORAGE || "");
+  const token = localStorage.getItem("nipa_token" || "");
   // const userInfoState = store.getState().users.userInfo;
   // const userInfoStorage = localStorage.getItem(
   //   process.env.REACT_APP_USER_STORAGE || ""
   // );
 
-  // if (!token || (!userInfoState && !userInfoStorage)) {
+  if (!token) {
     return <Outlet />;
-  // } else {
-  //   return <Navigate to="/dashboard" />;
-  // }
+  } else {
+    return <Navigate to="/dashboard" />;
+  }
 };
 
 export const MiddlewareRoute = ({ permission }: middlewareModel) => {

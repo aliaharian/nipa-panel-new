@@ -10,18 +10,66 @@ export const SnackbarUtilsConfigurator: React.FC = () => {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   success(msg: string) {
-    this.toast(msg, "success");
+    this.toast(msg, {
+      variant: "success",
+      className:
+        "!bg-white border border-success-secondary !rounded-[12px] !shadow-none !text-text-800 [&>div>svg]:text-success-primary !w-[400px] !h-[65px]",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+      onClose: () => {
+        console.log("dsvdvd");
+      },
+      // persist: true,
+    });
   },
   warning(msg: string) {
-    this.toast(msg, "warning");
+    this.toast(msg, {
+      variant: "warning",
+      className:
+        "!bg-white border border-warning-secondary !rounded-[12px] !shadow-none !text-text-800 [&>div>svg]:text-warning-primary !w-[400px] !h-[65px]",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+      onClose: () => {
+        console.log("dsvdvd");
+      },
+      // persist: true,
+    });
   },
   info(msg: string) {
-    this.toast(msg, "info");
+    this.toast(msg, {
+      variant: "info",
+      className:
+        "!bg-white border border-info-secondary !rounded-[12px] !shadow-none !text-text-800 [&>div>svg]:text-info-primary !w-[400px] !h-[65px]",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+      onClose: () => {
+        console.log("dsvdvd");
+      },
+      // persist: true,
+    });
   },
   error(msg: string) {
-    this.toast(msg, "error");
+    this.toast(msg, {
+      variant: "error",
+      className:
+        "!bg-white border border-error-secondary !rounded-[12px] !shadow-none !text-text-800 [&>div>svg]:text-error-primary !w-[400px] !h-[65px]",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+      onClose: () => {
+        console.log("dsvdvd");
+      },
+      // persist: true,
+    });
   },
-  toast(msg: string, variant: VariantType = "default") {
-    useSnackbarRef.enqueueSnackbar(msg, { variant });
+  toast(msg: string, variant: any) {
+    useSnackbarRef.enqueueSnackbar(msg, variant);
   },
 };

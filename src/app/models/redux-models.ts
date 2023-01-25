@@ -35,6 +35,7 @@ export interface blogSliceModel {
 }
 export interface usersSliceModel {
   mobile?:string | null;
+  login?:any | null;
 }
 export interface usersSliceModel {
   userInfo?: userModel;
