@@ -9,6 +9,7 @@ import {
   Wallet,
 } from "iconsax-react";
 import { useLocation } from "react-router-dom";
+import { useAppSelector } from "../../app/redux/hooks";
 import Logo from "../logo/Logo";
 import NavItem from "./NavItem";
 
@@ -17,6 +18,7 @@ const Sidebar = () => {
 
   //current route
   const { pathname } = useLocation();
+  const collapseMenu = useAppSelector((state) => state.app.collapseMenu);
   const menus = [
     {
       icon: <Category2 variant={pathname === "/" ? "Bold" : "Linear"} />,
@@ -65,7 +67,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex flex-col w-[280px] h-screen bg-white ">
+    <div className={`flex flex-col ${collapseMenu?"w-[60px]":"w-[280px]"} h-screen bg-white`}>
       <div className="flex flex-col flex-1 h-0">
         <div className="flex items-center justify-center h-[80px] px-4 bg-gray-800">
           <Logo />

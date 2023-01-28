@@ -1,10 +1,18 @@
 import { ArrowDown, ArrowDown2, ArrowRight, Notification } from "iconsax-react";
+import { setCollapseMenu } from "../../app/redux/app/actions";
+import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 
 const Header = () => {
+  const Dispatch = useAppDispatch();
+  const collapseMenu = useAppSelector((state) => state.app.collapseMenu);
+  const handleCollapseMenu = () => {
+    console.log("collapse menu");
+    Dispatch(setCollapseMenu(!collapseMenu));
+  };
   return (
     <div className="w-full h-[80px] bg-white flex items-center justify-between pl-[36px]">
       <div>
-        <ArrowRight />
+        <ArrowRight onClick={handleCollapseMenu} />
       </div>
       <div className="flex">
         <div className="p-[20px] ml-[20px]">

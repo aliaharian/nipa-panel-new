@@ -13,4 +13,12 @@ export const setApiLoading = (
   };
 };
 
+export const setCollapseMenu = (
+  open: boolean
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch, getState) => {
+    dispatch(appActions.setCollapseMenu(open));
+  };
+};
+
 

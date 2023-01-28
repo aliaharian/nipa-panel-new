@@ -45,6 +45,7 @@ export interface usersSliceModel {
 }
 export interface appSliceModel {
   apiLoading: boolean;
+  collapseMenu: boolean;
 }
 export interface socketSliceModel {
   ws: WebSocket | null;

@@ -1,8 +1,12 @@
-import { Add, More, Setting4 } from "iconsax-react";
+import { Add, Edit, More, ProfileDelete, Setting4 } from "iconsax-react";
+import { useRef } from "react";
 import DataTable, { Direction } from "react-data-table-component";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import Button from "../components/button/Button";
+import MenuButton from "../components/button/MenuButton";
+import IconMenu from "../components/menu/IconMenu";
 import Table from "../components/table/Table";
+import TableAction from "../components/table/TableAction";
 
 const Orders = () => {
   const columns = [
@@ -42,10 +46,8 @@ const Orders = () => {
     {
       allowOverflow: true,
       button: true,
-      width: "92px",
-      cell: (row: any) => (
-        <Button after icon={<More className="rotate-90"/>} text="عملیات" href={"/auth/verify"} bordered sm />
-      ),
+      width: "120px",
+      cell: (row: any) => <TableAction row={row} />,
     },
   ];
 
@@ -76,7 +78,7 @@ const Orders = () => {
               />
             </div>
             <div className="w-[186px] mr-[16px]">
-              <Button icon={<Add />} text="تایید و دریافت کد" href="submit" />
+              <Button icon={<Add />} text="ثبت سفارش جدید" href="submit" />
             </div>
           </>
         }

@@ -1,4 +1,5 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import appSlice from "./app/slice";
 
 import userSlice from "./users/slice";
 const customizedMiddleware = getDefaultMiddleware({
@@ -7,6 +8,7 @@ const customizedMiddleware = getDefaultMiddleware({
 const store = configureStore({
   reducer: {
     users: userSlice.reducer,
+    app : appSlice.reducer
   },
   middleware: customizedMiddleware,
 });
