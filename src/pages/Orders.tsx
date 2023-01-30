@@ -1,6 +1,8 @@
 import { Add, Edit, More, ProfileDelete, Setting4 } from "iconsax-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import DataTable, { Direction } from "react-data-table-component";
+import { useAppDispatch, useAppSelector } from "../app/redux/hooks";
+import { ordersList } from "../app/redux/orders/actions";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import Button from "../components/button/Button";
 import MenuButton from "../components/button/MenuButton";
@@ -9,60 +11,85 @@ import Table from "../components/table/Table";
 import TableAction from "../components/table/TableAction";
 
 const Orders = () => {
-  const columns = [
-    {
-      name: "کد سفارش",
-      selector: (row: any) => row.title,
-      sortable: true,
-    },
-    {
-      name: "تاریخ ثبت",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "نام مشتری",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "نام دریافت کننده",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "مدل",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "رنگ",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "مساحت",
-      selector: (row: any) => row.year,
-    },
-    {
-      name: "وضعیت",
-      selector: (row: any) => row.year,
-    },
-    {
-      allowOverflow: true,
-      button: true,
-      width: "120px",
-      cell: (row: any) => <TableAction row={row} />,
-    },
-  ];
+  const data = useAppSelector((state) => state.orders.orders);
+  const [columns, setColumns] = useState<any[]>([]);
+  // let columns: any = [
+  //   {
+  //     name: "کد سفارش",
+  //     selector: (row: any) => row.id,
+  //     sortable: true,
+  //   },
+  //   {
+  //     name: "تاریخ ثبت",
+  //     selector: (row: any) => row.jalali_date,
+  //   },
+  //   {
+  //     name: "نام مشتری",
+  //     selector: (row: any) => row.user.name + " " + row.user.last_name,
+  //   },
+  //   {
+  //     name: "نام دریافت کننده",
+  //     selector: (row: any) => row.customer_name,
+  //   },
+  // ];
+  // const data:any = [];
 
-  const data = [
-    {
-      id: 1,
-      title: "Beetlejuice",
-      year: "1988",
-    },
-    {
-      id: 2,
-      title: "Ghostbusters",
-      year: "1984",
-    },
-  ];
+  const Dispatch = useAppDispatch();
+  useEffect(() => {
+    Dispatch(ordersList());
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      let colTmp: any[] = [
+        {
+          name: "کد سفارش",
+          selector: (row: any) => row.id,
+          sortable: true,
+        },
+        {
+          name: "تاریخ ثبت",
+          selector: (row: any) => row.jalali_date,
+        },
+        {
+          name: "نام مشتری",
+          selector: (row: any) => row.user.name + " " + row.user.last_name,
+        },
+        {
+          name: "نام دریافت کننده",
+          selector: (row: any) => row.customer_name,
+        },
+      ];
+      //append cols to columns
+      data.cols.map((col: any) => {
+        colTmp.push({
+          name: col.field_label,
+          selector: (row: any) =>
+            row.additional_data?.find(
+              (item: any) => item.fild_name === col.fild_name
+            )?.field_value?.label ||
+            row.additional_data?.find(
+              (item: any) => item.fild_name === col.fild_name
+            )?.field_value || <div className="bg-error-secondary">ندارد</div>,
+        });
+      });
+      colTmp.push({
+        name: "وضعیت",
+        selector: (row: any) => row.year,
+      });
+      colTmp.push({
+        allowOverflow: true,
+        button: true,
+        width: "120px",
+        cell: (row: any) => <TableAction row={row} />,
+      });
+
+      setColumns([...colTmp]);
+
+      console.log("data.orders", data.cols);
+    }
+  }, [data]);
+
   return (
     <div className="w-full h-full">
       <Breadcrumb
@@ -85,7 +112,7 @@ const Orders = () => {
         title="سفارشات"
       />
       <div>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data?.orders} />
       </div>
     </div>
   );

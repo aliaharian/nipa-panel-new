@@ -64,6 +64,7 @@ export default function IconMenu({
             },
           }}
           onClick={item.onClick}
+          key={index}
         >
           <ListItemIcon>{item.icon}</ListItemIcon>
           <ListItemText>{item.text}</ListItemText>

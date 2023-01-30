@@ -7,14 +7,12 @@ import SnackbarUtils from "../utils/SnackbarUtils";
 const Api = () => {
   const instance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    headers: localStorage.getItem(process.env.REACT_APP_AUTH_STORAGE || "")
+    headers: localStorage.getItem("nipa_token")
       ? {
           "Content-Type": "application/json",
           Accept: "application/json",
           // site: process.env.REACT_APP_SITE_CODE || "",
-          authorization:
-            "Bearer " +
-            localStorage.getItem(process.env.REACT_APP_AUTH_STORAGE || ""),
+          authorization: "Bearer " + localStorage.getItem("nipa_token"),
         }
       : {
           "Content-Type": "application/json",
