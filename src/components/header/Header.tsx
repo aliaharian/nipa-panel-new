@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <div className="w-full h-[80px] bg-white flex items-center justify-between pl-[36px]">
       <div>
-        <ArrowRight onClick={handleCollapseMenu} />
+        <ArrowRight onClick={handleCollapseMenu} className={`${collapseMenu && "rotate-180"}`}/>
       </div>
       <div className="flex">
         <div className="p-[20px] ml-[20px]">

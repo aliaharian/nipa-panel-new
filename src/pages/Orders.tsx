@@ -1,18 +1,25 @@
-import { Add, Edit, More, ProfileDelete, Setting4 } from "iconsax-react";
-import { useEffect, useRef, useState } from "react";
-import DataTable, { Direction } from "react-data-table-component";
+import { Add, Setting4 } from "iconsax-react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/redux/hooks";
 import { ordersList } from "../app/redux/orders/actions";
 import Breadcrumb from "../components/breadcrumb/Breadcrumb";
 import Button from "../components/button/Button";
-import MenuButton from "../components/button/MenuButton";
-import IconMenu from "../components/menu/IconMenu";
+import OrderFiltersDialog from "../components/orders/OrderFiltersDialog";
+import SideDialog from "../components/sideDialog/SideDialog";
 import Table from "../components/table/Table";
 import TableAction from "../components/table/TableAction";
 
 const Orders = () => {
   const data = useAppSelector((state) => state.orders.orders);
   const [columns, setColumns] = useState<any[]>([]);
+  const arr1 = [1, 2, 3, 4];
+  const arr2 = ["a", "b", "c", "d"];
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const zipped: [number | string, number | string][] = [
+    [1, "a"],
+    [2, "b"],
+    [3, "c"],
+  ];
   // let columns: any = [
   //   {
   //     name: "کد سفارش",
@@ -89,9 +96,40 @@ const Orders = () => {
       console.log("data.orders", data.cols);
     }
   }, [data]);
+  const zipArray = () => {
+    let zipped = arr1.map((k, i) => [k, arr2[i]]);
+    console.log("zipped", zipped);
+  };
+  let array1: [number | string];
+  let array2: [number | string];
+  const unzipArray = () => {
+    //unzip zipped array to two arrays
+    //  [
+    //   [1, "a"],
+    //   [2, "b"],
+    //   [3, "c"],
+    // ];
+
+    let a = zipped.reduce((acc, val) => {
+      console.log("acc", acc);
+      console.log("val", val);
+      array1.push(val[0]);
+      array2.push(val[1]);
+      // acc[0].push(val[0]);
+      // acc[1].push(val[1]);
+      return acc;
+    });
+
+    console.log("array1", a);
+    // console.log("unzipped", unzipped);
+  };
 
   return (
     <div className="w-full h-full">
+      <OrderFiltersDialog
+        open={openFilter}
+        handleClose={() => setOpenFilter(false)}
+      />
       <Breadcrumb
         actions={
           <>
@@ -100,7 +138,7 @@ const Orders = () => {
               <Button
                 icon={<Setting4 />}
                 text="فیلتر پیشرفته"
-                href="submit"
+                onClick={() => setOpenFilter(true)}
                 simple
               />
             </div>
@@ -112,6 +150,9 @@ const Orders = () => {
         title="سفارشات"
       />
       <div>
+        {/* <button onClick={zipArray}>zip</button>
+        <button onClick={unzipArray}>unzip</button> */}
+
         <Table columns={columns} data={data?.orders} />
       </div>
     </div>

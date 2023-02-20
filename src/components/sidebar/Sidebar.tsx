@@ -67,7 +67,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className={`flex flex-col ${collapseMenu?"w-[60px]":"w-[280px]"} h-screen bg-white`}>
+    <div
+      className={`flex flex-col ${
+        collapseMenu ? "w-[84px]" : "w-[280px]"
+      } h-screen bg-white`}
+    >
       <div className="flex flex-col flex-1 h-0">
         <div className="flex items-center justify-center h-[80px] px-4 bg-gray-800">
           <Logo />
@@ -76,6 +80,7 @@ const Sidebar = () => {
           {menus.map((menu, index) => (
             <NavItem
               key={index}
+              collapseMenu={collapseMenu}
               route={menu.route}
               icon={menu.icon}
               title={menu.title}
