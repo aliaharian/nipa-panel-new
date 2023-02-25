@@ -76,7 +76,7 @@ const Sidebar = () => {
         <div className="flex items-center justify-center h-[80px] px-4 bg-gray-800">
           <Logo />
         </div>
-        <nav className="flex-1 px-2 py-[13px] pr-0 bg-gray-800">
+        <nav className="flex-1 pl-[20px] py-[13px] pr-0 bg-gray-800">
           {menus.map((menu, index) => (
             <NavItem
               key={index}

@@ -17,6 +17,7 @@ const VerifyPhone = React.lazy(() => import("../pages/auth/VerifyPhone"));
 
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 const Orders = React.lazy(() => import("../pages/Orders"));
+const FormBuilder = React.lazy(() => import("../pages/formBuilder/FormBuilder"));
 
 const Router = (): JSX.Element => {
   return (
@@ -27,6 +28,7 @@ const Router = (): JSX.Element => {
             <Route path="/dashboard" element={<Navigate to="/" />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/formBuilder" element={<FormBuilder />} />
 
             {/* <Route path="/" element={<ChatList />} /> */}
             {/* <Route path="/dialog/:peerId" element={<Dialog />} /> */}
