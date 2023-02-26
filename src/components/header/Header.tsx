@@ -10,7 +10,7 @@ const Header = () => {
     Dispatch(setCollapseMenu(!collapseMenu));
   };
   return (
-    <div className="w-full h-[80px] bg-white flex items-center justify-between pl-[36px]">
+    <div className="w-full h-[80px] bg-white flex items-center justify-between pl-[36px] sticky top-0 z-50">
       <div>
         <ArrowRight onClick={handleCollapseMenu} className={`${collapseMenu && "rotate-180"}`}/>
       </div>

@@ -1,10 +1,13 @@
 import { Add, Setting4 } from "iconsax-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { FormField } from "../../app/models/form";
 import { setCollapseMenu } from "../../app/redux/app/actions";
 import { useAppDispatch } from "../../app/redux/hooks";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Button from "../../components/button/Button";
+import FormBuilderSidebar from "../../components/formBuilder/FormBuilderSidebar";
+import FormContent from "../../components/formBuilder/formContent/FormContent";
 import Tabs from "../../components/tabs/Tabs";
 
 const FormBuilder = () => {
@@ -12,6 +15,22 @@ const FormBuilder = () => {
   useEffect(() => {
     Dispatch(setCollapseMenu(true));
   });
+  const [selectedTab, setSelectedTab] = useState<string>("elements");
+  const handleChangeTab = (value: string): void => {
+    setSelectedTab(value);
+  };
+  const [formElements, setFormElements] = useState<FormField[]>([]);
+  const handleAddElement = (element: string) => {
+    const tmp = {
+      name: "input" + element + (formElements.length + 1).toString(),
+      placeholder: element + (formElements.length + 1).toString(),
+      label: "عنوان فیلد",
+      type: element,
+      required: false,
+      order: 0,
+    };
+    setFormElements([...formElements, tmp]);
+  };
   return (
     <div className="w-full h-full">
       <Breadcrumb
@@ -34,25 +53,17 @@ const FormBuilder = () => {
         title="فرم ساز"
       />
       <div className="w-full flex">
-        <div className="basis-1/4 bg-white p-4 ml-[10px]">
-          <Tabs
-            items={[
-              {
-                label: "المان ها",
-                value: "elements",
-              },
-              {
-                label: "ویرایش المان",
-                value: "editElement",
-              },
-              {
-                label: "شرط های فرم",
-                value: "formConditions",
-              },
-            ]}
+        <FormBuilderSidebar
+          handleChangeTab={handleChangeTab}
+          selectedTab={selectedTab}
+          addElement={handleAddElement}
+        />
+        <div className="basis-3/4 bg-white mr-[10px]">
+          <FormContent
+            formElements={formElements}
+            setFormElements={setFormElements}
           />
         </div>
-        <div className="basis-3/4 bg-white p-4 mr-[10px]">content</div>
       </div>
     </div>
   );

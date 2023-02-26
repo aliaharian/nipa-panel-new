@@ -9,6 +9,8 @@ type TextFieldProps = {
   formik: any;
   mask?: string;
   maskChar?: string;
+  inputActions?: any;
+  className?: string;
 };
 const textField = ({
   name,
@@ -17,21 +19,27 @@ const textField = ({
   type,
   placeholder,
   maskChar,
+  className,
   mask,
+  inputActions,
 }: TextFieldProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
 
   return (
-    <div className="flex flex-col w-full items-start justify-start">
-      <label htmlFor={name} className="text-sm mb-2">
-        {label}
-      </label>
+    <div
+      className={`flex flex-col w-full items-start justify-start ${className}`}
+    >
+      <div className="text-sm mb-2 flex justify-between w-full">
+        <label htmlFor={name}>{label}</label>
+        {inputActions()}
+      </div>
+
       <ReactInputMask
         mask={mask ? mask : ""}
         maskChar={maskChar ? maskChar : " "}
         value={formik.values?.[name]}
         type={type}
-        dir="auto"
+        dir="rtl"
         className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${
           formik.errors?.[name] && formik.touched?.[name]
             ? "!border-error-primary"
