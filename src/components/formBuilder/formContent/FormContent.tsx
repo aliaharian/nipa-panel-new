@@ -1,8 +1,7 @@
-import { CloseCircle, Copy, HambergerMenu } from "iconsax-react";
+import { Copy, HambergerMenu } from "iconsax-react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { FormField } from "../../../app/models/form";
 import TextField from "../../form/TextField";
-import { Draggable } from "react-drag-reorder";
 import { Close } from "@mui/icons-material";
 
 type FormContentProps = {
