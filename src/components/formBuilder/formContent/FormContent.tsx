@@ -34,13 +34,13 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
     return (
       <div className="flex opacity-0 pointer-events-none	group-hover:pointer-events-auto	 group-hover:opacity-100 transition-all ">
         <div
-          onClick={() => handleCopyItem(element)}
+          onClick={() => handleDeleteItem(element)}
           className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
         >
           <Close className="w-[16px] h-[16px] text-error-primary" />
         </div>
         <div
-          onClick={() => handleDeleteItem(element)}
+          onClick={() => handleCopyItem(element)}
           className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-success-primary flex items-center justify-center"
         >
           <Copy className="w-[16px] h-[16px] text-success-primary" />
@@ -49,16 +49,36 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
     );
   };
 
-  const handleCopyItem = (element: FormField) => {};
+  const handleCopyItem = (element: FormField) => {
+    //copy element add add it just after the original element in the array
+    let tmp = [...formElements];
+    const index = tmp.indexOf(element);
+    console.log("item", index);
+
+    if (index > -1) {
+      tmp.splice(index + 1, 0, {
+        ...element,
+        name: element.name + "copy" + Math.floor(Math.random()*100),
+        placeholder: element.placeholder + "copy" + Math.floor(Math.random()*100),
+      });
+      setFormElements(tmp);
+    }
+  };
   const handleDeleteItem = (element: FormField) => {
     let tmp = [...formElements];
-    const index = tmp.indexOf
+    const index = tmp.indexOf(element);
+    console.log("item", index);
+
+    if (index > -1) {
+      tmp.splice(index, 1);
+      setFormElements(tmp);
+    }
   };
 
   const dragItem = useRef<any>();
   const dragOverItem = useRef<any>();
 
-  const dragStart = (e: any, position: any) => { 
+  const dragStart = (e: any, position: any) => {
     dragItem.current = position;
   };
 
@@ -77,7 +97,7 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
   };
   //   console.log('formElements', formElements)
   return (
-    <div className="px-4 py-6 draggable">
+    <div className="px-4 py-6 draggable grid grid-cols-1 gap-9">
       {formElements.map((element, index) => {
         return (
           <div

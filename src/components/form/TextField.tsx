@@ -31,7 +31,7 @@ const textField = ({
     >
       <div className="text-sm mb-2 flex justify-between w-full">
         <label htmlFor={name}>{label}</label>
-        {inputActions()}
+        {inputActions?.()}
       </div>
 
       <ReactInputMask
