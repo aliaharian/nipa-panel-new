@@ -8,7 +8,7 @@ import DropDown from "../../form/Dropdown";
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
   formElements: FormField[];
-  handleSelectField: (formElement: FormField) => void;
+  handleSelectField: (formElement?: FormField) => void;
   lastId: number;
   setLastId: (lastId: number) => void;
   selectedField?: FormField;
@@ -59,6 +59,7 @@ const FormContent = ({
             name={element.name}
             label={element.label}
             type="number"
+            options={element.options}
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
             formik={{
@@ -75,9 +76,10 @@ const FormContent = ({
       <div className="flex opacity-0 pointer-events-none	group-hover:pointer-events-auto	 group-hover:opacity-100 transition-all ">
         <div
           onClick={() => handleDeleteItem(element)}
+          id="deleteItem"
           className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
         >
-          <Close className="w-[16px] h-[16px] text-error-primary" />
+          <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
         </div>
         <div
           onClick={() => handleCopyItem(element)}
@@ -114,6 +116,11 @@ const FormContent = ({
     if (index > -1) {
       tmp.splice(index, 1);
       setFormElements(tmp);
+      if (element.id == selectedField?.id) {
+        // setTimeout(() => {
+        handleSelectField(undefined);
+        // }, 1);
+      }
     }
   };
 
@@ -148,7 +155,9 @@ const FormContent = ({
             onDragEnter={(e) => dragEnter(e, index)}
             onDragEnd={drop}
             key={index}
-            onClick={() => handleSelectField(element)}
+            onClick={(e: any) => {
+              e.target.id !== "deleteItem" && handleSelectField(element);
+            }}
             draggable
             className="flex"
           >

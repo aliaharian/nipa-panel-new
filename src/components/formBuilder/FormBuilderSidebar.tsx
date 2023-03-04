@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { FormField } from "../../app/models/form";
+import { FormField, FormOption } from "../../app/models/form";
 import Tabs from "../tabs/Tabs";
 import FormBuilderEditElementTab from "./editElement/FormBuilderEditElementTab";
 import FormBuilderElementsTab from "./elements/FormBuilderElementsTab";
@@ -11,6 +11,9 @@ type FormBuilderSidebarProps = {
   addElement(element: any): void;
   selectedField?: FormField;
   handleUpdateField: (field: FormField) => void;
+  handleAddOption: (id: number, option: FormOption) => void;
+  handleDeleteOption: (id: number, option: string) => void;
+
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -18,6 +21,8 @@ const FormBuilderSidebar = ({
   addElement,
   selectedField,
   handleUpdateField,
+  handleAddOption,
+  handleDeleteOption
 }: FormBuilderSidebarProps) => {
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
@@ -28,6 +33,8 @@ const FormBuilderSidebar = ({
           <FormBuilderEditElementTab
             handleUpdateField={handleUpdateField}
             selectedField={selectedField}
+            handleAddOption={handleAddOption}
+            handleDeleteOption={handleDeleteOption}
           />
         );
       case "formConditions":

@@ -9,7 +9,7 @@ const Tabs = ({ items, value, handleChange }: TabsProps) => {
       {items.map((item: any,index:number) => (
         <div
         key={index}
-          className="mx-1 cursor-pointer min-w-[70px] max-w-[120px] px-[13px] relative flex items-center justify-center"
+          className="mx-1 cursor-pointer min-w-[70px] max-w-[120px] px-[10px] relative flex items-center justify-center"
           onClick={() => handleChange(item.value)}
         >
           <p

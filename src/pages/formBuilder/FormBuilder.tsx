@@ -1,7 +1,7 @@
 import { Add, Setting4 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FormField } from "../../app/models/form";
+import { FormField, FormOption } from "../../app/models/form";
 import { setCollapseMenu } from "../../app/redux/app/actions";
 import { useAppDispatch } from "../../app/redux/hooks";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
@@ -24,29 +24,72 @@ const FormBuilder = () => {
 
   const [lastId, setLastId] = useState<number>(0);
   const handleAddElement = (element: string) => {
-    const tmp = {
+    let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
       placeholder: element + (lastId + 1).toString(),
       label: "عنوان فیلد",
       type: element,
       required: false,
-      order: 0,
       id: lastId + 1,
     };
+    if (element === "dropDown") {
+      tmp = { ...tmp, options: [] };
+    }
     setFormElements([...formElements, tmp]);
     setLastId(lastId + 1);
   };
-  const handleSelectField = (element: FormField) => {
+  const handleSelectField = (element?: FormField) => {
     console.log(element);
-    setSelectedField(element);
+    if (!element) {
+      console.log("null heah?");
+      setSelectedField(undefined);
+      handleChangeTab("elements");
+    } else {
+      setSelectedField(element);
+      handleChangeTab("editElement");
+    }
   };
   const handleUpdateField = (field: FormField) => {
-    console.log('ij',field)
     let tmp = [...formElements];
     let foundIndex = tmp.findIndex((x) => x.id == field.id);
-    tmp[foundIndex] = { ...field };
-    setFormElements([...tmp]);
-    setSelectedField({...field});
+    if (foundIndex !== -1) {
+      tmp[foundIndex] = { ...field };
+      setFormElements([...tmp]);
+      setSelectedField({ ...field });
+    }
+  };
+  const handleAddOption = (id: number, option: FormOption) => {
+    let tmp = [...formElements];
+    let foundIndex = tmp.findIndex((x) => x.id == id);
+    if (foundIndex !== -1 && tmp[foundIndex].options) {
+      const options = tmp[foundIndex].options || [];
+      tmp[foundIndex] = {
+        ...tmp[foundIndex],
+        options: [...options, option],
+      };
+      setFormElements([...tmp]);
+      setSelectedField({ ...tmp[foundIndex] });
+    }
+  };
+  const handleDeleteOption = (id: number, option: string) => {
+    let tmp = [...formElements];
+    let foundIndex = tmp.findIndex((x) => x.id == id);
+    if (foundIndex !== -1 && tmp[foundIndex].options) {
+      console.log("index is", foundIndex);
+      let options = [...(tmp[foundIndex].options || [])];
+      let optionIndex = options.findIndex((x) => x.value == option);
+      if (optionIndex > -1) {
+        console.log("option index is ", optionIndex);
+        options.splice(optionIndex, 1);
+        tmp[foundIndex] = {
+          ...tmp[foundIndex],
+          options: [...options],
+        };
+
+        setFormElements([...tmp]);
+        setSelectedField({ ...tmp[foundIndex] });
+      }
+    }
   };
   return (
     <div className="w-full h-full">
@@ -76,6 +119,8 @@ const FormBuilder = () => {
           addElement={handleAddElement}
           selectedField={selectedField}
           handleUpdateField={handleUpdateField}
+          handleAddOption={handleAddOption}
+          handleDeleteOption={handleDeleteOption}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent

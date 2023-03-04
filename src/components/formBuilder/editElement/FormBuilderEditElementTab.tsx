@@ -1,14 +1,20 @@
-import { FormField } from "../../../app/models/form";
+import { Add, Edit2, PenTool, Trash } from "iconsax-react";
+import { FormField, FormOption } from "../../../app/models/form";
+import Button from "../../button/Button";
 import TextField from "../../form/TextField";
 
 type FormBuilderEditElementTabProps = {
   selectedField?: FormField;
   handleUpdateField: (field: FormField) => void;
+  handleAddOption: (id: number, option: FormOption) => void;
+  handleDeleteOption: (id: number, option: string) => void;
 };
 
 const FormBuilderEditElementTab = ({
   selectedField,
   handleUpdateField,
+  handleAddOption,
+  handleDeleteOption,
 }: FormBuilderEditElementTabProps) => {
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
@@ -19,6 +25,19 @@ const FormBuilderEditElementTab = ({
         [e.target.name]: e.target.value,
       };
       handleUpdateField({ ...tmp });
+    }
+  };
+  const _handleAddOption = () => {
+    if (selectedField) {
+      handleAddOption(selectedField.id, {
+        label: <p>زن {Math.floor(Math.random() * 1000)}</p>,
+        value: Math.floor(Math.random() * 1000).toString(),
+      });
+    }
+  };
+  const _handleDeleteOption = (option: FormOption) => {
+    if (selectedField) {
+      handleDeleteOption(selectedField.id, option.value);
     }
   };
   return (
@@ -56,7 +75,7 @@ const FormBuilderEditElementTab = ({
               },
             }}
           />
-            <TextField
+          <TextField
             className="group"
             name={"placeholder"}
             label={"متن جایگزین"}
@@ -69,6 +88,39 @@ const FormBuilderEditElementTab = ({
               },
             }}
           />
+
+          {selectedField.options && (
+            <div className="w-full mt-[25px]">
+              {selectedField.options.map((option: FormOption) => (
+                <div className="mb-[10px] h-14 text-[14px] font-semibold flex items-center rounded-[8px] px-[18px] justify-between bg-text-250">
+                  <p>{option.label}</p>
+                  <div className="flex">
+                    <div
+                      onClick={() => _handleDeleteOption(option)}
+                      className="w-[24px] h-[24px] ml-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                    >
+                      <Edit2 className="w-[20px] h-[20px]" />
+                    </div>
+                    <div
+                      onClick={() => _handleDeleteOption(option)}
+                      className="w-[24px] h-[24px] mr-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                    >
+                      <Trash className="w-[20px] h-[20px]" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div className="w-full flex items-center justify-end">
+                <div className="w-[111px] mt-[30px] float-left">
+                  <Button
+                    icon={<Add />}
+                    text="افزودن"
+                    onClick={_handleAddOption}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
