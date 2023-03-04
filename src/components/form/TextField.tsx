@@ -53,7 +53,8 @@ const textField = ({
           formik.handleChange({
             target: {
               name,
-              value: e.target.value.replace(/ /g, ""),
+              value: e.target.value,
+              // value: e.target.value.replace(/ /g, ""),
             },
           });
         }}

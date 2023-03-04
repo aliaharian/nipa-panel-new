@@ -4,4 +4,5 @@ export interface FormField {
   type: string;
   required: boolean;
   label:string;
+  id:number;
 }

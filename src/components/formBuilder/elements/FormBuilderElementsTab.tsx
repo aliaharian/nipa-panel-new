@@ -31,6 +31,12 @@ const FormBuilderElementsTab = ({
           icon={<NumericField />}
           label={"فیلد عددی"}
         />
+        <FormElementItem
+          type="dropDown"
+          onClick={addElement}
+          icon={<NumericField />}
+          label={"دراپ داون"}
+        />
       </div>
     </div>
   );

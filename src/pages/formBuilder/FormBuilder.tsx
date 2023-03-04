@@ -20,16 +20,33 @@ const FormBuilder = () => {
     setSelectedTab(value);
   };
   const [formElements, setFormElements] = useState<FormField[]>([]);
+  const [selectedField, setSelectedField] = useState<FormField>();
+
+  const [lastId, setLastId] = useState<number>(0);
   const handleAddElement = (element: string) => {
     const tmp = {
-      name: "input" + element + (formElements.length + 1).toString(),
-      placeholder: element + (formElements.length + 1).toString(),
+      name: "input" + element + (lastId + 1).toString(),
+      placeholder: element + (lastId + 1).toString(),
       label: "عنوان فیلد",
       type: element,
       required: false,
       order: 0,
+      id: lastId + 1,
     };
     setFormElements([...formElements, tmp]);
+    setLastId(lastId + 1);
+  };
+  const handleSelectField = (element: FormField) => {
+    console.log(element);
+    setSelectedField(element);
+  };
+  const handleUpdateField = (field: FormField) => {
+    console.log('ij',field)
+    let tmp = [...formElements];
+    let foundIndex = tmp.findIndex((x) => x.id == field.id);
+    tmp[foundIndex] = { ...field };
+    setFormElements([...tmp]);
+    setSelectedField({...field});
   };
   return (
     <div className="w-full h-full">
@@ -57,11 +74,17 @@ const FormBuilder = () => {
           handleChangeTab={handleChangeTab}
           selectedTab={selectedTab}
           addElement={handleAddElement}
+          selectedField={selectedField}
+          handleUpdateField={handleUpdateField}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent
+            lastId={lastId}
+            setLastId={setLastId}
             formElements={formElements}
+            selectedField={selectedField}
             setFormElements={setFormElements}
+            handleSelectField={handleSelectField}
           />
         </div>
       </div>

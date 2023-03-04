@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { FormField } from "../../app/models/form";
 import Tabs from "../tabs/Tabs";
 import FormBuilderEditElementTab from "./editElement/FormBuilderEditElementTab";
 import FormBuilderElementsTab from "./elements/FormBuilderElementsTab";
@@ -8,22 +9,31 @@ type FormBuilderSidebarProps = {
   handleChangeTab: (value: string) => void;
   selectedTab: string;
   addElement(element: any): void;
+  selectedField?: FormField;
+  handleUpdateField: (field: FormField) => void;
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
   selectedTab,
-  addElement
+  addElement,
+  selectedField,
+  handleUpdateField,
 }: FormBuilderSidebarProps) => {
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
       case "elements":
-        return <FormBuilderElementsTab addElement={addElement}/>;
+        return <FormBuilderElementsTab addElement={addElement} />;
       case "editElement":
-        return <FormBuilderEditElementTab />;
+        return (
+          <FormBuilderEditElementTab
+            handleUpdateField={handleUpdateField}
+            selectedField={selectedField}
+          />
+        );
       case "formConditions":
         return <FormBuilderConditionsTab />;
       default:
-        return <FormBuilderElementsTab addElement={addElement}/>;
+        return <FormBuilderElementsTab addElement={addElement} />;
     }
   };
   return (

@@ -3,13 +3,25 @@ import { ReactElement, useEffect, useRef, useState } from "react";
 import { FormField } from "../../../app/models/form";
 import TextField from "../../form/TextField";
 import { Close } from "@mui/icons-material";
+import DropDown from "../../form/Dropdown";
 
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
   formElements: FormField[];
+  handleSelectField: (formElement: FormField) => void;
+  lastId: number;
+  setLastId: (lastId: number) => void;
+  selectedField?: FormField;
 };
 
-const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
+const FormContent = ({
+  formElements,
+  setFormElements,
+  handleSelectField,
+  lastId,
+  setLastId,
+  selectedField,
+}: FormContentProps) => {
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
       case "text":
@@ -19,6 +31,34 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
             name={element.name}
             label={element.label}
             type="text"
+            placeholder={element.placeholder}
+            inputActions={() => fieldActions(element)}
+            formik={{
+              handleChange: () => {},
+            }}
+          />
+        );
+      case "number":
+        return (
+          <TextField
+            className="group"
+            name={element.name}
+            label={element.label}
+            type="number"
+            placeholder={element.placeholder}
+            inputActions={() => fieldActions(element)}
+            formik={{
+              handleChange: () => {},
+            }}
+          />
+        );
+      case "dropDown":
+        return (
+          <DropDown
+            className="group"
+            name={element.name}
+            label={element.label}
+            type="number"
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
             formik={{
@@ -58,10 +98,12 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
     if (index > -1) {
       tmp.splice(index + 1, 0, {
         ...element,
-        name: element.name + "copy" + Math.floor(Math.random()*100),
-        placeholder: element.placeholder + "copy" + Math.floor(Math.random()*100),
+        id: lastId + 1,
+        name: element.name + (lastId + 1).toString(),
+        placeholder: element.placeholder + (lastId + 1).toString(),
       });
       setFormElements(tmp);
+      setLastId(lastId + 1);
     }
   };
   const handleDeleteItem = (element: FormField) => {
@@ -95,6 +137,7 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
     dragOverItem.current = null;
     setFormElements(copyListItems);
   };
+
   //   console.log('formElements', formElements)
   return (
     <div className="px-4 py-6 draggable grid grid-cols-1 gap-9">
@@ -105,10 +148,15 @@ const FormContent = ({ formElements, setFormElements }: FormContentProps) => {
             onDragEnter={(e) => dragEnter(e, index)}
             onDragEnd={drop}
             key={index}
+            onClick={() => handleSelectField(element)}
             draggable
             className="flex"
           >
-            <div className="ml-3 cursor-move">
+            <div
+              className={`ml-3 cursor-move ${
+                selectedField?.id === element.id ? "text-primary-main" : ""
+              }`}
+            >
               <HambergerMenu />
             </div>
             {renderElement(element)}
