@@ -3,12 +3,15 @@ import { useState } from "react";
 import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
 import TextField from "../../form/TextField";
-import AddDropdownItemDialog from "../Dialogs/AddDropdownItemDialog";
+import AddDropdownItemDialog, {
+  initialValues,
+} from "../Dialogs/AddDropdownItemDialog";
 
 type FormBuilderEditElementTabProps = {
   selectedField?: FormField;
   handleUpdateField: (field: FormField) => void;
   handleAddOption: (id: number, option: FormOption) => void;
+  handleUpdateOption: (id: number, option: FormOption, index: number) => void;
   handleDeleteOption: (id: number, option: string) => void;
 };
 
@@ -17,10 +20,11 @@ const FormBuilderEditElementTab = ({
   handleUpdateField,
   handleAddOption,
   handleDeleteOption,
+  handleUpdateOption,
 }: FormBuilderEditElementTabProps) => {
   const [openAddDropdownItemDialog, setOpenAddDropdownItemDialog] =
     useState<boolean>(false);
-
+  const [selectedOption, setSelectedOption] = useState<FormOption>();
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
       console.log("eeeee", e);
@@ -32,20 +36,44 @@ const FormBuilderEditElementTab = ({
       handleUpdateField({ ...tmp });
     }
   };
-  const _handleAddOption = () => {
+  const _handleAddOption = (item: initialValues, update?: boolean) => {
     if (selectedField) {
-      handleAddOption(selectedField.id, {
-        label: <p>زن {Math.floor(Math.random() * 1000)}</p>,
-        value: Math.floor(Math.random() * 1000).toString(),
-      });
+      console.log("item", item)
+      if (item.index !== undefined && item.index !== -1) {
+        console.log('sdvsdvsdvdsvosdvinsdoivsdvoisdnvoisdnvsodivnsdoivnsdaovindsav')
+        handleUpdateOption(
+          selectedField.id,
+          {
+            label: <p>{item.fieldName}</p>,
+            value: item.fieldValue.toString(),
+          },
+          item.index
+        );
+      } else {
+        handleAddOption(selectedField.id, {
+          label: <p>{item.fieldName}</p>,
+          value: item.fieldValue.toString(),
+        });
+      }
     }
   };
-  const _handleOpenAddOptionDialog = () => {
+  const _handleOpenAddOptionDialog = (item?: FormOption) => {
+    console.log("ite", item);
+    if (item?.label) {
+      setSelectedOption({
+        index: selectedField?.options?.findIndex(
+          (option) => option.value === item.value
+        ),
+        value: item.value,
+        label: item.label.props.children,
+      });
+    }
     if (selectedField && selectedField?.options) {
       setOpenAddDropdownItemDialog(true);
     }
   };
   const _handleCloseAddOptionDialog = () => {
+    setSelectedOption(undefined);
     setOpenAddDropdownItemDialog(false);
   };
   const _handleDeleteOption = (option: FormOption) => {
@@ -106,30 +134,37 @@ const FormBuilderEditElementTab = ({
               open={openAddDropdownItemDialog}
               handleClose={_handleCloseAddOptionDialog}
               field={selectedField}
+              handleAddOption={_handleAddOption}
+              selectedOption={selectedOption}
             />
           )}
 
           {selectedField.options && (
             <div className="w-full mt-[25px]">
-              {selectedField.options.map((option: FormOption) => (
-                <div className="mb-[10px] h-14 text-[14px] font-semibold flex items-center rounded-[8px] px-[18px] justify-between bg-text-250">
-                  <p>{option.label}</p>
-                  <div className="flex">
-                    <div
-                      onClick={() => _handleDeleteOption(option)}
-                      className="w-[24px] h-[24px] ml-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
-                    >
-                      <Edit2 className="w-[20px] h-[20px]" />
-                    </div>
-                    <div
-                      onClick={() => _handleDeleteOption(option)}
-                      className="w-[24px] h-[24px] mr-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
-                    >
-                      <Trash className="w-[20px] h-[20px]" />
+              {selectedField.options.map(
+                (option: FormOption, index: number) => (
+                  <div
+                    key={index}
+                    className="mb-[10px] h-14 text-[14px] font-semibold flex items-center rounded-[8px] px-[18px] justify-between bg-text-250"
+                  >
+                    <p>{option.label}</p>
+                    <div className="flex">
+                      <div
+                        onClick={() => _handleOpenAddOptionDialog(option)}
+                        className="w-[24px] h-[24px] ml-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                      >
+                        <Edit2 className="w-[20px] h-[20px]" />
+                      </div>
+                      <div
+                        onClick={() => _handleDeleteOption(option)}
+                        className="w-[24px] h-[24px] mr-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                      >
+                        <Trash className="w-[20px] h-[20px]" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
               <div className="w-full flex items-center justify-end">
                 <div className="w-[111px] mt-[30px] float-left">
                   <Button

@@ -12,8 +12,8 @@ interface initialValues {
 }
 const validationSchema = Yup.object().shape({
   mobile: Yup.string()
-    .min(11, "شماره موبایل صحیح نیست")
-    .max(11, "شماره موبایل صحیح نیست ")
+    .min(13, "شماره موبایل صحیح نیست")
+    .max(13, "شماره موبایل صحیح نیست ")
     .required("شماره موبایل الزامی است"),
 });
 const EnterPhone = () => {
@@ -28,7 +28,7 @@ const EnterPhone = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      Dispatch(sendOtp(values));
+      Dispatch(sendOtp({mobile: values.mobile.replaceAll(" ", "")}));
     },
   });
 

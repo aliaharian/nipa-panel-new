@@ -1,4 +1,4 @@
-import { TextBlock } from "iconsax-react";
+import { TextBlock, TickSquare } from "iconsax-react";
 import FormElementItem from "./FormElementItem";
 import { ReactComponent as Frame } from "../../../assets/icons/Frame.svg";
 import { ReactComponent as NumericField } from "../../../assets/icons/NumericField.svg";
@@ -37,6 +37,12 @@ const FormBuilderElementsTab = ({
           onClick={addElement}
           icon={<Dropdown />}
           label={"دراپ داون"}
+        />
+         <FormElementItem
+          type="checkbox"
+          onClick={addElement}
+          icon={<TickSquare />}
+          label={"چند انتخابی"}
         />
       </div>
     </div>

@@ -12,8 +12,8 @@ type FormBuilderSidebarProps = {
   selectedField?: FormField;
   handleUpdateField: (field: FormField) => void;
   handleAddOption: (id: number, option: FormOption) => void;
+  handleUpdateOption: (id: number, option: FormOption, index: number) => void;
   handleDeleteOption: (id: number, option: string) => void;
-
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -22,7 +22,8 @@ const FormBuilderSidebar = ({
   selectedField,
   handleUpdateField,
   handleAddOption,
-  handleDeleteOption
+  handleDeleteOption,
+  handleUpdateOption,
 }: FormBuilderSidebarProps) => {
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
@@ -34,6 +35,7 @@ const FormBuilderSidebar = ({
             handleUpdateField={handleUpdateField}
             selectedField={selectedField}
             handleAddOption={handleAddOption}
+            handleUpdateOption={handleUpdateOption}
             handleDeleteOption={handleDeleteOption}
           />
         );

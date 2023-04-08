@@ -11,6 +11,7 @@ type ButtonProps = {
   icon?: any;
   after?: boolean;
   sm?: boolean;
+  gray?: boolean;
 };
 const Button = ({
   type,
@@ -22,6 +23,7 @@ const Button = ({
   icon,
   after,
   sm,
+  gray,
 }: ButtonProps) => {
   const classNames = `w-full ${
     sm ? "h-[38px]" : "h-12"
@@ -29,7 +31,10 @@ const Button = ({
     bordered
       ? "border border-primary-main bg-transparent text-primary-main"
       : ""
-  } ${simple ? "border-none bg-transparent text-primary-main" : ""}`;
+  }
+   ${simple ? "border-none bg-transparent text-primary-main" : ""}
+   ${gray ? "border-none bg-text-200 text-text-500" : ""}
+  `;
   const handleIcon = () => {
     if (icon) {
       return <div className="inline-block ml-[4px]">{icon}</div>;

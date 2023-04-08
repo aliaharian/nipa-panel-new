@@ -2,26 +2,34 @@ import { Add } from "iconsax-react";
 import SideDialog from "../../sideDialog/SideDialog";
 import TextField from "../../form/TextField";
 import { useFormik } from "formik";
-import { FormField } from "../../../app/models/form";
+import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
+import { useEffect } from "react";
+
+export type initialValues = {
+  index?: number;
+  fieldName: string;
+  fieldValue: string;
+};
 
 type AddDropdownItemDialogProps = {
   open: boolean;
   handleClose?: () => void;
   field: FormField;
+  handleAddOption: (item: initialValues) => void;
+  selectedOption?: FormOption;
 };
-
-type initialValues = {
-  mobile: string;
-};
-
 const AddDropdownItemDialog = ({
   open,
   handleClose,
   field,
+  handleAddOption,
+  selectedOption,
 }: AddDropdownItemDialogProps) => {
   const initialValues: initialValues = {
-    mobile: "",
+    index: selectedOption?.index || -1,
+    fieldName: selectedOption?.label || "",
+    fieldValue: selectedOption?.value || "",
   };
 
   const formik = useFormik({
@@ -29,16 +37,37 @@ const AddDropdownItemDialog = ({
     // validationSchema,
     onSubmit: (values) => {
       console.log("values", values);
+      handleAddOption(values);
+      formik.setFieldValue("fieldName", "");
+      formik.setFieldValue("fieldValue", "");
+      formik.setFieldValue("index", -1);
+      handleClose?.();
     },
   });
+  useEffect(() => {
+    if (selectedOption) {
+      formik.setFieldValue("fieldName", selectedOption.label);
+      formik.setFieldValue("fieldValue", selectedOption.value);
+      formik.setFieldValue("index", selectedOption.index);
+    }
+  }, [selectedOption]);
 
+  const handleSubmitForm = () => {
+    formik.submitForm();
+  };
   console.log("cscscscscscs", field);
+  const _handleClose = () => {
+    handleClose?.();
+    formik.setFieldValue("fieldName", "");
+    formik.setFieldValue("fieldValue", "");
+    formik.setFieldValue("index", -1);
+  };
   return (
     <SideDialog
-      headerText={`افزودن ${field.label}`}
+      headerText={`${selectedOption?"ویرایش":"افزودن"} ${field.label}`}
       headerIcon={<Add />}
       open={open}
-      handleClose={handleClose}
+      handleClose={_handleClose}
     >
       <SideDialog.Content>
         <div className="p-7">
@@ -63,9 +92,13 @@ const AddDropdownItemDialog = ({
         </div>
       </SideDialog.Content>
       <SideDialog.Footer>
-        <div className="mt-20 px-7">
-          <Button text="تایید و دریافت کد" type="submit" />
-          <Button text="ورود با کلمه عبور" href={"/auth/verify"} simple />
+        <div className="mt-20 px-7 flex justify-between items-center py-[25px] border border-text-300">
+          <div className="w-[126px]">
+            <Button text="انصراف" onClick={_handleClose} gray />
+          </div>
+          <div className="w-[182px]">
+            <Button text={`${selectedOption?"ویرایش":"افزودن"} ${field.label}`} onClick={handleSubmitForm} />
+          </div>
         </div>
       </SideDialog.Footer>
     </SideDialog>

@@ -9,6 +9,7 @@ export interface FormField {
 }
 
 export interface FormOption {
+  index?: number;
   label: any;
   value: string;
 }

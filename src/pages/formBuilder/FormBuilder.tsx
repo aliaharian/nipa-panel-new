@@ -23,6 +23,7 @@ const FormBuilder = () => {
   const [selectedField, setSelectedField] = useState<FormField>();
 
   const [lastId, setLastId] = useState<number>(0);
+
   const handleAddElement = (element: string) => {
     let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
@@ -32,7 +33,7 @@ const FormBuilder = () => {
       required: false,
       id: lastId + 1,
     };
-    if (element === "dropDown") {
+    if (element === "dropDown" || element === "checkbox") {
       tmp = { ...tmp, options: [] };
     }
     setFormElements([...formElements, tmp]);
@@ -71,6 +72,25 @@ const FormBuilder = () => {
       setSelectedField({ ...tmp[foundIndex] });
     }
   };
+  const handleUpdateOption = (
+    id: number,
+    option: FormOption,
+    index: number
+  ) => {
+    let tmp = [...formElements];
+    let foundIndex = tmp.findIndex((x) => x.id == id);
+    if (foundIndex !== -1 && tmp[foundIndex].options) {
+      let options = tmp[foundIndex].options || [];
+      options[index] = option;
+      tmp[foundIndex] = {
+        ...tmp[foundIndex],
+        options: [...options],
+      };
+      setFormElements([...tmp]);
+      setSelectedField({ ...tmp[foundIndex] });
+    }
+  };
+
   const handleDeleteOption = (id: number, option: string) => {
     let tmp = [...formElements];
     let foundIndex = tmp.findIndex((x) => x.id == id);
@@ -120,6 +140,7 @@ const FormBuilder = () => {
           selectedField={selectedField}
           handleUpdateField={handleUpdateField}
           handleAddOption={handleAddOption}
+          handleUpdateOption={handleUpdateOption}
           handleDeleteOption={handleDeleteOption}
         />
         <div className="basis-3/4 bg-white mr-[10px]">

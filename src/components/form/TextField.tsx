@@ -47,6 +47,7 @@ const textField = ({
         }`}
         id={name}
         name={name}
+        style={{ direction: type == "tel" ? "ltr" : "rtl" }}
         placeholder={placeholder}
         onChange={(e) => {
           //formik handlechange without mask

@@ -4,6 +4,8 @@ import { FormField } from "../../../app/models/form";
 import TextField from "../../form/TextField";
 import { Close } from "@mui/icons-material";
 import DropDown from "../../form/Dropdown";
+import Checkbox from "../../form/Checkbox";
+import CheckboxGroup from "../../form/CheckboxGroup";
 
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
@@ -59,6 +61,20 @@ const FormContent = ({
             name={element.name}
             label={element.label}
             type="number"
+            options={element.options}
+            placeholder={element.placeholder}
+            inputActions={() => fieldActions(element)}
+            formik={{
+              handleChange: () => {},
+            }}
+          />
+        );
+      case "checkbox":
+        return (
+          <CheckboxGroup
+            className="group"
+            name={element.name}
+            label={element.label}
             options={element.options}
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
