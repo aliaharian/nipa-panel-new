@@ -1,5 +1,5 @@
 import { Add, CloseCircle } from "iconsax-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 type SideDialogProps = {
   open: boolean;
@@ -8,6 +8,15 @@ type SideDialogProps = {
   headerIcon?: any;
   headerText?: string;
 };
+
+const Content = ({ children }: any) => {
+  return <div>{children}</div>;
+};
+
+const Footer = ({ children }: any) => {
+  return <div>{children}</div>;
+};
+
 const SideDialog = ({
   open,
   handleClose,
@@ -27,11 +36,17 @@ const SideDialog = ({
     <div
       id={`dialog${rand}`}
       onClick={_handleClose}
-      className={`w-full h-full absolute bg-black-60 left-0 top-0 z-10 ${
-        !open && "hidden"
+      className={`w-full h-full absolute bg-black-60 left-0 top-0 transition-all ${
+        !open
+          ? "pointer-events-none opacity-0 z-0 delay-300"
+          : "opacity-1 z-[999] delay-200"
       }`}
     >
-      <div className="h-full w-1/2 bg-white">
+      <div
+        className={`h-full w-1/2 bg-white transition-all	${
+          open ? "translate-x-0 delay-300" : "translate-x-[100%] delay-200"
+        }`}
+      >
         {headerText && (
           <div className="flex w-full px-8 py-6 items-center justify-between border-b border-text-300">
             <div className="flex items-center">
@@ -49,10 +64,21 @@ const SideDialog = ({
             </div>
           </div>
         )}
-
-        {children}
+        <div className="flex justify-between w-full flex-col h-[calc(100%-85px)]">
+          {React.Children.map(children, (child) => {
+            if (child.type === Content) {
+              return <Content>{child.props.children}</Content>;
+            } else if (child.type === Footer) {
+              return <Footer>{child.props.children}</Footer>;
+            }
+          })}
+        </div>
       </div>
     </div>
   );
 };
+
+SideDialog.Content = Content;
+SideDialog.Footer = Footer;
+
 export default SideDialog;

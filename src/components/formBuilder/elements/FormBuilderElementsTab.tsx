@@ -2,6 +2,7 @@ import { TextBlock } from "iconsax-react";
 import FormElementItem from "./FormElementItem";
 import { ReactComponent as Frame } from "../../../assets/icons/Frame.svg";
 import { ReactComponent as NumericField } from "../../../assets/icons/NumericField.svg";
+import { ReactComponent as Dropdown } from "../../../assets/icons/Dropdown.svg";
 
 type FormBuilderElementsTabProps = {
   addElement(element: any): void;
@@ -34,7 +35,7 @@ const FormBuilderElementsTab = ({
         <FormElementItem
           type="dropDown"
           onClick={addElement}
-          icon={<NumericField />}
+          icon={<Dropdown />}
           label={"دراپ داون"}
         />
       </div>

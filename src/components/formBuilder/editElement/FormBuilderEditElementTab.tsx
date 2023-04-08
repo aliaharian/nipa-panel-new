@@ -1,7 +1,9 @@
 import { Add, Edit2, PenTool, Trash } from "iconsax-react";
+import { useState } from "react";
 import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
 import TextField from "../../form/TextField";
+import AddDropdownItemDialog from "../Dialogs/AddDropdownItemDialog";
 
 type FormBuilderEditElementTabProps = {
   selectedField?: FormField;
@@ -16,6 +18,9 @@ const FormBuilderEditElementTab = ({
   handleAddOption,
   handleDeleteOption,
 }: FormBuilderEditElementTabProps) => {
+  const [openAddDropdownItemDialog, setOpenAddDropdownItemDialog] =
+    useState<boolean>(false);
+
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
       console.log("eeeee", e);
@@ -34,6 +39,14 @@ const FormBuilderEditElementTab = ({
         value: Math.floor(Math.random() * 1000).toString(),
       });
     }
+  };
+  const _handleOpenAddOptionDialog = () => {
+    if (selectedField && selectedField?.options) {
+      setOpenAddDropdownItemDialog(true);
+    }
+  };
+  const _handleCloseAddOptionDialog = () => {
+    setOpenAddDropdownItemDialog(false);
   };
   const _handleDeleteOption = (option: FormOption) => {
     if (selectedField) {
@@ -88,6 +101,13 @@ const FormBuilderEditElementTab = ({
               },
             }}
           />
+          {selectedField.options && (
+            <AddDropdownItemDialog
+              open={openAddDropdownItemDialog}
+              handleClose={_handleCloseAddOptionDialog}
+              field={selectedField}
+            />
+          )}
 
           {selectedField.options && (
             <div className="w-full mt-[25px]">
@@ -115,7 +135,7 @@ const FormBuilderEditElementTab = ({
                   <Button
                     icon={<Add />}
                     text="افزودن"
-                    onClick={_handleAddOption}
+                    onClick={_handleOpenAddOptionDialog}
                   />
                 </div>
               </div>
