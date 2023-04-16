@@ -5,16 +5,16 @@ type TabsProps = {
 };
 const Tabs = ({ items, value, handleChange }: TabsProps) => {
   return (
-    <div className="mx-auto w-full flex px-3 items-center justify-center border-b mb-[19px] border-text-300">
+    <div className="mx-auto w-full flex px-3 items-center justify-between border-b mb-[19px] border-text-300">
       {items.map((item: any,index:number) => (
         <div
         key={index}
-          className="mx-1 cursor-pointer min-w-[70px] max-w-[120px] px-[10px] relative flex items-center justify-center"
+          className="mx-1 cursor-pointer min-w-[70px] w-1/3 px-[10px] 2xl:px-[6px] relative flex items-center justify-center"
           onClick={() => handleChange(item.value)}
         >
           <p
-            className={`mb-[20px] transition-all text-[14px] leading-[20px] ${
-              item.value === value ? "text-primary-main font-black" : "text-text-500"
+            className={`mb-[20px] transition-all text-[14px] 2xl:text-[12px] leading-[20px] ${
+              item.value === value ? "text-primary-main font-black 2xl:font-semibold" : "text-text-500"
             }`}
           >
             {item.label}

@@ -1,4 +1,4 @@
-import { TextBlock, TickSquare } from "iconsax-react";
+import { ExportCurve, TextBlock, TickSquare } from "iconsax-react";
 import FormElementItem from "./FormElementItem";
 import { ReactComponent as Frame } from "../../../assets/icons/Frame.svg";
 import { ReactComponent as NumericField } from "../../../assets/icons/NumericField.svg";
@@ -31,6 +31,12 @@ const FormBuilderElementsTab = ({
           onClick={addElement}
           icon={<NumericField />}
           label={"فیلد عددی"}
+        />
+            <FormElementItem
+          type="uploadFile"
+          onClick={addElement}
+          icon={<ExportCurve />}
+          label={"آپلود فایل"}
         />
         <FormElementItem
           type="dropDown"

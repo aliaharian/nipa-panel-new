@@ -1,7 +1,7 @@
 import React from "react";
 import ReactInputMask from "react-input-mask";
 
-type TextFieldProps = {
+type UploadFileProps = {
   name: string;
   label: string;
   type?: string;
@@ -12,7 +12,7 @@ type TextFieldProps = {
   inputActions?: any;
   className?: string;
 };
-const TextField = ({
+const UploadFile = ({
   name,
   label,
   formik,
@@ -22,7 +22,7 @@ const TextField = ({
   className,
   mask,
   inputActions,
-}: TextFieldProps) => {
+}: UploadFileProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
 
   return (
@@ -60,6 +60,7 @@ const TextField = ({
           });
         }}
       ></ReactInputMask>
+  
 
       {formik.errors?.[name] && formik.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">
@@ -69,4 +70,4 @@ const TextField = ({
     </div>
   );
 };
-export default TextField;
+export default UploadFile;

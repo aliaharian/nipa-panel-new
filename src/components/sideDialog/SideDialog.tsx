@@ -36,7 +36,7 @@ const SideDialog = ({
     <div
       id={`dialog${rand}`}
       onClick={_handleClose}
-      className={`w-full h-full absolute bg-black-60 left-0 top-0 transition-all ${
+      className={`w-full h-full fixed bg-black-60 left-0 top-0 transition-all ${
         !open
           ? "pointer-events-none opacity-0 z-0 delay-300"
           : "opacity-1 z-[999] delay-200"

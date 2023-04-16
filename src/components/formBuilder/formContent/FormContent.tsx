@@ -6,6 +6,8 @@ import { Close } from "@mui/icons-material";
 import DropDown from "../../form/Dropdown";
 import Checkbox from "../../form/Checkbox";
 import CheckboxGroup from "../../form/CheckboxGroup";
+import TextArea from "../../form/TextArea";
+import UploadFile from "../../form/UploadFile";
 
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
@@ -40,6 +42,18 @@ const FormContent = ({
             }}
           />
         );
+      case "textArea":
+        return (
+          <TextArea
+            className="group"
+            name={element.name}
+            label={element.label}
+            inputActions={() => fieldActions(element)}
+            formik={{
+              handleChange: () => {},
+            }}
+          />
+        );
       case "number":
         return (
           <TextField
@@ -48,6 +62,18 @@ const FormContent = ({
             label={element.label}
             type="number"
             placeholder={element.placeholder}
+            inputActions={() => fieldActions(element)}
+            formik={{
+              handleChange: () => {},
+            }}
+          />
+        );
+      case "uploadFile":
+        return (
+          <UploadFile
+            className="group"
+            name={element.name}
+            label={element.label}
             inputActions={() => fieldActions(element)}
             formik={{
               handleChange: () => {},
