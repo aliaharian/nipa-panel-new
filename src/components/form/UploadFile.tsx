@@ -1,5 +1,6 @@
 import React from "react";
 import ReactInputMask from "react-input-mask";
+import Dropzone from "./Dropzone";
 
 type UploadFileProps = {
   name: string;
@@ -11,6 +12,7 @@ type UploadFileProps = {
   maskChar?: string;
   inputActions?: any;
   className?: string;
+  imageOnly?:boolean;
 };
 const UploadFile = ({
   name,
@@ -22,9 +24,10 @@ const UploadFile = ({
   className,
   mask,
   inputActions,
+  imageOnly
 }: UploadFileProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
-
+console.log('dvdvdvdvd',placeholder)
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
@@ -34,7 +37,7 @@ const UploadFile = ({
         {inputActions?.()}
       </div>
 
-      <ReactInputMask
+      {/* <ReactInputMask
         mask={mask ? mask : ""}
         maskChar={maskChar ? maskChar : " "}
         value={formik.values?.[name]}
@@ -59,8 +62,9 @@ const UploadFile = ({
             },
           });
         }}
-      ></ReactInputMask>
-  
+      ></ReactInputMask> */}
+
+      <Dropzone placeholder={placeholder} imageOnly={imageOnly}/>
 
       {formik.errors?.[name] && formik.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">

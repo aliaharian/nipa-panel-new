@@ -2,6 +2,8 @@ import { Add, Edit2, PenTool, Trash } from "iconsax-react";
 import { useState } from "react";
 import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
+import Switch from "../../form/Switch";
+import SwitchButton from "../../form/SwitchButton";
 import TextField from "../../form/TextField";
 import AddDropdownItemDialog, {
   initialValues,
@@ -13,6 +15,10 @@ type FormBuilderEditElementTabProps = {
   handleAddOption: (id: number, option: FormOption) => void;
   handleUpdateOption: (id: number, option: FormOption, index: number) => void;
   handleDeleteOption: (id: number, option: string) => void;
+  onlyImage: boolean;
+  setOnlyImage: (onlyImage: boolean) => void;
+  required: boolean;
+  setRequired: (required: boolean) => void;
 };
 
 const FormBuilderEditElementTab = ({
@@ -21,10 +27,15 @@ const FormBuilderEditElementTab = ({
   handleAddOption,
   handleDeleteOption,
   handleUpdateOption,
+  onlyImage,
+  setOnlyImage,
+  required,
+  setRequired,
 }: FormBuilderEditElementTabProps) => {
   const [openAddDropdownItemDialog, setOpenAddDropdownItemDialog] =
     useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<FormOption>();
+
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
       console.log("eeeee", e);
@@ -38,9 +49,11 @@ const FormBuilderEditElementTab = ({
   };
   const _handleAddOption = (item: initialValues, update?: boolean) => {
     if (selectedField) {
-      console.log("item", item)
+      console.log("item", item);
       if (item.index !== undefined && item.index !== -1) {
-        console.log('sdvsdvsdvdsvosdvinsdoivsdvoisdnvoisdnvsodivnsdoivnsdaovindsav')
+        console.log(
+          "sdvsdvsdvdsvosdvinsdoivsdvoisdnvoisdnvsodivnsdoivnsdaovindsav"
+        );
         handleUpdateOption(
           selectedField.id,
           {
@@ -129,6 +142,23 @@ const FormBuilderEditElementTab = ({
               },
             }}
           />
+          <div className="w-full mt-[30px]">
+            <Switch
+              checked={required}
+              setChecked={setRequired}
+              label={"این فیلد اجباری می باشد"}
+            />
+          </div>
+          {selectedField.type === "uploadFile" && (
+            <div className="w-full mt-[30px]">
+              <Switch
+                checked={onlyImage}
+                setChecked={setOnlyImage}
+                label={"فقط تصویر"}
+              />
+            </div>
+          )}
+
           {selectedField.options && (
             <AddDropdownItemDialog
               open={openAddDropdownItemDialog}

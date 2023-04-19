@@ -74,6 +74,8 @@ const FormContent = ({
             className="group"
             name={element.name}
             label={element.label}
+            imageOnly={element.onlyImage}
+            placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
             formik={{
               handleChange: () => {},

@@ -36,6 +36,10 @@ const FormBuilder = () => {
     if (element === "dropDown" || element === "checkbox") {
       tmp = { ...tmp, options: [] };
     }
+    if(element==="uploadFile"){
+      tmp = { ...tmp, onlyImage: false };
+
+    }
     setFormElements([...formElements, tmp]);
     setLastId(lastId + 1);
   };
@@ -111,6 +115,43 @@ const FormBuilder = () => {
       }
     }
   };
+
+
+  const setOnlyImage = (value: boolean) => {
+    let tmp = [...formElements];
+
+    let foundIndex = tmp.findIndex((x) => x.id == selectedField?.id);
+
+    if (foundIndex > -1) {
+      tmp[foundIndex] = {
+        ...tmp[foundIndex],
+        onlyImage: value,
+      };
+      setFormElements([...tmp]);
+      setSelectedField({ ...tmp[foundIndex] });
+
+    }
+  };
+
+
+
+  const setRequired = (value: boolean) => {
+    let tmp = [...formElements];
+
+    let foundIndex = tmp.findIndex((x) => x.id == selectedField?.id);
+
+    if (foundIndex > -1) {
+      tmp[foundIndex] = {
+        ...tmp[foundIndex],
+        required: value,
+      };
+      setFormElements([...tmp]);
+      setSelectedField({ ...tmp[foundIndex] });
+
+    }
+  };
+
+
   return (
     <div className="w-full h-full">
       <Breadcrumb
@@ -142,6 +183,8 @@ const FormBuilder = () => {
           handleAddOption={handleAddOption}
           handleUpdateOption={handleUpdateOption}
           handleDeleteOption={handleDeleteOption}
+          setOnlyImage={setOnlyImage}
+          setRequired={setRequired}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent

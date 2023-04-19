@@ -6,6 +6,7 @@ export interface FormField {
   label: string;
   id: number;
   options?: FormOption[];
+  onlyImage?:boolean;
 }
 
 export interface FormOption {

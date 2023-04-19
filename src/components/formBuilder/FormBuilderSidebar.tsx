@@ -14,6 +14,8 @@ type FormBuilderSidebarProps = {
   handleAddOption: (id: number, option: FormOption) => void;
   handleUpdateOption: (id: number, option: FormOption, index: number) => void;
   handleDeleteOption: (id: number, option: string) => void;
+  setOnlyImage: (onlyImage: boolean) => void;
+  setRequired: (required: boolean) => void;
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -24,6 +26,8 @@ const FormBuilderSidebar = ({
   handleAddOption,
   handleDeleteOption,
   handleUpdateOption,
+  setOnlyImage,
+  setRequired,
 }: FormBuilderSidebarProps) => {
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
@@ -37,6 +41,10 @@ const FormBuilderSidebar = ({
             handleAddOption={handleAddOption}
             handleUpdateOption={handleUpdateOption}
             handleDeleteOption={handleDeleteOption}
+            onlyImage={selectedField?.onlyImage || false}
+            setOnlyImage={setOnlyImage}
+            required={selectedField?.required || false}
+            setRequired={setRequired}
           />
         );
       case "formConditions":
