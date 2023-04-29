@@ -16,6 +16,7 @@ type FormContentProps = {
   lastId: number;
   setLastId: (lastId: number) => void;
   selectedField?: FormField;
+  deleteItem: (item: FormField) => void;
 };
 
 const FormContent = ({
@@ -25,6 +26,7 @@ const FormContent = ({
   lastId,
   setLastId,
   selectedField,
+  deleteItem,
 }: FormContentProps) => {
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
@@ -88,7 +90,6 @@ const FormContent = ({
             className="group"
             name={element.name}
             label={element.label}
-            type="number"
             options={element.options}
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
@@ -153,19 +154,7 @@ const FormContent = ({
     }
   };
   const handleDeleteItem = (element: FormField) => {
-    let tmp = [...formElements];
-    const index = tmp.indexOf(element);
-    console.log("item", index);
-
-    if (index > -1) {
-      tmp.splice(index, 1);
-      setFormElements(tmp);
-      if (element.id == selectedField?.id) {
-        // setTimeout(() => {
-        handleSelectField(undefined);
-        // }, 1);
-      }
-    }
+    deleteItem(element);
   };
 
   const dragItem = useRef<any>();

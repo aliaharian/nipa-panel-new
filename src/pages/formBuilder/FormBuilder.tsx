@@ -1,9 +1,10 @@
 import { Add, Setting4 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { FormField, FormOption } from "../../app/models/form";
+import { Condition, FormField, FormOption } from "../../app/models/form";
 import { setCollapseMenu } from "../../app/redux/app/actions";
 import { useAppDispatch } from "../../app/redux/hooks";
+import SnackbarUtils from "../../app/utils/SnackbarUtils";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Button from "../../components/button/Button";
 import FormBuilderSidebar from "../../components/formBuilder/FormBuilderSidebar";
@@ -21,9 +22,10 @@ const FormBuilder = () => {
   };
   const [formElements, setFormElements] = useState<FormField[]>([]);
   const [selectedField, setSelectedField] = useState<FormField>();
-
+  const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
   const [lastId, setLastId] = useState<number>(0);
 
+  console.log("cond", savedConditions);
   const handleAddElement = (element: string) => {
     let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
@@ -36,17 +38,14 @@ const FormBuilder = () => {
     if (element === "dropDown" || element === "checkbox") {
       tmp = { ...tmp, options: [] };
     }
-    if(element==="uploadFile"){
+    if (element === "uploadFile") {
       tmp = { ...tmp, onlyImage: false };
-
     }
     setFormElements([...formElements, tmp]);
     setLastId(lastId + 1);
   };
   const handleSelectField = (element?: FormField) => {
-    console.log(element);
     if (!element) {
-      console.log("null heah?");
       setSelectedField(undefined);
       handleChangeTab("elements");
     } else {
@@ -70,7 +69,10 @@ const FormBuilder = () => {
       const options = tmp[foundIndex].options || [];
       tmp[foundIndex] = {
         ...tmp[foundIndex],
-        options: [...options, option],
+        options: [
+          ...options,
+          { ...option, id: Math.floor(Math.random() * 100) },
+        ],
       };
       setFormElements([...tmp]);
       setSelectedField({ ...tmp[foundIndex] });
@@ -99,11 +101,9 @@ const FormBuilder = () => {
     let tmp = [...formElements];
     let foundIndex = tmp.findIndex((x) => x.id == id);
     if (foundIndex !== -1 && tmp[foundIndex].options) {
-      console.log("index is", foundIndex);
       let options = [...(tmp[foundIndex].options || [])];
       let optionIndex = options.findIndex((x) => x.value == option);
       if (optionIndex > -1) {
-        console.log("option index is ", optionIndex);
         options.splice(optionIndex, 1);
         tmp[foundIndex] = {
           ...tmp[foundIndex],
@@ -115,7 +115,6 @@ const FormBuilder = () => {
       }
     }
   };
-
 
   const setOnlyImage = (value: boolean) => {
     let tmp = [...formElements];
@@ -129,11 +128,8 @@ const FormBuilder = () => {
       };
       setFormElements([...tmp]);
       setSelectedField({ ...tmp[foundIndex] });
-
     }
   };
-
-
 
   const setRequired = (value: boolean) => {
     let tmp = [...formElements];
@@ -147,10 +143,27 @@ const FormBuilder = () => {
       };
       setFormElements([...tmp]);
       setSelectedField({ ...tmp[foundIndex] });
-
     }
   };
-
+  const saveConditions = (conditions: Condition[]) => {
+    setSavedConditions([...conditions.filter((x) => x.saved)]);
+    console.log(conditions.filter((x) => x.saved));
+  };
+  const handleDeleteItem = (element: FormField) => {
+    //add alert for delete
+    let tmp = [...formElements];
+    const index = tmp.indexOf(element);
+    console.log("item", index);
+    if (index > -1) {
+      tmp.splice(index, 1);
+      setFormElements(tmp);
+      if (element.id == selectedField?.id) {
+        // setTimeout(() => {
+        handleSelectField(undefined);
+        // }, 1);
+      }
+    }
+  };
 
   return (
     <div className="w-full h-full">
@@ -185,6 +198,9 @@ const FormBuilder = () => {
           handleDeleteOption={handleDeleteOption}
           setOnlyImage={setOnlyImage}
           setRequired={setRequired}
+          formElements={formElements}
+          saveConditions={saveConditions}
+          savedConditions={savedConditions}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent
@@ -194,6 +210,7 @@ const FormBuilder = () => {
             selectedField={selectedField}
             setFormElements={setFormElements}
             handleSelectField={handleSelectField}
+            deleteItem={handleDeleteItem}
           />
         </div>
       </div>

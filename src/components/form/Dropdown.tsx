@@ -37,6 +37,7 @@ const DropDown = ({
   const handleChange = (e: any) => {
     console.log("eee", e);
     setSelectedOption(e);
+    formik?.handleChange(e);
   };
   return (
     <div
@@ -47,8 +48,9 @@ const DropDown = ({
         {inputActions?.()}
       </div>
       <Select
-        defaultValue={selectedOption}
+        defaultValue={formik.values ? formik.values[name] : selectedOption}
         onChange={handleChange}
+        value={formik.values ? formik.values[name] : selectedOption}
         placeholder={placeholder}
         options={options}
         className="w-full h-12 !outline-none"
@@ -68,6 +70,7 @@ const DropDown = ({
         styles={{
           option: (baseStyles, state) => ({
             "&>p": {
+              cursor: "pointer",
               backgroundColor:
                 state.isFocused || state.isSelected ? "#eef3fa" : "#fff",
               height: 40,

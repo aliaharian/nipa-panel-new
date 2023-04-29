@@ -18,6 +18,14 @@ export default {
         vertical: "bottom",
         horizontal: "right",
       },
+      //close snackbar after 1 second
+      autoHideDuration: 1000,
+      //close on click
+      onClick: () => {
+        //close
+        
+      },
+
       onClose: () => {
         console.log("dsvdvd");
       },
@@ -36,6 +44,8 @@ export default {
       onClose: () => {
         console.log("dsvdvd");
       },
+      autoHideDuration: 1000,
+
       // persist: true,
     });
   },
@@ -51,6 +61,8 @@ export default {
       onClose: () => {
         console.log("dsvdvd");
       },
+      autoHideDuration: 1000,
+
       // persist: true,
     });
   },
@@ -66,6 +78,8 @@ export default {
       onClose: () => {
         console.log("dsvdvd");
       },
+      autoHideDuration: 1000,
+
       // persist: true,
     });
   },

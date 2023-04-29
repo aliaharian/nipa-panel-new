@@ -38,7 +38,6 @@ const FormBuilderEditElementTab = ({
 
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
-      console.log("eeeee", e);
       let tmp: FormField = { ...selectedField };
       tmp = {
         ...tmp,
@@ -49,16 +48,14 @@ const FormBuilderEditElementTab = ({
   };
   const _handleAddOption = (item: initialValues, update?: boolean) => {
     if (selectedField) {
-      console.log("item", item);
       if (item.index !== undefined && item.index !== -1) {
-        console.log(
-          "sdvsdvsdvdsvosdvinsdoivsdvoisdnvoisdnvsodivnsdoivnsdaovindsav"
-        );
+    
         handleUpdateOption(
           selectedField.id,
           {
             label: <p>{item.fieldName}</p>,
             value: item.fieldValue.toString(),
+            id: item.id,
           },
           item.index
         );
@@ -79,6 +76,7 @@ const FormBuilderEditElementTab = ({
         ),
         value: item.value,
         label: item.label.props.children,
+        id: item.id,
       });
     }
     if (selectedField && selectedField?.options) {

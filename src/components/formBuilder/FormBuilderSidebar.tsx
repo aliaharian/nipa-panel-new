@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { FormField, FormOption } from "../../app/models/form";
+import { Condition, FormField, FormOption } from "../../app/models/form";
 import Tabs from "../tabs/Tabs";
 import FormBuilderEditElementTab from "./editElement/FormBuilderEditElementTab";
 import FormBuilderElementsTab from "./elements/FormBuilderElementsTab";
@@ -16,6 +16,9 @@ type FormBuilderSidebarProps = {
   handleDeleteOption: (id: number, option: string) => void;
   setOnlyImage: (onlyImage: boolean) => void;
   setRequired: (required: boolean) => void;
+  formElements: FormField[];
+  saveConditions: (conditions: Condition[]) => void;
+  savedConditions: Condition[];
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -28,7 +31,14 @@ const FormBuilderSidebar = ({
   handleUpdateOption,
   setOnlyImage,
   setRequired,
+  formElements,
+  saveConditions,
+  savedConditions,
 }: FormBuilderSidebarProps) => {
+  const handleSaveConditions = (conditions: Condition[]) => {
+    saveConditions(conditions);
+  };
+
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
       case "elements":
@@ -48,7 +58,14 @@ const FormBuilderSidebar = ({
           />
         );
       case "formConditions":
-        return <FormBuilderConditionsTab />;
+        return (
+          <FormBuilderConditionsTab
+            conditionalfields={formElements.filter((x) => x.options)}
+            formElements={formElements}
+            saveConditions={handleSaveConditions}
+            savedConditions={savedConditions}
+          />
+        );
       default:
         return <FormBuilderElementsTab addElement={addElement} />;
     }

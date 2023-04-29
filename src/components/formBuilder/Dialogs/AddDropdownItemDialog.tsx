@@ -10,6 +10,7 @@ export type initialValues = {
   index?: number;
   fieldName: string;
   fieldValue: string;
+  id?: number;
 };
 
 type AddDropdownItemDialogProps = {
@@ -26,8 +27,10 @@ const AddDropdownItemDialog = ({
   handleAddOption,
   selectedOption,
 }: AddDropdownItemDialogProps) => {
+  console.log("selectedOptionselectedOptionselectedOptionselectedOptionselectedOption", selectedOption);
   const initialValues: initialValues = {
     index: selectedOption?.index || -1,
+    id: selectedOption?.index || 0,
     fieldName: selectedOption?.label || "",
     fieldValue: selectedOption?.value || "",
   };
@@ -49,6 +52,7 @@ const AddDropdownItemDialog = ({
       formik.setFieldValue("fieldName", selectedOption.label);
       formik.setFieldValue("fieldValue", selectedOption.value);
       formik.setFieldValue("index", selectedOption.index);
+      formik.setFieldValue("id", selectedOption.id);
     }
   }, [selectedOption]);
 
@@ -64,7 +68,7 @@ const AddDropdownItemDialog = ({
   };
   return (
     <SideDialog
-      headerText={`${selectedOption?"ویرایش":"افزودن"} ${field.label}`}
+      headerText={`${selectedOption ? "ویرایش" : "افزودن"} ${field.label}`}
       headerIcon={<Add />}
       open={open}
       handleClose={_handleClose}
@@ -97,7 +101,10 @@ const AddDropdownItemDialog = ({
             <Button text="انصراف" onClick={_handleClose} gray />
           </div>
           <div className="w-[182px]">
-            <Button text={`${selectedOption?"ویرایش":"افزودن"} ${field.label}`} onClick={handleSubmitForm} />
+            <Button
+              text={`${selectedOption ? "ویرایش" : "افزودن"} ${field.label}`}
+              onClick={handleSubmitForm}
+            />
           </div>
         </div>
       </SideDialog.Footer>
