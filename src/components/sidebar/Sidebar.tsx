@@ -1,5 +1,6 @@
 import {
   AddSquare,
+  BoxAdd,
   Category2,
   ElementPlus,
   Grid1,
@@ -12,9 +13,11 @@ import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/redux/hooks";
 import Logo from "../logo/Logo";
 import NavItem from "./NavItem";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
   //div tag classnaming with tailwindcss
+  const { t } = useTranslation("nav");
 
   //current route
   const { pathname } = useLocation();
@@ -22,48 +25,48 @@ const Sidebar = () => {
   const menus = [
     {
       icon: <Category2 variant={pathname === "/" ? "Bold" : "Linear"} />,
-      title: "داشبورد",
+      title: t("dashboard"),
       route: "/",
     },
     {
       icon: (
         <ReceiptItem variant={pathname === "/orders" ? "Bold" : "Linear"} />
       ),
-      title: "سفارشات",
+      title: t("orders"),
       route: "/orders",
     },
     {
       icon: <Wallet variant={pathname === "/finance" ? "Bold" : "Linear"} />,
-      title: "مالی",
+      title: t("finance"),
       route: "/finance",
     },
     {
       icon: <Grid1 variant={pathname === "/maps" ? "Bold" : "Linear"} />,
-      title: "نقشه ها",
+      title: t("maps"),
       route: "/maps",
     },
     {
       icon: (
         <ElementPlus variant={pathname === "/produce" ? "Bold" : "Linear"} />
       ),
-      title: "تولید",
+      title: t("production"),
       route: "/produce",
     },
     {
       icon: <RulerPen variant={pathname === "/install" ? "Bold" : "Linear"} />,
-      title: "اندازه گیری و نصب",
+      title: t("measurement_and_installation"),
       route: "/install",
     },
     {
       icon: <Truck variant={pathname === "/send" ? "Bold" : "Linear"} />,
-      title: "ارسال",
+      title: t("shipping"),
       route: "/send",
     },
-    // {
-    //   icon: <AddSquare variant={pathname === "/orders" ? "Bold" : "Linear"} />,
-    //   title: "ارسال",
-    //   route: "/orders",
-    // },
+    {
+      icon: <BoxAdd variant={pathname === "/products" ? "Bold" : "Linear"} />,
+      title: t("products"),
+      route: "/products",
+    },
   ];
 
   return (

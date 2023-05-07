@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { setApiLoading } from "../redux/app/actions";
+import { setApiLoading } from "../redux/application/actions";
 import store from "../redux/store";
 import SnackbarUtils from "../utils/SnackbarUtils";
 // import SnackbarUtils from "../utils/SnackbarUtils";

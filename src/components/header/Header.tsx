@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowDown2, ArrowRight, Notification } from "iconsax-react";
-import { setCollapseMenu } from "../../app/redux/app/actions";
+import { setCollapseMenu } from "../../app/redux/application/actions";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 
 const Header = () => {

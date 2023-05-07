@@ -1,6 +1,6 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { userModel } from "../../models/redux-models";
-import { RootState } from "../store";
+import { userModel } from "@models/redux-models";
+import { RootState } from "@redux/store";
 import appSlice from "./slice";
 
 const appActions = appSlice.actions;

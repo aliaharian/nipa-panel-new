@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { LoginFormInitialValues } from "../../models/auth";
-import Api from "../../service/Api";
+import Api from "@service/Api";
 async function getAllUsers() {
   let response = await Api()?.get("users?page=1");
   return response?.data.data;

@@ -1,0 +1,10 @@
+{
+  "dashboard": "Dashboard",
+  "orders": "Orders",
+  "finance": "Finance",
+  "maps": "Maps",
+  "production": "Production",
+  "measurement_and_installation": "Measurement and Installation",
+  "shipping": "Shipping",
+  "products": "Products"
+}

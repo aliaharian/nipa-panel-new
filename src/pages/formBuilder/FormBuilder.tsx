@@ -2,7 +2,7 @@ import { Add, Setting4 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Condition, FormField, FormOption } from "../../app/models/form";
-import { setCollapseMenu } from "../../app/redux/app/actions";
+import { setCollapseMenu } from "../../app/redux/application/actions";
 import { useAppDispatch } from "../../app/redux/hooks";
 import SnackbarUtils from "../../app/utils/SnackbarUtils";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";

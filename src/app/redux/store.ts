@@ -1,5 +1,5 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import appSlice from "./app/slice";
+import appSlice from "./application/slice";
 import orderSlice from "./orders/slice";
 
 import userSlice from "./users/slice";
