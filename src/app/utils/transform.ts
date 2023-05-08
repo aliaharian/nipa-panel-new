@@ -33,3 +33,45 @@ export const renderDialogTime = (timestamp: number, time?: boolean) => {
     }
   }
 };
+
+export const fileToUrl = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function (event: any) {
+      const imageUrl = event.target.result;
+      resolve(imageUrl);
+    };
+    reader.onerror = function (event: any) {
+      reject(event.target.error);
+    };
+    reader.readAsDataURL(file);
+  });
+};
+function base64ToBlob(base64: string, type: string): Blob {
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; ++i) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([bytes], { type: type });
+}
+
+const imageValidExtensions = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+];
+function fileToBlob(file: File): Blob {
+  return new Blob([file], { type: file.type });
+  
+}
+
+export default {
+  pluralize,
+  fileToUrl,
+  imageValidExtensions,
+  base64ToBlob,
+  fileToBlob
+};

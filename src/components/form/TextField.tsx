@@ -5,7 +5,7 @@ type TextFieldProps = {
   name: string;
   label: string;
   type?: string;
-  placeholder?: string;
+  placeholder?: string|null;
   formik: any;
   mask?: string;
   maskChar?: string;
@@ -30,7 +30,7 @@ const TextField = ({
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name}>{label}</label>
+        <label htmlFor={name} className="font-normal">{label}</label>
         {inputActions?.()}
       </div>
 
@@ -48,7 +48,7 @@ const TextField = ({
         id={name}
         name={name}
         style={{ direction: type == "tel" ? "ltr" : "rtl" }}
-        placeholder={placeholder}
+        placeholder={placeholder||""}
         onChange={(e) => {
           //formik handlechange without mask
           formik.handleChange({

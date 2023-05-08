@@ -1,0 +1,17 @@
+{
+  "products": "Products",
+  "addProduct": "Add Product",
+  "productCode": "Product Code",
+  "title": "Title",
+  "productType": "Product Type",
+  "status": "Status",
+  "operation": "Operation",
+  "active": "Active",
+  "inactive": "Inactive",
+  "normal": "Normal",
+  "custom": "Custom",
+  "delete": "Delete",
+  "edit": "Edit",
+  "view": "View",
+  "enterProductDetail": "Enter Product Detail"
+}

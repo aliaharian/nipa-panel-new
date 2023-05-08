@@ -6,7 +6,7 @@ type SideDialogProps = {
   handleClose?: () => void;
   children?: any;
   headerIcon?: any;
-  headerText?: string;
+  headerText?: string | null;
 };
 
 const Content = ({ children }: any) => {
@@ -22,7 +22,7 @@ const SideDialog = ({
   handleClose,
   children,
   headerIcon,
-  headerText,
+  headerText = "",
 }: SideDialogProps) => {
   const [rand, setRand] = useState<number>(Math.floor(Math.random() * 1000));
   const _handleClose = (

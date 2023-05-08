@@ -1,5 +1,8 @@
+import transform from "app/utils/transform";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 import { DocumentText, GalleryAdd } from "iconsax-react";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 interface DropzoneProps {
   onFileDrop?: (file: File) => void;
@@ -18,6 +21,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
   placeholder,
 }) => {
   const dropzoneRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation(["common", "validations"]);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -42,6 +46,15 @@ const Dropzone: React.FC<DropzoneProps> = ({
       console.error("File type not supported");
       return;
     }
+    //image file types
+    if (imageOnly) {
+      //check extensions
+     
+      if (!transform.imageValidExtensions.includes(file.type)) {
+        console.error("File type not supported");
+        return;
+      }
+    }
 
     if (maxSize && file.size > maxSize) {
       console.error("File size exceeds maximum limit");
@@ -61,7 +74,20 @@ const Dropzone: React.FC<DropzoneProps> = ({
 
       if (maxSize && file.size > maxSize) {
         console.error("File size exceeds maximum limit");
+        SnackbarUtils.error(t('file_size_exceeds_maximum_limit',{ns:"validations"}));
         return;
+      }
+
+      //image file types
+      if (imageOnly) {
+        //check extensions
+    
+        if (!transform.imageValidExtensions.includes(file.type)) {
+          console.error("File type not supported");
+          SnackbarUtils.error(t('file_type_not_supported',{ns:"validations"}));
+
+          return;
+        }
       }
 
       onFileDrop?.(file);
@@ -83,7 +109,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleFilePickerClick}
-      className="w-[161px] h-[144px] border border-dashed border-text-400 text-text-500 rounded-[6px] flex items-center justify-center cursor-pointer"
+      className="w-full h-[144px] border border-dashed border-text-400 text-text-500 rounded-[6px] flex items-center justify-center cursor-pointer"
     >
       <input
         type="file"

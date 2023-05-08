@@ -7,7 +7,7 @@ type TextFieldProps = {
   name: string;
   label: string;
   type?: string;
-  placeholder?: string;
+  placeholder?: string | null;
   formik: any;
   mask?: string;
   maskChar?: string;
@@ -35,22 +35,32 @@ const DropDown = ({
   // ];
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
-    console.log("eee", e);
     setSelectedOption(e);
-    formik?.handleChange(e);
+    // formik?.handleChange(e);
+    formik.handleChange({
+      target: {
+        name,
+        value: e.value,
+        // value: e.target.value.replace(/ /g, ""),
+      },
+    });
   };
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name}>{label}</label>
+        <label className="font-normal" htmlFor={name}>{label}</label>
         {inputActions?.()}
       </div>
       <Select
         defaultValue={formik.values ? formik.values[name] : selectedOption}
         onChange={handleChange}
-        value={formik.values ? formik.values[name] : selectedOption}
+        value={
+          formik.values
+            ? options?.find((x) => x.value === formik.values[name])
+            : selectedOption
+        }
         placeholder={placeholder}
         options={options}
         className="w-full h-12 !outline-none"
@@ -75,6 +85,7 @@ const DropDown = ({
                 state.isFocused || state.isSelected ? "#eef3fa" : "#fff",
               height: 40,
               display: "flex",
+              fontWeight: "normal",
               alignItems: "center",
               justifyContent: "flex-start",
               padding: "10px",

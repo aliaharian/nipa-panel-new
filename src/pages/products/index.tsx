@@ -2,18 +2,20 @@ import { Add, Setting4 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import Breadcrumb from "components/breadcrumb/Breadcrumb";
 import Button from "components/button/Button";
-import OrderFiltersDialog from "components/orders/OrderFiltersDialog";
 import Table from "components/table/Table";
 import TableAction from "components/table/TableAction";
-import { ordersList } from "app/redux/orders/actions";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
+import { useTranslation } from "react-i18next";
+import { productsList } from "app/redux/products/actions";
+import AddProductDialog from "components/products/AddProductDialog";
 
 const Products = () => {
-  const data = useAppSelector((state) => state.orders.orders);
+  const data = useAppSelector((state) => state.products.products);
   const [columns, setColumns] = useState<any[]>([]);
+  const { t } = useTranslation("common");
   const arr1 = [1, 2, 3, 4];
   const arr2 = ["a", "b", "c", "d"];
-  const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const [addProduct, setOpenAddProduct] = useState<boolean>(false);
   const zipped: [number | string, number | string][] = [
     [1, "a"],
     [2, "b"],
@@ -22,47 +24,36 @@ const Products = () => {
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
-    Dispatch(ordersList());
+    Dispatch(productsList());
   }, []);
 
   useEffect(() => {
     if (data) {
+      console.log("data123", data);
+
       let colTmp: any[] = [
         {
-          name: "کد سفارش",
-          selector: (row: any) => row.id,
+          name: t("productCode"),
+          selector: (row: any) => row.code,
           sortable: true,
         },
         {
-          name: "تاریخ ثبت",
-          selector: (row: any) => row.jalali_date,
+          name: t("title"),
+          selector: (row: any) => row.name,
+          sortable: true,
         },
         {
-          name: "نام مشتری",
-          selector: (row: any) => row.user.name + " " + row.user.last_name,
+          name: t("productType"),
+          selector: (row: any) => (row.custom ? t("custom") : t("normal")),
+          sortable: true,
         },
         {
-          name: "نام دریافت کننده",
-          selector: (row: any) => row.customer_name,
+          name: t("status"),
+          selector: (row: any) => t("active"),
+          sortable: true,
         },
       ];
-      //append cols to columns
-      data.cols.map((col: any) => {
-        colTmp.push({
-          name: col.field_label,
-          selector: (row: any) =>
-            row.additional_data?.find(
-              (item: any) => item.fild_name === col.fild_name
-            )?.field_value?.label ||
-            row.additional_data?.find(
-              (item: any) => item.fild_name === col.fild_name
-            )?.field_value || <div className="bg-error-secondary">ندارد</div>,
-        });
-      });
-      colTmp.push({
-        name: "وضعیت",
-        selector: (row: any) => row.year,
-      });
+
       colTmp.push({
         allowOverflow: true,
         button: true,
@@ -105,34 +96,29 @@ const Products = () => {
 
   return (
     <div className="w-full h-full">
-      <OrderFiltersDialog
-        open={openFilter}
-        handleClose={() => setOpenFilter(false)}
+      <AddProductDialog
+        open={addProduct}
+        handleClose={() => setOpenAddProduct(false)}
       />
       <Breadcrumb
         actions={
           <>
-            {" "}
-            <div className="w-[186px]">
-              <Button
-                icon={<Setting4 />}
-                text="فیلتر پیشرفته"
-                onClick={() => setOpenFilter(true)}
-                simple
-              />
-            </div>
             <div className="w-[186px] mr-[16px]">
-              <Button icon={<Add />} text="ثبت سفارش جدید" href="submit" />
+              <Button
+                icon={<Add />}
+                text={t("addProduct")}
+                onClick={() => setOpenAddProduct(true)}
+              />
             </div>
           </>
         }
-        title="سفارشات"
+        title={t("products")}
       />
       <div>
         {/* <button onClick={zipArray}>zip</button>
         <button onClick={unzipArray}>unzip</button> */}
 
-        <Table columns={columns} data={data?.orders} />
+        <Table columns={columns} data={data||[]} />
       </div>
     </div>
   );

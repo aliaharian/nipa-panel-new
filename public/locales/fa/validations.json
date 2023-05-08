@@ -1,4 +1,17 @@
 {
   "requiredField": "این فیلد الزامی است",
-  "emailFormat": "لطفا یک آدرس ایمیل معتبر وارد کنید"
+  "emailFormat": "لطفا یک آدرس ایمیل معتبر وارد کنید",
+  "productCode.placeholder": "کد محصول را وارد کنید",
+  "productCode.required": "کد محصول الزامی است",
+  "productCode.invalid": "کد محصول معتبر نیست",
+  "productCode.unique": "کد محصول تکراری است",
+  "productName.placeholder": "نام محصول را وارد کنید",
+  "productName.required": "نام محصول الزامی است",
+  "productName.invalid": "نام محصول معتبر نیست",
+  "productName.unique": "نام محصول تکراری است",
+  "productPrice.placeholder": "قیمت محصول را وارد کنید",
+  "productStatus.placeholder": "وضعیت محصول را انتخاب کنید",
+  "productType.placeholder": "نوع محصول را انتخاب کنید",
+  "file_type_not_supported": "فرمت فایل پشتیبانی نمی شود",
+  "file_size_exceeds_maximum_limit": "حجم فایل بیش از حد مجاز است"
 }

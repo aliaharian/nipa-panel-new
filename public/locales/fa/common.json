@@ -1,0 +1,22 @@
+{
+  "products": "محصولات",
+  "addProduct": "افزودن محصول جدید",
+  "productCode": "کد محصول",
+  "title": "عنوان",
+  "productType": "نوع محصول",
+  "productName": "نام محصول",
+  "status": "وضعیت",
+  "operation": "عملیات",
+  "active": "فعال",
+  "inactive": "غیرفعال",
+  "normal": "عادی",
+  "custom": "سفارشی",
+  "delete": "حذف",
+  "edit": "ویرایش",
+  "view": "مشاهده",
+  "enterProductDetail": "جزییات محصول را وارد کنید",
+  "uploadNewImage": "آپلود تصویر جدید",
+  "viewImage": "مشاهده تصویر",
+  "mainImage": "تصویر اصلی",
+  "productImages": "تصاویر محصول"
+}

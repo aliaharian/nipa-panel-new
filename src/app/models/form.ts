@@ -13,7 +13,7 @@ export interface FormOption {
   index?: number;
   id?:number;
   label: any;
-  value: string;
+  value: any;
 }
 
 export interface Condition {

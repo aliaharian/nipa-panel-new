@@ -4,67 +4,49 @@ import Dropzone from "./Dropzone";
 
 type UploadFileProps = {
   name: string;
-  label: string;
-  type?: string;
+  label?: string;
   placeholder?: string;
   formik: any;
-  mask?: string;
-  maskChar?: string;
   inputActions?: any;
   className?: string;
-  imageOnly?:boolean;
+  imageOnly?: boolean;
 };
 const UploadFile = ({
   name,
   label,
   formik,
-  type,
   placeholder,
-  maskChar,
   className,
-  mask,
   inputActions,
-  imageOnly
+  imageOnly,
 }: UploadFileProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
-console.log('dvdvdvdvd',placeholder)
+  console.log("dvdvdvdvd", placeholder);
+  const handleChange = (e: any) => {
+    console.log("e", e);
+    formik.handleChange({
+      target: {
+        name,
+        value: e,
+      },
+    });
+  };
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
-      <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name}>{label}</label>
-        {inputActions?.()}
-      </div>
+      {label && (
+        <div className="text-sm mb-2 flex justify-between w-full">
+          <label htmlFor={name}>{label}</label>
+          {inputActions?.()}
+        </div>
+      )}
 
-      {/* <ReactInputMask
-        mask={mask ? mask : ""}
-        maskChar={maskChar ? maskChar : " "}
-        value={formik.values?.[name]}
-        type={type}
-        dir="rtl"
-        className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${
-          formik.errors?.[name] && formik.touched?.[name]
-            ? "!border-error-primary"
-            : ""
-        }`}
-        id={name}
-        name={name}
-        style={{ direction: type == "tel" ? "ltr" : "rtl" }}
+      <Dropzone
+        onFileDrop={handleChange}
         placeholder={placeholder}
-        onChange={(e) => {
-          //formik handlechange without mask
-          formik.handleChange({
-            target: {
-              name,
-              value: e.target.value,
-              // value: e.target.value.replace(/ /g, ""),
-            },
-          });
-        }}
-      ></ReactInputMask> */}
-
-      <Dropzone placeholder={placeholder} imageOnly={imageOnly}/>
+        imageOnly={imageOnly}
+      />
 
       {formik.errors?.[name] && formik.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">

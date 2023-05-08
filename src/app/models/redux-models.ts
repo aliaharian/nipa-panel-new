@@ -36,6 +36,9 @@ export interface blogSliceModel {
 export interface ordersSliceModel {
   orders?: any;
 }
+export interface productsSliceModel {
+  products?: any;
+}
 export interface usersSliceModel {
   mobile?:string | null;
   login?:any | null;
