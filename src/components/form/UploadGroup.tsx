@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UploadFile from "./UploadFile";
 import ImageThumbnail from "../imageManager/ImageThumbnail";
 import { useTranslation } from "react-i18next";
 import ImageFullscreen from "../imageManager/ImageFullscreen";
 import ReactDOM from "react-dom/client";
 import transform from "app/utils/transform";
+import Api from "app/service/Api";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 
 type UploadGroupProps = {
   name: string;
@@ -32,19 +34,61 @@ const UploadGroup = ({
   imageOnly,
 }: UploadGroupProps) => {
   const { t } = useTranslation(["common", "validations"]);
-
+  const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<any>([]);
-  const handleUploadFile = (e: any) => {
+  const [uploading, setUploading] = useState(false);
+  const handleUploadFile = async (e: any) => {
     console.log("eee", e);
     const newFiles = [...files];
-
+    const newName = name + "_" + Math.floor(Math.random() * 100);
     newFiles.push({
-      name: name + "_" + Math.floor(Math.random() * 100),
+      name: newName,
       value: e.target.value,
+      hashCode: null,
     });
-    //do upload
-
     setFiles([...newFiles]);
+
+    setUploading(true);
+    //upload file
+    uploadFile(e.target.value, newName, newFiles);
+  };
+  const uploadFile = async (file: File, name: string, allFiles: any[]) => {
+    //do upload
+    var formData = new FormData();
+    formData.append("file", file);
+    try {
+      let response = await Api()?.post("/files", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("response", response);
+      if (response?.data?.file?.hash_code) {
+        const newFiles = [...allFiles];
+        const foundIndex = newFiles.findIndex((x: any) => x.name === name);
+        if (foundIndex !== -1) {
+          newFiles[foundIndex] = {
+            ...newFiles[foundIndex],
+            hashCode: response.data.file.hash_code,
+          };
+          setFiles([...newFiles]);
+        }
+      }
+      setUploading(false);
+    } catch (e) {
+      console.log("error", e);
+      //remove image from array
+      const newFiles = [...allFiles];
+      const foundIndex = newFiles.findIndex((x: any) => x.name === name);
+      if (foundIndex !== -1) {
+        newFiles.splice(foundIndex, 1);
+        setFiles([...newFiles]);
+      }
+      //snackbar
+      SnackbarUtils.error(t("validations:uploadError"));
+      setUploading(false);
+    }
   };
 
   console.log("files", files);
@@ -89,15 +133,18 @@ const UploadGroup = ({
         </label>
       </div>
 
-      <div className="bg-text-300 w-full p-[14px] grid grid-cols-4 gap-x-5 gap-y-5">
+      <div className="bg-text-300 w-full p-[14px] grid grid-cols-5 gap-x-5 gap-y-5">
         <div className="bg-white w-full h-min rounded-[6px]">
           <UploadFile
+            disabled={uploading}
             name={"uploadFile"}
             imageOnly={imageOnly}
-            placeholder={placeholder || ""}
+            fileRef={fileRef}
+            placeholder={uploading ? t("pleaseWait") || "" : placeholder || ""}
             formik={{
               handleChange: (e: any) => {
                 handleUploadFile(e);
+                if (fileRef.current) fileRef.current.value = "";
               },
             }}
           />
@@ -111,6 +158,7 @@ const UploadGroup = ({
             >
               <ImageThumbnail
                 src={file.value}
+                hashCode={file.hashCode}
                 handleDelete={() => {
                   handleDeleteFile(file, index);
                 }}

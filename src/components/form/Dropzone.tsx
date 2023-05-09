@@ -11,6 +11,8 @@ interface DropzoneProps {
   imageOnly?: boolean;
   file?: File;
   placeholder?: string;
+  fileRef: any;
+  disabled?: boolean;
 }
 const Dropzone: React.FC<DropzoneProps> = ({
   onFileDrop,
@@ -19,10 +21,11 @@ const Dropzone: React.FC<DropzoneProps> = ({
   imageOnly,
   file,
   placeholder,
+  fileRef,
+  disabled,
 }) => {
   const dropzoneRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation(["common", "validations"]);
-
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     dropzoneRef.current?.classList.add("!bg-primary-main");
@@ -36,32 +39,33 @@ const Dropzone: React.FC<DropzoneProps> = ({
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    dropzoneRef.current?.classList.remove("!bg-primary-main");
-    dropzoneRef.current?.classList.remove("!text-white");
+    if (!disabled) {
+      e.preventDefault();
+      dropzoneRef.current?.classList.remove("!bg-primary-main");
+      dropzoneRef.current?.classList.remove("!text-white");
 
-    const file = e.dataTransfer.files[0];
+      const file = e.dataTransfer.files[0];
 
-    if (acceptedTypes && !acceptedTypes.includes(file.type)) {
-      console.error("File type not supported");
-      return;
-    }
-    //image file types
-    if (imageOnly) {
-      //check extensions
-     
-      if (!transform.imageValidExtensions.includes(file.type)) {
+      if (acceptedTypes && !acceptedTypes.includes(file.type)) {
         console.error("File type not supported");
         return;
       }
-    }
+      //image file types
+      if (imageOnly) {
+        //check extensions
 
-    if (maxSize && file.size > maxSize) {
-      console.error("File size exceeds maximum limit");
-      return;
-    }
+        if (!transform.imageValidExtensions.includes(file.type)) {
+          console.error("File type not supported");
+          return;
+        }
+      }
 
-    onFileDrop?.(file);
+      if (maxSize && file.size > maxSize) {
+        console.error("File size exceeds maximum limit");
+        return;
+      }
+      onFileDrop?.(file);
+    }
   };
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -74,17 +78,21 @@ const Dropzone: React.FC<DropzoneProps> = ({
 
       if (maxSize && file.size > maxSize) {
         console.error("File size exceeds maximum limit");
-        SnackbarUtils.error(t('file_size_exceeds_maximum_limit',{ns:"validations"}));
+        SnackbarUtils.error(
+          t("file_size_exceeds_maximum_limit", { ns: "validations" })
+        );
         return;
       }
 
       //image file types
       if (imageOnly) {
         //check extensions
-    
+
         if (!transform.imageValidExtensions.includes(file.type)) {
           console.error("File type not supported");
-          SnackbarUtils.error(t('file_type_not_supported',{ns:"validations"}));
+          SnackbarUtils.error(
+            t("file_type_not_supported", { ns: "validations" })
+          );
 
           return;
         }
@@ -94,7 +102,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
     }
   };
   const handleFilePickerClick = () => {
-    if (dropzoneRef.current) {
+    if (dropzoneRef.current && !disabled) {
       const fileInput = dropzoneRef.current.querySelector(
         'input[type="file"]'
       ) as HTMLInputElement;
@@ -113,6 +121,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
     >
       <input
         type="file"
+        ref={fileRef}
         style={{ display: "none" }}
         onChange={handleFileInputChange}
       />

@@ -13,5 +13,6 @@
   "productStatus.placeholder": "وضعیت محصول را انتخاب کنید",
   "productType.placeholder": "نوع محصول را انتخاب کنید",
   "file_type_not_supported": "فرمت فایل پشتیبانی نمی شود",
-  "file_size_exceeds_maximum_limit": "حجم فایل بیش از حد مجاز است"
+  "file_size_exceeds_maximum_limit": "حجم فایل بیش از حد مجاز است",
+  "uploadError": "خطا در آپلود فایل"
 }

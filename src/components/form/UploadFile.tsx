@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactInputMask from "react-input-mask";
 import Dropzone from "./Dropzone";
 
@@ -10,6 +10,8 @@ type UploadFileProps = {
   inputActions?: any;
   className?: string;
   imageOnly?: boolean;
+  fileRef?: any;
+  disabled?: boolean;
 };
 const UploadFile = ({
   name,
@@ -19,9 +21,13 @@ const UploadFile = ({
   className,
   inputActions,
   imageOnly,
+  disabled,
+  fileRef,
 }: UploadFileProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
   console.log("dvdvdvdvd", placeholder);
+  const fileRefInside = useRef<HTMLInputElement>(null);
+
   const handleChange = (e: any) => {
     console.log("e", e);
     formik.handleChange({
@@ -31,9 +37,12 @@ const UploadFile = ({
       },
     });
   };
+
   return (
     <div
-      className={`flex flex-col w-full items-start justify-start ${className}`}
+      className={`flex flex-col w-full items-start justify-start ${className} ${
+        disabled ? "pointer-events-none" : "pointer-events-auto"
+      }`}
     >
       {label && (
         <div className="text-sm mb-2 flex justify-between w-full">
@@ -43,9 +52,11 @@ const UploadFile = ({
       )}
 
       <Dropzone
+        disabled={disabled}
         onFileDrop={handleChange}
         placeholder={placeholder}
         imageOnly={imageOnly}
+        fileRef={fileRef || fileRefInside}
       />
 
       {formik.errors?.[name] && formik.touched?.[name] && (
