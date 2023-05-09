@@ -108,6 +108,10 @@ const Dropzone: React.FC<DropzoneProps> = ({
       ) as HTMLInputElement;
       fileInput.click();
       console.log('ok')
+      console.log('ok')
+      console.log('ok')
+      console.log('ok')
+
     }
   };
 
