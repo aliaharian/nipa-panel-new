@@ -7,7 +7,7 @@ const Accordion = () => {
   const handleToggle = () => {
     setOpen(!open);
   };
-
+  
   return (
     <div className="mb-[20px]">
       <div
@@ -25,7 +25,7 @@ const Accordion = () => {
           />
         </div>
       </div>
-u
+
       <div
         className={`overflow-hidden ${
           open ? "h-auto opacity-100" : "h-0 opacity-0"
