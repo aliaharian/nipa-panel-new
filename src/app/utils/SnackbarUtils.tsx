@@ -19,7 +19,7 @@ export default {
         horizontal: "right",
       },
       //close snackbar after 1 second
-      autoHideDuration: 1000,
+      autoHideDuration: 3000,
       //close on click
       onClick: () => {
         //close

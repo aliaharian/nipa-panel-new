@@ -1,12 +1,7 @@
 import {
-  countryModel,
-  roleModel,
-  userModel,
   usersSliceModel,
-  contactModel,
 } from "../../../app/models/redux-models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { usersResponseModel } from "../../../app/models/user";
 
 const initialUserState: usersSliceModel = {
   mobile: null,

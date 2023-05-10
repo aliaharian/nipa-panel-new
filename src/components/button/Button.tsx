@@ -6,12 +6,13 @@ type ButtonProps = {
   simple?: boolean;
   bordered?: boolean;
   href?: string;
-  text: string;
+  text: any;
   onClick?: () => void;
   icon?: any;
   after?: boolean;
   sm?: boolean;
   gray?: boolean;
+  disabled?: boolean;
 };
 const Button = ({
   type,
@@ -24,6 +25,7 @@ const Button = ({
   after,
   sm,
   gray,
+  disabled,
 }: ButtonProps) => {
   const classNames = `w-full ${
     sm ? "h-[38px]" : "h-12"
@@ -34,6 +36,7 @@ const Button = ({
   }
    ${simple ? "border-none bg-transparent text-primary-main" : ""}
    ${gray ? "border-none bg-text-200 text-text-500" : ""}
+    ${disabled ? "opacity-90 cursor-not-allowed pointer-events-none" : ""}
   `;
   const handleIcon = () => {
     if (icon) {

@@ -30,11 +30,13 @@ module.exports = {
         main: "#5079b8",
         100: "#f7fafd",
         200: "#D3DEED",
+        250: "#e3ebf7",
         300: "#92abd3",
         400: "#395A8D",
         500: "#263C5E",
         600: "#eef3fa",
         nav: "rgba(47, 98, 176, 0.1)",
+        dark:"#234a84"
       },
       secondary: {
         main: "#F9BE57",

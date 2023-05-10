@@ -19,5 +19,13 @@
   "viewImage": "مشاهده تصویر",
   "mainImage": "تصویر اصلی",
   "productImages": "تصاویر محصول",
-  "pleaseWait": "لطفا صبر کنید"
+  "pleaseWait": "لطفا صبر کنید",
+  "price": "قیمت",
+  "description": "توضیحات",
+  "addProductSuccess": "محصول با موفقیت اضافه شد",
+  "deleteProductConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این محصول حذف خواهند شد. آیا مطمئن هستید؟",
+  "yes": "بله",
+  "no": "خیر",
+  "deleteProductSuccess": "محصول با موفقیت حذف شد",
+  "handleProductSteps": "مدیریت مراحل محصول"
 }

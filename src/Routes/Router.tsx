@@ -21,6 +21,7 @@ const FormBuilder = React.lazy(
   () => import("../pages/formBuilder/FormBuilder")
 );
 const Products = React.lazy(() => import("../pages/products/index"));
+const ProductSteps = React.lazy(() => import("pages/productSteps/index"));
 
 const Router = (): JSX.Element => {
   return (
@@ -28,11 +29,12 @@ const Router = (): JSX.Element => {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<Navigate to="/" />} />
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/products">
               <Route path="" element={<Products />}></Route>
+              <Route path=":code/steps" element={<ProductSteps />}></Route>
             </Route>
             <Route path="/formBuilder" element={<FormBuilder />} />
 

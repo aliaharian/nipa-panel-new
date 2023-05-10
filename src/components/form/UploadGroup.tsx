@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import UploadFile from "./UploadFile";
 import ImageThumbnail from "../imageManager/ImageThumbnail";
 import { useTranslation } from "react-i18next";
@@ -11,34 +11,27 @@ import SnackbarUtils from "app/utils/SnackbarUtils";
 type UploadGroupProps = {
   name: string;
   label: string;
-  type?: string;
   placeholder?: string | null;
   formik: any;
-  mask?: string;
-  maskChar?: string;
-  inputActions?: any;
   className?: string;
   imageOnly?: boolean;
+  setPending?: Dispatch<SetStateAction<boolean>>;
 };
 
 const UploadGroup = ({
   name,
   label,
   formik,
-  type,
   placeholder,
-  maskChar,
   className,
-  mask,
-  inputActions,
   imageOnly,
+  setPending,
 }: UploadGroupProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<any>([]);
   const [uploading, setUploading] = useState(false);
   const handleUploadFile = async (e: any) => {
-    console.log("eee", e);
     const newFiles = [...files];
     const newName = name + "_" + Math.floor(Math.random() * 100);
     newFiles.push({
@@ -63,7 +56,6 @@ const UploadGroup = ({
         },
       });
 
-      console.log("response", response);
       if (response?.data?.file?.hash_code) {
         const newFiles = [...allFiles];
         const foundIndex = newFiles.findIndex((x: any) => x.name === name);
@@ -77,7 +69,6 @@ const UploadGroup = ({
       }
       setUploading(false);
     } catch (e) {
-      console.log("error", e);
       //remove image from array
       const newFiles = [...allFiles];
       const foundIndex = newFiles.findIndex((x: any) => x.name === name);
@@ -91,16 +82,19 @@ const UploadGroup = ({
     }
   };
 
-  console.log("files", files);
-
-  const handleDeleteFile = (file: any, index: number) => {
-    console.log("file", index);
-    console.log("file", file);
+  const handleDeleteFile = async (file: any, index: number) => {
     //remove index from files
 
     let newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles([...newFiles]);
+    try {
+      let response = await Api()?.delete(`/files/${file.hashCode}`);
+      newFiles.splice(index, 1);
+      setFiles([...newFiles]);
+
+      SnackbarUtils.success(t("validations:imageDeleteSuccess"));
+    } catch (e) {
+      SnackbarUtils.error(t("validations:imageDeleteError"));
+    }
   };
   const handleFullscreen = (file: any) => {
     //check type to verify this file is an image
@@ -119,10 +113,26 @@ const UploadGroup = ({
     if (transform.imageValidExtensions.includes(file.type)) {
       const blob = transform.fileToBlob(file);
       const blobUrl = URL.createObjectURL(blob);
-      console.log(blobUrl);
       window.open(blobUrl, "_blank");
     }
   };
+
+  useEffect(() => {
+    //formik change listener
+    formik.setFieldValue(name, files);
+  }, [files]);
+  useEffect(() => {
+    //formik change listener
+    if (formik.values[name].length == 0 && files.length > 0) {
+      setFiles(formik.values[name] || []);
+    }
+  }, [formik]);
+
+  useEffect(() => {
+    if (setPending) {
+      setPending(uploading);
+    }
+  }, [uploading]);
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
@@ -134,21 +144,25 @@ const UploadGroup = ({
       </div>
 
       <div className="bg-text-300 w-full p-[14px] grid grid-cols-5 gap-x-5 gap-y-5">
-        <div className="bg-white w-full h-min rounded-[6px]">
-          <UploadFile
-            disabled={uploading}
-            name={"uploadFile"}
-            imageOnly={imageOnly}
-            fileRef={fileRef}
-            placeholder={uploading ? t("pleaseWait") || "" : placeholder || ""}
-            formik={{
-              handleChange: (e: any) => {
-                handleUploadFile(e);
-                if (fileRef.current) fileRef.current.value = "";
-              },
-            }}
-          />
-        </div>
+        {files.length < 5 && (
+          <div className="bg-white w-full h-min rounded-[6px]">
+            <UploadFile
+              disabled={uploading}
+              name={"uploadFile"}
+              imageOnly={imageOnly}
+              fileRef={fileRef}
+              placeholder={
+                uploading ? t("pleaseWait") || "" : placeholder || ""
+              }
+              formik={{
+                handleChange: (e: any) => {
+                  handleUploadFile(e);
+                  if (fileRef.current) fileRef.current.value = "";
+                },
+              }}
+            />
+          </div>
+        )}
         {/* map all except last */}
         {files.map((file: any, index: any) => {
           return (

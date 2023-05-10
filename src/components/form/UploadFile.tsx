@@ -24,12 +24,9 @@ const UploadFile = ({
   disabled,
   fileRef,
 }: UploadFileProps) => {
-  // console.log("formik.errors?.[name]", formik.values[name]);
-  console.log("dvdvdvdvd", placeholder);
   const fileRefInside = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: any) => {
-    console.log("e", e);
     formik.handleChange({
       target: {
         name,

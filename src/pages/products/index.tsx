@@ -1,4 +1,11 @@
-import { Add, Setting4 } from "iconsax-react";
+import {
+  Add,
+  ArrangeVertical,
+  Edit,
+  Eye,
+  Setting4,
+  Trash,
+} from "iconsax-react";
 import { useEffect, useState } from "react";
 import Breadcrumb from "components/breadcrumb/Breadcrumb";
 import Button from "components/button/Button";
@@ -6,21 +13,31 @@ import Table from "components/table/Table";
 import TableAction from "components/table/TableAction";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useTranslation } from "react-i18next";
-import { productsList } from "app/redux/products/actions";
+import {
+  deleteProduct,
+  productsList,
+  setDeleteSuccess,
+} from "app/redux/products/actions";
 import AddProductDialog from "components/products/AddProductDialog";
+import DeletePopup from "components/popup/DeletePopup";
+import SnackbarUtils from "app/utils/SnackbarUtils";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const data = useAppSelector((state) => state.products.products);
   const [columns, setColumns] = useState<any[]>([]);
+  const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
+  const Navigator = useNavigate();
+  const deleteSuccess = useAppSelector(
+    (state: any) => state.products.deleteSuccess
+  );
   const { t } = useTranslation("common");
-  const arr1 = [1, 2, 3, 4];
-  const arr2 = ["a", "b", "c", "d"];
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [addProduct, setOpenAddProduct] = useState<boolean>(false);
-  const zipped: [number | string, number | string][] = [
-    [1, "a"],
-    [2, "b"],
-    [3, "c"],
-  ];
+  const handleClosedeletePopup = () => {
+    setOpenDeletePopup(false);
+  };
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
@@ -58,7 +75,29 @@ const Products = () => {
         allowOverflow: true,
         button: true,
         width: "120px",
-        cell: (row: any) => <TableAction row={row} />,
+        cell: (row: any) => (
+          <TableAction
+            items={[
+              {
+                icon: <Edit variant="Bold" />,
+                text: "ویرایش",
+                name: "edit",
+              },
+              {
+                icon: <ArrangeVertical variant="Bold" />,
+                text: "مدیریت مراحل",
+                name: "steps",
+              },
+              {
+                icon: <Trash variant={"Bold"} />,
+                text: "حذف",
+                name: "delete",
+              },
+            ]}
+            handleAction={handleTableAction}
+            row={row}
+          />
+        ),
       });
 
       setColumns([...colTmp]);
@@ -66,39 +105,55 @@ const Products = () => {
       console.log("data.orders", data.cols);
     }
   }, [data]);
-  const zipArray = () => {
-    let zipped = arr1.map((k, i) => [k, arr2[i]]);
-    console.log("zipped", zipped);
+  const handleTableAction = (row: any, action: string) => {
+    console.log("row", row);
+    console.log("action", action);
+    setSelectedRow(row);
+    switch (action) {
+      case "delete":
+        setOpenDeletePopup(true);
+        break;
+      case "steps":
+        Navigator(`${row.code}/steps`);
+        break;
+      default:
+        break;
+    }
   };
-  let array1: [number | string];
-  let array2: [number | string];
-  const unzipArray = () => {
-    //unzip zipped array to two arrays
-    //  [
-    //   [1, "a"],
-    //   [2, "b"],
-    //   [3, "c"],
-    // ];
-
-    let a = zipped.reduce((acc, val) => {
-      console.log("acc", acc);
-      console.log("val", val);
-      array1.push(val[0]);
-      array2.push(val[1]);
-      // acc[0].push(val[0]);
-      // acc[1].push(val[1]);
-      return acc;
-    });
-
-    console.log("array1", a);
-    // console.log("unzipped", unzipped);
+  const handleDeleteProduct = () => {
+    setDeleteLoading(true);
+    console.log("selectedRow", selectedRow);
+    Dispatch(deleteProduct(selectedRow.id));
+    // setTimeout(() => {
+    //   setDeleteLoading(false);
+    //   setOpenDeletePopup(false);
+    //   SnackbarUtils.success(t("deleteProductSuccess"));
+    // }, 1000);
   };
+  useEffect(() => {
+    if (deleteSuccess) {
+      setDeleteLoading(false);
+      setOpenDeletePopup(false);
+      SnackbarUtils.success(t("deleteProductSuccess"));
+      setTimeout(() => {
+        Dispatch(setDeleteSuccess(false));
+      }, 100);
+    }
+  }, [deleteSuccess]);
 
   return (
     <div className="w-full h-full">
       <AddProductDialog
         open={addProduct}
         handleClose={() => setOpenAddProduct(false)}
+      />
+
+      <DeletePopup
+        title={t("deleteProductConfirmation")}
+        open={openDeletePopup}
+        onClose={handleClosedeletePopup}
+        handleConfirm={handleDeleteProduct}
+        loading={deleteLoading}
       />
       <Breadcrumb
         actions={
@@ -118,7 +173,7 @@ const Products = () => {
         {/* <button onClick={zipArray}>zip</button>
         <button onClick={unzipArray}>unzip</button> */}
 
-        <Table columns={columns} data={data||[]} />
+        <Table columns={columns} data={data || []} />
       </div>
     </div>
   );

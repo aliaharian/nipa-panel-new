@@ -22,11 +22,12 @@ const Sidebar = () => {
   //current route
   const { pathname } = useLocation();
   const collapseMenu = useAppSelector((state) => state.app.collapseMenu);
+  console.log("pathnme", pathname);
   const menus = [
     {
-      icon: <Category2 variant={pathname === "/" ? "Bold" : "Linear"} />,
+      icon: <Category2 variant={pathname === "/dashboard" ? "Bold" : "Linear"} />,
       title: t("dashboard"),
-      route: "/",
+      route: "/dashboard",
     },
     {
       icon: (
@@ -63,7 +64,9 @@ const Sidebar = () => {
       route: "/send",
     },
     {
-      icon: <BoxAdd variant={pathname === "/products" ? "Bold" : "Linear"} />,
+      icon: (
+        <BoxAdd variant={pathname.includes("products") ? "Bold" : "Linear"} />
+      ),
       title: t("products"),
       route: "/products",
     },
@@ -87,7 +90,7 @@ const Sidebar = () => {
               route={menu.route}
               icon={menu.icon}
               title={menu.title}
-              active={menu.route === pathname}
+              active={pathname.includes(menu.route)}
             />
           ))}
         </nav>

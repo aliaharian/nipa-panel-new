@@ -14,5 +14,10 @@
   "productType.placeholder": "نوع محصول را انتخاب کنید",
   "file_type_not_supported": "فرمت فایل پشتیبانی نمی شود",
   "file_size_exceeds_maximum_limit": "حجم فایل بیش از حد مجاز است",
-  "uploadError": "خطا در آپلود فایل"
+  "uploadError": "خطا در آپلود فایل",
+  "imageDeleteSuccess": "تصویر با موفقیت حذف شد",
+  "imageDeleteError": "خطا در حذف تصویر",
+  "productImages.required": "حداقل یک تصویر باید انتخاب شود",
+  "productPrice.required": "قیمت محصول الزامی است",
+  "productDescription.required": "توضیحات محصول الزامی است"
 }

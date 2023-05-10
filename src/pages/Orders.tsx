@@ -1,4 +1,4 @@
-import { Add, Setting4 } from "iconsax-react";
+import { Add, Edit, Eye, Setting4, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/redux/hooks";
 import { ordersList } from "../app/redux/orders/actions";
@@ -88,7 +88,28 @@ const Orders = () => {
         allowOverflow: true,
         button: true,
         width: "120px",
-        cell: (row: any) => <TableAction row={row} />,
+        cell: (row: any) => (
+          <TableAction
+            items={[
+              {
+                icon: <Edit variant="Bold" />,
+                text: "ویرایش",
+                name: "edit",
+              },
+              {
+                icon: <Eye variant="Bold" />,
+                text: "مشاهده جزئیات",
+                name: "view",
+              },
+              {
+                icon: <Trash variant={"Bold"} />,
+                text: "حذف",
+                name: "delete",
+              },
+            ]}
+            row={row}
+          />
+        ),
       });
 
       setColumns([...colTmp]);

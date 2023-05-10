@@ -51,6 +51,7 @@ const TextArea = ({
         apiKey="ajj87dt2tkk9iay286x5uxdjdb685g4spq516y5lacgqlerz"
         init={{
           height: 150,
+          width: "100%",
           menubar: false,
           // plugins: [
           //   "advlist autolink lists link image charmap print preview anchor",
