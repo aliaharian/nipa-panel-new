@@ -111,7 +111,6 @@ const Dropzone: React.FC<DropzoneProps> = ({
 
     }
   };
-
   return (
     <div
       ref={dropzoneRef}
