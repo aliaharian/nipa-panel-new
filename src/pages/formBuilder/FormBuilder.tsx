@@ -1,18 +1,24 @@
-import { Add, Setting4 } from "iconsax-react";
+import { Add, ArchiveTick, Eye, Setting4 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Condition, FormField, FormOption } from "../../app/models/form";
 import { setCollapseMenu } from "../../app/redux/application/actions";
-import { useAppDispatch } from "../../app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import SnackbarUtils from "../../app/utils/SnackbarUtils";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Button from "../../components/button/Button";
 import FormBuilderSidebar from "../../components/formBuilder/FormBuilderSidebar";
 import FormContent from "../../components/formBuilder/formContent/FormContent";
 import Tabs from "../../components/tabs/Tabs";
+import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { getProductStepInfo } from "app/redux/products/actions";
+import { Save } from "@mui/icons-material";
 
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
+  let { code, step_id } = useParams();
+
   useEffect(() => {
     Dispatch(setCollapseMenu(true));
   });
@@ -23,9 +29,16 @@ const FormBuilder = () => {
   const [formElements, setFormElements] = useState<FormField[]>([]);
   const [selectedField, setSelectedField] = useState<FormField>();
   const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
+  const productStepInfo = useAppSelector(
+    (state) => state.products.productStepInfo
+  );
   const [lastId, setLastId] = useState<number>(0);
-
+  const { t } = useTranslation(["common", "validations"]);
+  const Navigate = useNavigate();
   console.log("cond", savedConditions);
+  useEffect(() => {
+    Dispatch(getProductStepInfo(parseInt(step_id || "0")));
+  }, []);
   const handleAddElement = (element: string) => {
     let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
@@ -164,27 +177,32 @@ const FormBuilder = () => {
       }
     }
   };
-
+  const handleBack = () => {
+    Navigate(`/products/${code}/steps`);
+  };
   return (
     <div className="w-full h-full">
       <Breadcrumb
+        handleBack={handleBack}
         actions={
           <>
             {" "}
             <div className="w-[186px]">
               <Button
-                icon={<Setting4 />}
-                text="فیلتر پیشرفته"
+                icon={<Eye />}
+                text={t("viewForm")}
                 onClick={() => {}}
-                simple
+                gray
               />
             </div>
-            <div className="w-[186px] mr-[16px]">
-              <Button icon={<Add />} text="ثبت سفارش جدید" href="submit" />
+            <div className="w-[138px] mr-[16px]">
+              <Button icon={<ArchiveTick />} text={t("saveForm")} onClick={()=>{}} />
             </div>
           </>
         }
-        title="فرم ساز"
+        title={`${t("formBuilder")} ${t("step")} ${
+          productStepInfo?.step_name
+        } ${t("product")} ${productStepInfo?.product?.name}`}
       />
       <div className="w-full flex">
         <FormBuilderSidebar

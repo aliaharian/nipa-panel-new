@@ -5,6 +5,8 @@ const initialUserState: productsSliceModel = {
   products: null,
   saveSuccess: false,
   deleteSuccess: false,
+  productSteps: [],
+  productStepInfo: undefined,
 };
 
 const productSlice = createSlice({
@@ -31,6 +33,12 @@ const productSlice = createSlice({
     },
     setDeleteSuccess: (state, action: PayloadAction<boolean>) => {
       state.deleteSuccess = action.payload;
+    },
+    productStepsList: (state, action: PayloadAction<any | undefined>) => {
+      state.productSteps = action.payload;
+    },
+    productStepInfo: (state, action: PayloadAction<any | undefined>) => {
+      state.productStepInfo = action.payload;
     },
   },
 });

@@ -1,13 +1,17 @@
 import { ArrowSquareUp, ArrowUp2 } from "iconsax-react";
 import { useState } from "react";
 
-const Accordion = () => {
+type AccordionProps = {
+  children: React.ReactNode;
+  title: string;
+};
+const Accordion = ({ children, title }: AccordionProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleToggle = () => {
     setOpen(!open);
   };
-  
+
   return (
     <div className="mb-[20px]">
       <div
@@ -15,7 +19,7 @@ const Accordion = () => {
         className="border border-text-300 w-full h-[72px] bg-white flex items-center justify-between px-[16px] rounded-[5px]"
       >
         <p className="text-primary-dark text-[18px] font-bold cursor-pointer">
-          فروش
+          {title}
         </p>
         <div className="w-[28px] h-[28px] bg-text-300 flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-text-400 transition-all">
           <ArrowUp2
@@ -32,15 +36,7 @@ const Accordion = () => {
         } w-full transition-all mt-[20px] flex flex-col justify-start items-start`}
       >
         <div className="border border-text-300 bg-white rounded-[5px] w-full h-full">
-          <div className="px-6 py-8">
-            <p>
-              {/* lorem */}
-              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              voluptatum. Quisquam, voluptatum. Quisquam, voluptatum. Quisquam,
-              voluptatum. Quisquam, voluptatum. Quisquam, voluptatum. Quisquam,
-              voluptatum. Quisquam, voluptatum. Quisquam, voluptatum.
-            </p>
-          </div>
+          {children}
         </div>
       </div>
     </div>

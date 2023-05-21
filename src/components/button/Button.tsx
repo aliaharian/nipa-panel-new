@@ -11,6 +11,7 @@ type ButtonProps = {
   icon?: any;
   after?: boolean;
   sm?: boolean;
+  xs?: boolean;
   gray?: boolean;
   disabled?: boolean;
 };
@@ -24,11 +25,12 @@ const Button = ({
   icon,
   after,
   sm,
+  xs,
   gray,
   disabled,
 }: ButtonProps) => {
   const classNames = `w-full ${
-    sm ? "h-[38px]" : "h-12"
+    xs ? "h-[36px]" : sm ? "h-[38px]" : "h-12"
   } rounded-[8px] flex items-center justify-center bg-primary-main text-white ${
     bordered
       ? "border border-primary-main bg-transparent text-primary-main"

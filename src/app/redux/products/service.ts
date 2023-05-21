@@ -7,6 +7,14 @@ async function productsList() {
   let response = await Api()?.get("/products");
   return response?.data;
 }
+async function productStepsList(code: string) {
+  let response = await Api()?.get(`/product/${code}/steps`);
+  return response?.data;
+}
+async function productStepInfo(id: number) {
+  let response = await Api()?.get(`/productSteps/${id}`);
+  return response?.data;
+}
 async function saveProduct(product: Product) {
   let response = await Api()?.post("/products", {
     name: product.name,
@@ -32,4 +40,6 @@ export default {
   productsList,
   saveProduct,
   deleteProduct,
+  productStepsList,
+  productStepInfo
 };

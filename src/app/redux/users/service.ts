@@ -14,15 +14,19 @@ async function sendOtp(credentials: sendCodeFormInitialValues) {
   return response?.data;
 }
 async function confirmOtp(credentials: confirmCodeFormInitialValues) {
-  console.log('cscscsc', credentials)
+  console.log("cscscsc", credentials);
   let response = await Api()?.post("/confirmOtp", {
     mobile: credentials.mobile,
     otp: credentials.otp,
   });
   return response?.data;
 }
-
+async function getRolesList() {
+  let response = await Api()?.get("/roles");
+  return response?.data;
+}
 export default {
   sendOtp,
   confirmOtp,
+  getRolesList,
 };

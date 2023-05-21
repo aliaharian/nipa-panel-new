@@ -1,13 +1,14 @@
-import { Copy, HambergerMenu } from "iconsax-react";
+import { Copy, HambergerMenu, Information } from "iconsax-react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { FormField } from "../../../app/models/form";
 import TextField from "../../form/TextField";
-import { Close } from "@mui/icons-material";
+import { Close, HourglassEmptyOutlined } from "@mui/icons-material";
 import DropDown from "../../form/Dropdown";
 import Checkbox from "../../form/Checkbox";
 import CheckboxGroup from "../../form/CheckboxGroup";
 import TextArea from "../../form/TextArea";
 import UploadFile from "../../form/UploadFile";
+import { useTranslation } from "react-i18next";
 
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
@@ -28,6 +29,8 @@ const FormContent = ({
   selectedField,
   deleteItem,
 }: FormContentProps) => {
+  const { t } = useTranslation(["common", "validations"]);
+
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
       case "text":
@@ -181,6 +184,16 @@ const FormContent = ({
   //   console.log('formElements', formElements)
   return (
     <div className="px-4 py-6 draggable grid grid-cols-1 gap-9">
+      {formElements.length === 0 && (
+        <div className="flex flex-col items-center justify-center mt-8">
+          <div className="w-[50px] rounded-full h-[50px] bg-primary-main text-white flex items-center justify-center">
+            <Information />
+          </div>
+          <p className="text-gray-400 text-[16px] font-bold mt-4">
+            {t("addFieldToStart")}
+          </p>
+        </div>
+      )}
       {formElements.map((element, index) => {
         return (
           <div

@@ -35,10 +35,70 @@ export interface productsSliceModel {
   products?: any;
   saveSuccess?: boolean;
   deleteSuccess?: boolean;
+  productSteps?: productStep[];
+  productStepInfo?: productStepInfo;
+}
+export interface productStepInfo {
+  id: number;
+  global_step_id: number;
+  product_id: number;
+  step_name: string;
+  parent_step_id: number | null;
+  meta: string | null;
+  parent_id: number | null;
+  global_step: {
+    id: number;
+    name: string;
+    description: string;
+    parent_id: number;
+    created_at: string;
+    updated_at: string;
+  };
+  global_step_parent: any;
+  product: product;
+}
+export interface product {
+  id: number;
+  code: string;
+  name: string;
+  custom: number;
+  status: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface productStep {
+  id: number;
+  global_step_id: number;
+  product_id: number;
+  step_name: string;
+  parent_step_id: number;
+  meta: string;
+  parent_id: number;
+  forms: any[];
 }
 export interface usersSliceModel {
-  mobile?:string | null;
-  login?:any | null;
+  mobile?: string | null;
+  login?: any | null;
+  roles?: role[] | null;
+}
+export interface role {
+  id: number;
+  name: string;
+  slug: string;
+  permissions: permission[];
+}
+
+export interface permission {
+  id: number;
+  name: string;
+  slug: string;
+  created_at: string;
+  updated_at: string;
+  pivot: {
+    role_id: number;
+    permission_id: number;
+  };
 }
 export interface usersSliceModel {
   userInfo?: userModel;

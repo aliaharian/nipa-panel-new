@@ -35,6 +35,7 @@ const Router = (): JSX.Element => {
             <Route path="/products">
               <Route path="" element={<Products />}></Route>
               <Route path=":code/steps" element={<ProductSteps />}></Route>
+              <Route path=":code/steps/:step_id/form" element={<FormBuilder />}></Route>
             </Route>
             <Route path="/formBuilder" element={<FormBuilder />} />
 

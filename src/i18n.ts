@@ -15,8 +15,8 @@ i18n
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
-    ns: ["nav", "validations"],
-    defaultNS: "nav",
+    ns: ["nav", "common", "validations"],
+    defaultNS: "common",
   });
 
 export default i18n;

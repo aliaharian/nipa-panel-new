@@ -54,6 +54,10 @@ code {
   height: 60px;
 
 }
+.customTable .rdt_TableCol_Sortable{
+  font-weight: bold;
+}
+
 
 .customTable .rdt_TableBody > :nth-child(even) {
   background-color: #f5f5f5;

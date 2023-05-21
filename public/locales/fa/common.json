@@ -27,5 +27,20 @@
   "yes": "بله",
   "no": "خیر",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
-  "handleProductSteps": "مدیریت مراحل محصول"
+  "handleProductSteps": "مدیریت مراحل محصول",
+  "order": "ترتیب",
+  "editForm": "ویرایش فرم",
+  "displayCondition": "شرط نمایش",
+  "accessibilities": "دسترسی ها",
+  "exportAndPrint": "خروجی و چاپ",
+  "manageForm": "مدیریت فرم",
+  "manageCondition": "مدیریت شرط",
+  "manageAccessibilities": "مدیریت دسترسی",
+  "managePrint": "مدیریت چاپ",
+  "step": "مرحله",
+  "product": "محصول",
+  "formBuilder": "فرم ساز",
+  "saveForm": "ذخیره فرم",
+  "addFieldToStart":"برای ساخت فرم، از فرم سمت راست یک فیلد اضافه کنید.",
+  "viewForm": "مشاهده فرم"
 }
