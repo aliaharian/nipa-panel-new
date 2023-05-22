@@ -15,6 +15,13 @@ async function productStepInfo(id: number) {
   let response = await Api()?.get(`/productSteps/${id}`);
   return response?.data;
 }
+async function setProductStepRoles(id: number, roles: number[]) {
+  let response = await Api()?.post(`/product/steps/${id}/setRoles`, {
+    //array to string by ,
+    roles: roles.join(","),
+  });
+  return response?.data;
+}
 async function saveProduct(product: Product) {
   let response = await Api()?.post("/products", {
     name: product.name,
@@ -41,5 +48,6 @@ export default {
   saveProduct,
   deleteProduct,
   productStepsList,
-  productStepInfo
+  productStepInfo,
+  setProductStepRoles
 };

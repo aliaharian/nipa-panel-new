@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { productStepsList } from "app/redux/products/actions";
 import Accordion from "components/accordion/Accordion";
 import Breadcrumb from "components/breadcrumb/Breadcrumb";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "components/button/Button";
 import { getRolesList } from "app/redux/users/actions";
+import ManageStepPermissionsDialog from "components/productSteps/Dialogs/ManageStepPermissionsDialog";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 
 const ProductSteps = () => {
   const { t } = useTranslation(["common", "validations"]);
@@ -17,7 +19,8 @@ const ProductSteps = () => {
   const Navigate = useNavigate();
   let { code } = useParams();
   const Dispatch = useAppDispatch();
-  console.log("props", code);
+  const [selectedStep, setSelectedStep] = useState<productStep | null>(null);
+  // console.log("props", code);
   const columns: any[] = [
     {
       name: t("order"),
@@ -54,7 +57,7 @@ const ProductSteps = () => {
             xs
             bordered
             text={t("manageCondition")}
-            onClick={() => handleManageForm(row)}
+            onClick={() => handleManageCondition(row)}
           />
         </div>
       ),
@@ -69,7 +72,7 @@ const ProductSteps = () => {
             xs
             bordered
             text={t("manageAccessibilities")}
-            onClick={() => handleManageForm(row)}
+            onClick={() => handleManagePermissions(row)}
           />
         </div>
       ),
@@ -94,13 +97,10 @@ const ProductSteps = () => {
     },
   ];
   const handleBack = () => {
-    console.log("back");
     Navigate("/products");
   };
 
-  console.log("roles", roles);
   useEffect(() => {
-    console.log("steps", steps);
     Dispatch(productStepsList(code || ""));
     if (roles?.length < 1) {
       Dispatch(getRolesList());
@@ -108,12 +108,36 @@ const ProductSteps = () => {
   }, []);
 
   const handleManageForm = (row: any) => {
-    console.log("row", row);
     Navigate(`/products/${code}/steps/${row.id}/form`);
   };
+  const handleManagePermissions = (row: any) => {
+    setSelectedStep(row);
+  };
 
+  const handleManageCondition = (row: any) => {
+    let flag = true;
+    let tmp = steps?.filter(
+      (x: productStep) => x.parent_id == row.parent_id
+    ) as productStep[];
+    console.log("tmp", tmp);
+    tmp.map((item: productStep) => {
+      if (item.forms.length == 0) {
+        flag = false;
+      }
+    });
+    if(!flag){
+      SnackbarUtils.error(t("validations:stepHasNoForm"));
+    }
+  };
   return (
     <div className="w-full h-full">
+      <ManageStepPermissionsDialog
+        roles={roles}
+        open={selectedStep ? true : false}
+        handleClose={() => setSelectedStep(null)}
+        step={selectedStep}
+      />
+
       <Breadcrumb
         title={t("handleProductSteps") + " " + code}
         handleBack={handleBack}

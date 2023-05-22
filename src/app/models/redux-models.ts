@@ -76,6 +76,7 @@ export interface productStep {
   meta: string;
   parent_id: number;
   forms: any[];
+  roles?: role[];
 }
 export interface usersSliceModel {
   mobile?: string | null;
@@ -86,7 +87,7 @@ export interface role {
   id: number;
   name: string;
   slug: string;
-  permissions: permission[];
+  permissions?: permission[];
 }
 
 export interface permission {

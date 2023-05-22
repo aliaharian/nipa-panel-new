@@ -27,15 +27,11 @@ const DropDown = ({
   inputActions,
   options,
 }: TextFieldProps) => {
-  // console.log("formik.errors?.[name]", formik.values[name]);
-  // const options = [
-  //   { value: "chocolate", label: <p>chocolate</p> },
-  //   { value: "strawberry", label: <p>strawberry</p> },
-  //   { value: "vanilla", label: <p>vanilla</p> },
-  // ];
+
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
     setSelectedOption(e);
+    console.log('nice car')
     // formik?.handleChange(e);
     formik.handleChange({
       target: {

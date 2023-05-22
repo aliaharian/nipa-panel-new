@@ -41,7 +41,6 @@ const ConditionItem = ({
       setSelectedFieldValue([...newSelectedFieldValue]);
     }
   };
-  console.log("selectedFielouter", selectedField);
 
   useEffect(() => {
     if (
@@ -53,13 +52,13 @@ const ConditionItem = ({
       let selectedFieldTmp = conditionalfields.find(
         (x) => x.id.toString() == condition.field
       );
+
       let relationFieldTmp = formElements.find(
         (x) => x.id.toString() == condition.relationField
       );
-      let selectedFieldValueTmp = selectedFieldTmp?.options;
+      // let selectedFieldValueTmp = selectedFieldTmp?.options;
 
-      console.log("sssss", selectedFieldValueTmp);
-      if (selectedFieldTmp && relationFieldTmp && selectedFieldValueTmp) {
+      if (selectedFieldTmp && relationFieldTmp && condition.values) {
         setSelectedField({
           label: selectedFieldTmp.label,
           value: selectedFieldTmp.id.toString(),
@@ -74,7 +73,7 @@ const ConditionItem = ({
           value: relationFieldTmp.id.toString(),
         });
 
-        setSelectedFieldValue([...selectedFieldValueTmp]);
+        setSelectedFieldValue(condition.values);
       }
     }
   }, [condition]);
@@ -98,38 +97,67 @@ const ConditionItem = ({
   };
   const handleChangeField = (e: any) => {
     let selectedField = conditionalfields.find(
-      (x) => x.id.toString() == e.value
+      (x) => x.id.toString() == e.target.value
     );
 
-    console.log("conditionalfields", conditionalfields);
-    console.log("eval", e.value);
-    console.log("selectedFieldinner", selectedField);
     setSelectedField({ ...e, options: selectedField?.options });
+
+    // console.log({ ...e.target, options: selectedField?.options });
+
     setSelectedFieldValue([]);
     updateConditions({
       ...condition,
-      field: e.value,
+      field: e.target.value,
     });
   };
+  console.log("condition", condition);
 
   const handleChangeOperation = (e: any) => {
-    setOperation(e);
-    updateConditions({ ...condition, operation: e });
+    console.log("e", operation);
+    setOperation(e.target);
+    updateConditions({ ...condition, operation: e.target });
   };
 
   const handleChangeRelationField = (e: any) => {
-    setRelationField(e);
-    updateConditions({ ...condition, relationField: e.value });
+    const field = formElements.find((x) => x.id.toString() == e.target.value);
+    console.log("field", field);
+    if (field) {
+      setRelationField({ label: field.label, value: field.id.toString() });
+      updateConditions({
+        ...condition,
+        relationField: field.id,
+      });
+    }
   };
 
   const handleChangeValue = (e: any) => {
-    let index = selectedFieldValue.findIndex((x) => x.id == e.value);
+    const options = selectedField?.options;
+    let index = selectedFieldValue.findIndex((x) => x.id == e.target.value);
     if (index > -1) {
     } else {
-      setSelectedFieldValue([...selectedFieldValue, e]);
-      updateConditions({ ...condition, values: [...selectedFieldValue, e] });
+      setSelectedFieldValue([
+        ...selectedFieldValue,
+        {
+          ...options.find((x: any) => x.id == e.target.value),
+        },
+      ]);
+      updateConditions({
+        ...condition,
+        values: [
+          ...selectedFieldValue,
+          {
+            ...options.find((x: any) => x.id == e.target.value),
+          },
+        ],
+      });
     }
   };
+
+  ///
+  // console.log("selectedField", selectedField);
+  // console.log("selectedFieldValue", selectedFieldValue);
+  // console.log("operation", operation);
+  // console.log("relationField", relationField);
 
   return (
     <div className="w-full flex flex-col items-start justify-start px-4 border-b pb-[30px] border-text-400 mb-[18px]">
@@ -150,7 +178,7 @@ const ConditionItem = ({
         formik={{
           handleChange: handleChangeField,
           values: {
-            condField: selectedField,
+            condField: selectedField?.value,
           },
         }}
       />
@@ -162,7 +190,7 @@ const ConditionItem = ({
         label={"برابر"}
         options={
           selectedField &&
-          selectedField.options.map((option: any) => {
+          selectedField?.options?.map((option: any) => {
             return {
               label: option.label,
               value: option.id,
@@ -211,7 +239,7 @@ const ConditionItem = ({
         formik={{
           handleChange: handleChangeOperation,
           values: {
-            operation: operation,
+            operation: operation?.value,
           },
         }}
       />
@@ -238,7 +266,7 @@ const ConditionItem = ({
         formik={{
           handleChange: handleChangeRelationField,
           values: {
-            relationField: relationField,
+            relationField: relationField?.value,
           },
         }}
       />

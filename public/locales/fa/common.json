@@ -41,6 +41,12 @@
   "product": "محصول",
   "formBuilder": "فرم ساز",
   "saveForm": "ذخیره فرم",
-  "addFieldToStart":"برای ساخت فرم، از فرم سمت راست یک فیلد اضافه کنید.",
-  "viewForm": "مشاهده فرم"
+  "addFieldToStart": "برای ساخت فرم، از فرم سمت راست یک فیلد اضافه کنید.",
+  "viewForm": "مشاهده فرم",
+  "addPermission": "افزودن دسترسی",
+  "systemRoles": "نقش های سیستم",
+  "saveSetting": "ذخیره تنظیمات",
+  "selectAtLeastOneRole": "حداقل یک نقش را انتخاب کنید",
+  "successSaveProductStepRoles": "تنظیمات با موفقیت ذخیره شد",
+  "errorSaveProductStepRoles": "خطا در ذخیره تنظیمات"
 }
