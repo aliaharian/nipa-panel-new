@@ -46,6 +46,7 @@ export interface productStepInfo {
   parent_step_id: number | null;
   meta: string | null;
   parent_id: number | null;
+  forms: any[];
   global_step: {
     id: number;
     name: string;

@@ -108,6 +108,7 @@ const ProductSteps = () => {
   }, []);
 
   const handleManageForm = (row: any) => {
+    console.log('row',row)
     Navigate(`/products/${code}/steps/${row.id}/form`);
   };
   const handleManagePermissions = (row: any) => {
@@ -125,7 +126,7 @@ const ProductSteps = () => {
         flag = false;
       }
     });
-    if(!flag){
+    if (!flag) {
       SnackbarUtils.error(t("validations:stepHasNoForm"));
     }
   };

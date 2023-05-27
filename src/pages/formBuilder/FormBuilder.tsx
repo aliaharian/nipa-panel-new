@@ -1,19 +1,16 @@
-import { Add, ArchiveTick, Eye, Setting4 } from "iconsax-react";
+import { ArchiveTick, Eye } from "iconsax-react";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Condition, FormField, FormOption } from "../../app/models/form";
 import { setCollapseMenu } from "../../app/redux/application/actions";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
-import SnackbarUtils from "../../app/utils/SnackbarUtils";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Button from "../../components/button/Button";
 import FormBuilderSidebar from "../../components/formBuilder/FormBuilderSidebar";
 import FormContent from "../../components/formBuilder/formContent/FormContent";
-import Tabs from "../../components/tabs/Tabs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getProductStepInfo } from "app/redux/products/actions";
-import { Save } from "@mui/icons-material";
+import formService from "app/redux/forms/service";
 
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
@@ -29,22 +26,23 @@ const FormBuilder = () => {
   const [formElements, setFormElements] = useState<FormField[]>([]);
   const [selectedField, setSelectedField] = useState<FormField>();
   const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
+  const [formId, setFormId] = useState<number>(0);
   const productStepInfo = useAppSelector(
     (state) => state.products.productStepInfo
   );
   const [lastId, setLastId] = useState<number>(0);
   const { t } = useTranslation(["common", "validations"]);
   const Navigate = useNavigate();
-  console.log("cond", savedConditions);
   useEffect(() => {
     Dispatch(getProductStepInfo(parseInt(step_id || "0")));
   }, []);
-  const handleAddElement = (element: string) => {
+  const handleAddElement = (element: string, id: number) => {
     let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
       placeholder: element + (lastId + 1).toString(),
       label: "عنوان فیلد",
       type: element,
+      typeId: id,
       required: false,
       id: lastId + 1,
     };
@@ -180,6 +178,75 @@ const FormBuilder = () => {
   const handleBack = () => {
     Navigate(`/products/${code}/steps`);
   };
+
+  useEffect(() => {
+    if (productStepInfo) {
+      if (productStepInfo.forms?.length > 0) {
+        setFormId(productStepInfo.forms?.[0].id);
+        loadForm(productStepInfo.forms?.[0].id);
+      } else {
+        createForm();
+      }
+    }
+  }, [productStepInfo]);
+  const loadForm = async (id: number) => {
+    const response = await formService.getForm(id);
+    console.log(response);
+  };
+
+  const createForm = async () => {
+    const response = await formService.createForm({
+      name: "form" + productStepInfo?.id,
+      product_id: productStepInfo?.product_id,
+      product_steps: productStepInfo?.id?.toString(),
+    });
+    setFormId(response.id);
+
+    // console.log(response);
+  };
+
+  const handleSaveForm = async () => {
+    console.log("save form", formElements);
+    //save form fields and save their ids as server_id
+    let tmp = [...formElements];
+    tmp.map((item, index) => {
+      if (item.server_id) {
+        let res = formService.updateFormField(item.server_id, {
+          name: item.name,
+          form_field_type_id: item.typeId,
+          label: item.label,
+          placeholder: item.placeholder,
+          // helper_text: "",
+          required: item.required,
+          min: 1,
+          max: 100,
+        });
+        res.then((response) => {
+          console.log("updated!", response);
+        });
+      } else {
+        let res = formService.createFormField({
+          name: item.name,
+          form_field_type_id: item.typeId,
+          label: item.label,
+          placeholder: item.placeholder,
+          // helper_text: "",
+          required: item.required,
+          min: 1,
+          max: 100,
+        });
+        res.then((response) => {
+          console.log(response);
+          tmp[index] = {
+            ...tmp[index],
+            server_id: response.id,
+          };
+          setFormElements([...tmp]);
+        });
+      }
+    });
+  };
+
   return (
     <div className="w-full h-full">
       <Breadcrumb
@@ -196,7 +263,11 @@ const FormBuilder = () => {
               />
             </div>
             <div className="w-[138px] mr-[16px]">
-              <Button icon={<ArchiveTick />} text={t("saveForm")} onClick={()=>{}} />
+              <Button
+                icon={<ArchiveTick />}
+                text={t("saveForm")}
+                onClick={handleSaveForm}
+              />
             </div>
           </>
         }

@@ -8,7 +8,7 @@ import FormBuilderConditionsTab from "./formConditions/FormBuilderConditionsTab"
 type FormBuilderSidebarProps = {
   handleChangeTab: (value: string) => void;
   selectedTab: string;
-  addElement(element: any): void;
+  addElement(element: any,id:number): void;
   selectedField?: FormField;
   handleUpdateField: (field: FormField) => void;
   handleAddOption: (id: number, option: FormOption) => void;

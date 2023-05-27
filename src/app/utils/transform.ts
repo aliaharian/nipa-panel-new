@@ -1,3 +1,5 @@
+import { ExportCurve, TextBlock, TickSquare } from "iconsax-react";
+
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
 
@@ -65,13 +67,14 @@ const imageValidExtensions = [
 ];
 function fileToBlob(file: File): Blob {
   return new Blob([file], { type: file.type });
-  
 }
+
+
 
 export default {
   pluralize,
   fileToUrl,
   imageValidExtensions,
   base64ToBlob,
-  fileToBlob
+  fileToBlob,
 };

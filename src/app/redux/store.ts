@@ -4,6 +4,7 @@ import orderSlice from "./orders/slice";
 
 import userSlice from "./users/slice";
 import productSlice from "./products/slice";
+import formSlice from "./forms/slice";
 const customizedMiddleware = getDefaultMiddleware({
   serializableCheck: false,
 });
@@ -13,6 +14,7 @@ const store = configureStore({
     app: appSlice.reducer,
     orders: orderSlice.reducer,
     products: productSlice.reducer,
+    forms: formSlice.reducer
   },
   middleware: customizedMiddleware,
 });
