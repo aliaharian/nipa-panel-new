@@ -48,5 +48,8 @@
   "saveSetting": "ذخیره تنظیمات",
   "selectAtLeastOneRole": "حداقل یک نقش را انتخاب کنید",
   "successSaveProductStepRoles": "تنظیمات با موفقیت ذخیره شد",
-  "errorSaveProductStepRoles": "خطا در ذخیره تنظیمات"
+  "errorSaveProductStepRoles": "خطا در ذخیره تنظیمات",
+  "stepHasNoForm": "لطفا برای همه مراحل فرم تعریف کنید.",
+  "stepHasNoOptionalFields": "فرم این مرحله فیلد انتخابی ندارد",
+  "addConditionFor": "افزودن شرط برای"
 }

@@ -59,7 +59,7 @@ const CheckboxGroup = ({
             name={name}
             value={item.value}
             label={item.label}
-            checked={selectedOptions.includes(item.value)}
+            checked={selectedOptions.includes(item.value)||false}
             handleCheck={() => handleChange(item)}
           />
         ))}

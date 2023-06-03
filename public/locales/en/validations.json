@@ -1,4 +1,6 @@
 {
     "requiredField": "This field is required",
-    "emailFormat": "Please enter a valid email address"
+    "emailFormat": "Please enter a valid email address",
+    "stepHasNoForm": "لطفا برای همه مراحل فرم تعریف کنید."
+
   }

@@ -14,7 +14,6 @@ export const productsList = (): ThunkAction<
 > => {
   return async (dispatch, getState) => {
     const response = await productService.productsList();
-    console.log(response);
     dispatch(productActions.productsList(response));
   };
 };
@@ -24,7 +23,6 @@ export const productStepsList = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const response = await productService.productStepsList(code);
-    console.log(response);
     dispatch(productActions.productStepsList(response));
   };
 };
@@ -32,8 +30,8 @@ export const getProductStepInfo = (
   id: number
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
+    if(id === 0) return dispatch(productActions.productStepInfo(null));
     const response = await productService.productStepInfo(id);
-    console.log(response);
     dispatch(productActions.productStepInfo(response));
   };
 };
@@ -43,7 +41,6 @@ export const saveProduct = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const response = await productService.saveProduct(product);
-    console.log(response);
     dispatch(productActions.saveProduct(response));
   };
 };
@@ -62,7 +59,6 @@ export const deleteProduct = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const response = await productService.deleteProduct(id);
-    console.log(response);
     dispatch(productActions.deleteProduct(response));
   };
 };

@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getProductStepInfo } from "app/redux/products/actions";
 import formService from "app/redux/forms/service";
+import { CircularProgress } from "@mui/material";
 
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
@@ -21,11 +22,14 @@ const FormBuilder = () => {
   });
   const [selectedTab, setSelectedTab] = useState<string>("elements");
   const handleChangeTab = (value: string): void => {
+    handleSaveForm();
     setSelectedTab(value);
   };
   const [formElements, setFormElements] = useState<FormField[]>([]);
   const [selectedField, setSelectedField] = useState<FormField>();
   const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
+  const [saveFormLoading, setSaveFormLoading] = useState<boolean>(true);
+
   const [formId, setFormId] = useState<number>(0);
   const productStepInfo = useAppSelector(
     (state) => state.products.productStepInfo
@@ -35,6 +39,10 @@ const FormBuilder = () => {
   const Navigate = useNavigate();
   useEffect(() => {
     Dispatch(getProductStepInfo(parseInt(step_id || "0")));
+    return () => {
+      Dispatch(setCollapseMenu(false));
+      Dispatch(getProductStepInfo(parseInt("0")));
+    };
   }, []);
   const handleAddElement = (element: string, id: number) => {
     let tmp: FormField = {
@@ -108,7 +116,11 @@ const FormBuilder = () => {
     }
   };
 
-  const handleDeleteOption = (id: number, option: string) => {
+  const handleDeleteOption = (
+    id: number,
+    option: string,
+    server_id?: number | null
+  ) => {
     let tmp = [...formElements];
     let foundIndex = tmp.findIndex((x) => x.id == id);
     if (foundIndex !== -1 && tmp[foundIndex].options) {
@@ -124,6 +136,13 @@ const FormBuilder = () => {
         setFormElements([...tmp]);
         setSelectedField({ ...tmp[foundIndex] });
       }
+    }
+
+    //server side delete if item has server_id
+    if (server_id) {
+      formService.deleteOption(server_id).then((res) => {
+        console.log("res", res);
+      });
     }
   };
 
@@ -158,13 +177,11 @@ const FormBuilder = () => {
   };
   const saveConditions = (conditions: Condition[]) => {
     setSavedConditions([...conditions.filter((x) => x.saved)]);
-    console.log(conditions.filter((x) => x.saved));
   };
   const handleDeleteItem = (element: FormField) => {
     //add alert for delete
     let tmp = [...formElements];
     const index = tmp.indexOf(element);
-    console.log("item", index);
     if (index > -1) {
       tmp.splice(index, 1);
       setFormElements(tmp);
@@ -182,16 +199,109 @@ const FormBuilder = () => {
   useEffect(() => {
     if (productStepInfo) {
       if (productStepInfo.forms?.length > 0) {
+        setSaveFormLoading(true);
         setFormId(productStepInfo.forms?.[0].id);
         loadForm(productStepInfo.forms?.[0].id);
       } else {
         createForm();
+        setSaveFormLoading(false);
       }
     }
   }, [productStepInfo]);
   const loadForm = async (id: number) => {
     const response = await formService.getForm(id);
-    console.log(response);
+    handleSetFormElements(response);
+    handleSetFormConditions(response);
+    setSaveFormLoading(false);
+  };
+
+  const handleSetFormConditions = (response: any) => {
+    let { conditions, fields, id } = response;
+    let tmp: Condition[] = [];
+    //group conditions by form_field_id
+    conditions.map((item: any) => {
+      //find field
+      let field = fields.find((x: any) => x.id == item.form_field_id);
+
+      //find field options
+      let options = field?.options?.map((x: any) => {
+        return {
+          id: x.id,
+          label: x.label,
+          server_id: x.id,
+          value: x.option,
+        };
+      });
+
+      let foundIndex = tmp.findIndex((x: any) => x.field == item.form_field_id);
+      if (foundIndex > -1) {
+        //find specific option
+        let option = options?.find(
+          (x: any) => x.id == item.form_field_option_id
+        );
+
+        tmp[foundIndex]?.values?.push({
+          id: option?.id,
+          label: option?.label,
+          server_id: option?.id,
+          value: option?.value,
+        });
+      } else {
+        //find specific option
+        let option = options?.find(
+          (x: any) => x.id == item.form_field_option_id
+        );
+        tmp.push({
+          field: item.form_field_id,
+          id: item.id,
+          operation:
+            item.operation == 1
+              ? { name: "operation", value: "show" }
+              : { name: "operation", value: "hide" },
+          relationField: item.relational_form_field_id,
+          saved: true,
+          values: [
+            {
+              id: option?.id,
+              label: option?.label,
+              server_id: option?.id,
+              value: option?.value,
+            },
+          ],
+        });
+      }
+    });
+
+    setSavedConditions([...tmp]);
+  };
+  const handleSetFormElements = (form: any) => {
+    let tmp: FormField[] = [];
+    form.fields?.forEach((item: any) => {
+      let tmpItem: FormField = {
+        id: item.id,
+        name: item.name,
+        type: item.type?.type,
+        typeId: item.form_field_type_id,
+        label: item.label,
+        placeholder: item.placeholder,
+        required: item.required,
+        options:
+          ((item.options && item.options.length > 0) ||
+            item.type?.has_options) &&
+          item.options?.map((option: any) => {
+            return {
+              id: option.id,
+              server_id: option.id,
+              value: option.option,
+              label: <p>{option.label}</p>,
+            };
+          }),
+        onlyImage: item.onlyImage,
+        server_id: item.id,
+      };
+      tmp.push(tmpItem);
+    });
+    setFormElements(tmp);
   };
 
   const createForm = async () => {
@@ -201,54 +311,72 @@ const FormBuilder = () => {
       product_steps: productStepInfo?.id?.toString(),
     });
     setFormId(response.id);
-
-    // console.log(response);
   };
 
   const handleSaveForm = async () => {
-    console.log("save form", formElements);
     //save form fields and save their ids as server_id
+    setSaveFormLoading(true);
     let tmp = [...formElements];
-    tmp.map((item, index) => {
-      if (item.server_id) {
-        let res = formService.updateFormField(item.server_id, {
+    let condTmp = [...savedConditions];
+    let res = formService.updateForm(formId, {
+      name: "form" + productStepInfo?.id,
+      fields: tmp.map((item, index) => {
+        return {
+          server_id: item.server_id,
           name: item.name,
           form_field_type_id: item.typeId,
           label: item.label,
           placeholder: item.placeholder,
-          // helper_text: "",
           required: item.required,
+          helper_text: item.id,
           min: 1,
           max: 100,
-        });
-        res.then((response) => {
-          console.log("updated!", response);
-        });
-      } else {
-        let res = formService.createFormField({
-          name: item.name,
-          form_field_type_id: item.typeId,
-          label: item.label,
-          placeholder: item.placeholder,
-          // helper_text: "",
-          required: item.required,
-          min: 1,
-          max: 100,
-        });
-        res.then((response) => {
-          console.log(response);
-          tmp[index] = {
-            ...tmp[index],
-            server_id: response.id,
-          };
-          setFormElements([...tmp]);
-        });
-      }
+          order: index,
+          hasOptions: item.options && item.options.length > 0,
+          options:
+            item.options &&
+            item.options.length > 0 &&
+            item.options?.map((x) => {
+              return {
+                option: x.value,
+                label: x.label.props.children,
+                id: x.server_id,
+              };
+            }),
+        };
+      }),
+      conditions: condTmp.map((item, index) => {
+        return {
+          form_id: formId,
+          form_field_id: item.field,
+          form_field_options_id: item.values?.map((value) => {
+            return value.id;
+          }),
+          operation: item.operation?.value === "show" ? 1 : 0,
+          relational_form_field_id: item.relationField,
+        };
+      }),
+    });
+    res.then((response) => {
+      console.log("updated!", response);
+
+      handleSetFormElements(response);
+      handleSetFormConditions(response);
+      setSaveFormLoading(false);
+    });
+    res.catch((error) => {
+      setSaveFormLoading(false);
     });
   };
 
   return (
     <div className="w-full h-full">
+      {saveFormLoading && (
+        <div className="flex-col w-full h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.8)] z-[9999] pointer-events-auto flex justify-center items-center">
+          <CircularProgress />
+          <p className="text-white mt-4">لطفا چند لحظه صبر کنید...</p>
+        </div>
+      )}
       <Breadcrumb
         handleBack={handleBack}
         actions={
@@ -295,6 +423,7 @@ const FormBuilder = () => {
           <FormContent
             lastId={lastId}
             setLastId={setLastId}
+            saveFormLoading={saveFormLoading}
             formElements={formElements}
             selectedField={selectedField}
             setFormElements={setFormElements}

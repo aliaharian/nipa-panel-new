@@ -18,6 +18,7 @@ type FormContentProps = {
   setLastId: (lastId: number) => void;
   selectedField?: FormField;
   deleteItem: (item: FormField) => void;
+  saveFormLoading: boolean;
 };
 
 const FormContent = ({
@@ -28,6 +29,7 @@ const FormContent = ({
   setLastId,
   selectedField,
   deleteItem,
+  saveFormLoading,
 }: FormContentProps) => {
   const { t } = useTranslation(["common", "validations"]);
 
@@ -184,7 +186,7 @@ const FormContent = ({
   //   console.log('formElements', formElements)
   return (
     <div className="px-4 py-6 draggable grid grid-cols-1 gap-9">
-      {formElements.length === 0 && (
+      {formElements.length === 0 && !saveFormLoading && (
         <div className="flex flex-col items-center justify-center mt-8">
           <div className="w-[50px] rounded-full h-[50px] bg-primary-main text-white flex items-center justify-center">
             <Information />

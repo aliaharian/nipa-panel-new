@@ -25,7 +25,6 @@ const Api = () => {
     function (config) {
       // Do something before request is sent
 
-      console.log("req sent");
       store.dispatch(setApiLoading(true));
       return config;
     },

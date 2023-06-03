@@ -42,6 +42,16 @@ async function deleteProduct(id: number) {
   let response = await Api()?.delete(`/products/${id}`);
   return response?.data;
 }
+//add product condition
+async function addProductConditions(data: any) {
+  let response = await Api()?.post(`/product/steps/conditions`, {
+    step_id: data.stepId,
+    field_id: data.fieldId,
+    option_id: data.optionId,
+    next_step_id: data.nextStepId,
+  });
+  return response?.data;
+}
 
 export default {
   productsList,
@@ -49,5 +59,6 @@ export default {
   deleteProduct,
   productStepsList,
   productStepInfo,
-  setProductStepRoles
+  setProductStepRoles,
+  addProductConditions,
 };

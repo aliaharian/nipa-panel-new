@@ -38,10 +38,22 @@ async function updateFormField(id: number, data: any) {
   });
   return response?.data;
 }
+async function updateForm(id: number, data: any) {
+  let response = await Api()?.put(`/forms/${id}`, {
+    ...data,
+  });
+  return response?.data;
+}
+async function deleteOption(id: number) {
+  let response = await Api()?.delete(`/formFieldOptions/${id}`);
+  return response?.data;
+}
 export default {
   getForm,
   createForm,
   getFormFieldTypes,
   createFormField,
   updateFormField,
+  updateForm,
+  deleteOption
 };

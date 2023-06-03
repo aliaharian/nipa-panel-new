@@ -41,7 +41,6 @@ const FormBuilderConditionsTab = ({
     }
   };
 
-
   const setCondition = (condition: Condition) => {
     let index = conditions.findIndex((x) => x.id == condition.id);
     if (index > -1) {

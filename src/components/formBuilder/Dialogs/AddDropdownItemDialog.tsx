@@ -11,6 +11,7 @@ export type initialValues = {
   fieldName: string;
   fieldValue: string;
   id?: number;
+  server_id?: number;
 };
 
 type AddDropdownItemDialogProps = {
@@ -27,12 +28,16 @@ const AddDropdownItemDialog = ({
   handleAddOption,
   selectedOption,
 }: AddDropdownItemDialogProps) => {
-  console.log("selectedOptionselectedOptionselectedOptionselectedOptionselectedOption", selectedOption);
+  console.log(
+    "selectedOptionselectedOptionselectedOptionselectedOptionselectedOption",
+    selectedOption
+  );
   const initialValues: initialValues = {
     index: selectedOption?.index || -1,
     id: selectedOption?.index || 0,
     fieldName: selectedOption?.label || "",
     fieldValue: selectedOption?.value || "",
+    server_id: selectedOption?.server_id,
   };
 
   const formik = useFormik({
@@ -44,6 +49,8 @@ const AddDropdownItemDialog = ({
       formik.setFieldValue("fieldName", "");
       formik.setFieldValue("fieldValue", "");
       formik.setFieldValue("index", -1);
+      formik.setFieldValue("server_id", -1);
+
       handleClose?.();
     },
   });
@@ -53,6 +60,7 @@ const AddDropdownItemDialog = ({
       formik.setFieldValue("fieldValue", selectedOption.value);
       formik.setFieldValue("index", selectedOption.index);
       formik.setFieldValue("id", selectedOption.id);
+      formik.setFieldValue("server_id", selectedOption.server_id);
     }
   }, [selectedOption]);
 

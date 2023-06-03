@@ -20,5 +20,5 @@
   "productImages.required": "حداقل یک تصویر باید انتخاب شود",
   "productPrice.required": "قیمت محصول الزامی است",
   "productDescription.required": "توضیحات محصول الزامی است",
-  "validations:stepHasNoForm": "لطفا برای همه مراحل فرم تعریف کنید."
+  "stepHasNoForm": "لطفا برای همه مراحل فرم تعریف کنید."
 }

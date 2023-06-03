@@ -26,6 +26,7 @@ const Checkbox = ({
         checked={checked}
         value={value}
         name={name}
+        onChange={handleCheck}
         className="absolute top-0 left-0 opacity-0"
       />
       <div

@@ -14,7 +14,11 @@ type FormBuilderEditElementTabProps = {
   handleUpdateField: (field: FormField) => void;
   handleAddOption: (id: number, option: FormOption) => void;
   handleUpdateOption: (id: number, option: FormOption, index: number) => void;
-  handleDeleteOption: (id: number, option: string) => void;
+  handleDeleteOption: (
+    id: number,
+    option: string,
+    server_id?: number | null
+  ) => void;
   onlyImage: boolean;
   setOnlyImage: (onlyImage: boolean) => void;
   required: boolean;
@@ -49,13 +53,13 @@ const FormBuilderEditElementTab = ({
   const _handleAddOption = (item: initialValues, update?: boolean) => {
     if (selectedField) {
       if (item.index !== undefined && item.index !== -1) {
-    
         handleUpdateOption(
           selectedField.id,
           {
             label: <p>{item.fieldName}</p>,
             value: item.fieldValue.toString(),
             id: item.id,
+            server_id: item.server_id,
           },
           item.index
         );
@@ -77,6 +81,7 @@ const FormBuilderEditElementTab = ({
         value: item.value,
         label: item.label.props.children,
         id: item.id,
+        server_id: item.server_id,
       });
     }
     if (selectedField && selectedField?.options) {
@@ -89,7 +94,7 @@ const FormBuilderEditElementTab = ({
   };
   const _handleDeleteOption = (option: FormOption) => {
     if (selectedField) {
-      handleDeleteOption(selectedField.id, option.value);
+      handleDeleteOption(selectedField.id, option.value, option.server_id);
     }
   };
   return (
@@ -157,7 +162,7 @@ const FormBuilderEditElementTab = ({
             </div>
           )}
 
-          {selectedField.options && (
+          {selectedField.options ? (
             <AddDropdownItemDialog
               open={openAddDropdownItemDialog}
               handleClose={_handleCloseAddOptionDialog}
@@ -165,9 +170,11 @@ const FormBuilderEditElementTab = ({
               handleAddOption={_handleAddOption}
               selectedOption={selectedOption}
             />
+          ) : (
+            ""
           )}
 
-          {selectedField.options && (
+          {selectedField.options ? (
             <div className="w-full mt-[25px]">
               {selectedField.options.map(
                 (option: FormOption, index: number) => (
@@ -203,6 +210,8 @@ const FormBuilderEditElementTab = ({
                 </div>
               </div>
             </div>
+          ) : (
+            ""
           )}
         </div>
       )}

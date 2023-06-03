@@ -2,7 +2,7 @@ export interface FormField {
   name: string;
   placeholder: string;
   type: string;
-  typeId:number;
+  typeId: number;
   required: boolean;
   label: string;
   id: number;
@@ -14,8 +14,10 @@ export interface FormField {
 export interface FormOption {
   index?: number;
   id?: number;
-  label: any;
+  label?: any;
+  name?: any;
   value: any;
+  server_id?: number;
 }
 
 export interface Condition {

@@ -13,7 +13,6 @@ export const getFormFieldTypes = (): ThunkAction<
 > => {
   return async (dispatch, getState) => {
     const response = await formService.getFormFieldTypes();
-    console.log(response);
     dispatch(formActions.getFormFieldTypes(response));
   };
 };

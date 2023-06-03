@@ -23,7 +23,6 @@ const FormBuilderElementsTab = ({
     }
   }, []);
   const parseIcon = (icon: string): any => {
-    console.log(icon);
     switch (icon) {
       case "TextBlock":
         return <TextBlock />;
@@ -61,6 +60,7 @@ const FormBuilderElementsTab = ({
             {/* repeat 9 in loop skeleton */}
             {Array.from(Array(9).keys()).map((item, index) => (
               <Skeleton
+                key={index}
                 variant="rounded"
                 width={80}
                 height={80}

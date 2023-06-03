@@ -8,7 +8,7 @@ i18n
   // .use(LanguageDetector)
   .init({
     fallbackLng: "fa",
-    debug: true,
+    debug: false,
     interpolation: {
       escapeValue: false,
     },

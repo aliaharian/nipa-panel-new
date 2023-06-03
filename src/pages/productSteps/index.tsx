@@ -11,6 +11,7 @@ import Button from "components/button/Button";
 import { getRolesList } from "app/redux/users/actions";
 import ManageStepPermissionsDialog from "components/productSteps/Dialogs/ManageStepPermissionsDialog";
 import SnackbarUtils from "app/utils/SnackbarUtils";
+import ManageStepConditionsDialog from "components/productSteps/Dialogs/ManageStepConditionsDialog";
 
 const ProductSteps = () => {
   const { t } = useTranslation(["common", "validations"]);
@@ -20,6 +21,8 @@ const ProductSteps = () => {
   let { code } = useParams();
   const Dispatch = useAppDispatch();
   const [selectedStep, setSelectedStep] = useState<productStep | null>(null);
+  const [selectedStepForCondition, setSelectedStepForCondition] =
+    useState<productStep | null>(null);
   // console.log("props", code);
   const columns: any[] = [
     {
@@ -89,13 +92,15 @@ const ProductSteps = () => {
             xs
             bordered
             text={t("managePrint")}
-            onClick={() => handleManageForm(row)}
+            onClick={() => handleManagePrint(row)}
           />
         </div>
       ),
       sortable: false,
     },
   ];
+
+  const handleManagePrint = (row: any) => {};
   const handleBack = () => {
     Navigate("/products");
   };
@@ -108,7 +113,7 @@ const ProductSteps = () => {
   }, []);
 
   const handleManageForm = (row: any) => {
-    console.log('row',row)
+    console.log("row", row);
     Navigate(`/products/${code}/steps/${row.id}/form`);
   };
   const handleManagePermissions = (row: any) => {
@@ -127,7 +132,13 @@ const ProductSteps = () => {
       }
     });
     if (!flag) {
-      SnackbarUtils.error(t("validations:stepHasNoForm"));
+      SnackbarUtils.error(t("stepHasNoForm"));
+    } else {
+      if (row.forms[0].optionalFields.length == 0) {
+        SnackbarUtils.error(t("stepHasNoOptionalFields"));
+      } else {
+        setSelectedStepForCondition(row);
+      }
     }
   };
   return (
@@ -137,6 +148,18 @@ const ProductSteps = () => {
         open={selectedStep ? true : false}
         handleClose={() => setSelectedStep(null)}
         step={selectedStep}
+      />
+      <ManageStepConditionsDialog
+        open={selectedStepForCondition ? true : false}
+        handleClose={() => setSelectedStepForCondition(null)}
+        step={selectedStepForCondition}
+        otherSteps={
+          selectedStepForCondition &&
+          steps?.filter(
+            (x: productStep) =>
+              x.parent_id != null && x.id > selectedStepForCondition?.id
+          )
+        }
       />
 
       <Breadcrumb

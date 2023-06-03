@@ -76,7 +76,7 @@ const ConditionItem = ({
         setSelectedFieldValue(condition.values);
       }
     }
-  }, [condition]);
+  }, [condition, conditionalfields, formElements]);
 
   const updateConditions = (condition: Condition) => {
     let newCondition: Condition = {
@@ -102,7 +102,6 @@ const ConditionItem = ({
 
     setSelectedField({ ...e, options: selectedField?.options });
 
-    // console.log({ ...e.target, options: selectedField?.options });
 
     setSelectedFieldValue([]);
     updateConditions({
@@ -110,17 +109,14 @@ const ConditionItem = ({
       field: e.target.value,
     });
   };
-  console.log("condition", condition);
 
   const handleChangeOperation = (e: any) => {
-    console.log("e", operation);
     setOperation(e.target);
     updateConditions({ ...condition, operation: e.target });
   };
 
   const handleChangeRelationField = (e: any) => {
     const field = formElements.find((x) => x.id.toString() == e.target.value);
-    console.log("field", field);
     if (field) {
       setRelationField({ label: field.label, value: field.id.toString() });
       updateConditions({
@@ -153,11 +149,7 @@ const ConditionItem = ({
     }
   };
 
-  ///
-  // console.log("selectedField", selectedField);
-  // console.log("selectedFieldValue", selectedFieldValue);
-  // console.log("operation", operation);
-  // console.log("relationField", relationField);
+  
 
   return (
     <div className="w-full flex flex-col items-start justify-start px-4 border-b pb-[30px] border-text-400 mb-[18px]">
