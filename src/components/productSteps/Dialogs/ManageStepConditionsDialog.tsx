@@ -37,27 +37,59 @@ const ManageStepConditionsDialog = ({
     []
   );
   const [relationField, setRelationField] = useState<selectedFieldType>();
-
   const handleSubmitForm = () => {
     // formik.submitForm();
-      productService.addProductConditions({
-        stepId: step?.id,
-        fieldId: selectedField?.target.value,
-        optionId: selectedFieldValue.map((opt)=>opt.id),
-        nextStepId: relationField?.value,
-      });
+    productService.addProductConditions({
+      stepId: step?.id,
+      fieldId: selectedField?.value,
+      optionId: selectedFieldValue.map((opt) => opt.id),
+      nextStepId: relationField?.value,
+    });
+
+    handleClose?.();
+    SnackbarUtils.success(t("successSaveProductStepconds"));
+
   };
 
-  console.log("selectedFieldValue", selectedFieldValue);
-  console.log("selectedField", selectedField);
+  console.log("step", selectedField);
+  useEffect(() => {
+    if (step) {
+      setSelectedField({
+        name: "condField",
+        value: step.conditions?.[0]?.form_field_id.toString() || "0",
+        options: conditionalfields.find(
+          (x: any) =>
+            x.id.toString() == step.conditions?.[0]?.form_field_id.toString()
+        )?.options,
+      });
+
+      setRelationField({
+        label: step.conditions?.[0]?.next_product_step_id.toString() || "0",
+        value: step.conditions?.[0]?.next_product_step_id.toString() || "0",
+      });
+
+      let optTmp: FormOption[] = [];
+      step.conditions?.map((condition) => {
+        let option = conditionalfields
+          .find((x: any) => x.id == condition.form_field_id)
+          ?.options.find((x: any) => x.id == condition.form_field_option_id);
+        if (option) optTmp.push(option);
+      });
+      setSelectedFieldValue([...optTmp]);
+    }
+  }, [step]);
   const _handleClose = () => {
     handleClose?.();
     // formik.setFieldValue("selectedRoles", []);
   };
 
   const handleDeleteItem = (item: any) => {
-    let index = selectedFieldValue.findIndex((x) => x.value == item.value);
+    console.log("item", item);
+    let tmp = [...selectedFieldValue];
+    let index = tmp.findIndex((x: any) => x.option == item.option);
     if (index > -1) {
+      console.log("index", index);
+      console.log("selectedFieldValue", tmp);
       let newSelectedFieldValue = selectedFieldValue;
       newSelectedFieldValue.splice(index, 1);
       setSelectedFieldValue([...newSelectedFieldValue]);
@@ -69,7 +101,7 @@ const ManageStepConditionsDialog = ({
       (x: any) => x.id.toString() == e.target.value
     );
 
-    setSelectedField({ ...e, options: selectedField?.options });
+    setSelectedField({ ...e.target, options: selectedField?.options });
 
     setSelectedFieldValue([]);
   };
@@ -154,7 +186,7 @@ const ManageStepConditionsDialog = ({
                 {selectedFieldValue.map((item, index) => {
                   return (
                     <div
-                      key={index}
+                      key={Math.random() * 10000}
                       className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pl-[10px] pr-[16px] ml-[8px]"
                     >
                       <p className="text-[14px]">{item.label}</p>

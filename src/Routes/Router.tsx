@@ -23,6 +23,8 @@ const FormBuilder = React.lazy(
 const Products = React.lazy(() => import("../pages/products/index"));
 const ProductSteps = React.lazy(() => import("pages/productSteps/index"));
 
+const BasicDatas = React.lazy(() => import("../pages/basicDatas/index"));
+
 const Router = (): JSX.Element => {
   return (
     <Suspense fallback={<div>loading...</div>}>
@@ -37,10 +39,14 @@ const Router = (): JSX.Element => {
               <Route path=":code/steps" element={<ProductSteps />}></Route>
               <Route path=":code/steps/:step_id/form" element={<FormBuilder />}></Route>
             </Route>
-            <Route path="/formBuilder" element={<FormBuilder />} />
+            <Route path="/basicDatas">
+              <Route path="" element={<BasicDatas />}></Route>
+       
+            </Route>
+         
+            {/* <Route path="/formBuilder" element={<FormBuilder />} /> */}
 
-            {/* <Route path="/" element={<ChatList />} /> */}
-            {/* <Route path="/dialog/:peerId" element={<Dialog />} /> */}
+
           </Route>
         </Route>
 

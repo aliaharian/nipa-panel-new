@@ -1,3 +1,4 @@
+import { BasicData } from "./basicData";
 import { usersResponseModel } from "./user";
 
 export interface userModel {
@@ -78,6 +79,14 @@ export interface productStep {
   parent_id: number;
   forms: any[];
   roles?: role[];
+  conditions?: condition[];
+}
+export interface condition {
+  form_field_id: number;
+  form_field_option_id: number;
+  id: number;
+  next_product_step_id: number;
+  product_step_id: number;
 }
 export interface usersSliceModel {
   mobile?: string | null;
@@ -111,4 +120,8 @@ export interface usersSliceModel {
 export interface appSliceModel {
   apiLoading: boolean;
   collapseMenu: boolean;
+}
+
+export interface basicDatasSliceModel {
+  basicDatas: BasicData[] | null;
 }

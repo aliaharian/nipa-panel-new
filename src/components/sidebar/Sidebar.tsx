@@ -1,5 +1,6 @@
 import {
   AddSquare,
+  Book,
   BoxAdd,
   Category2,
   ElementPlus,
@@ -69,6 +70,13 @@ const Sidebar = () => {
       ),
       title: t("products"),
       route: "/products",
+    },
+    {
+      icon: (
+        <Book variant={pathname.includes("basicDatas") ? "Bold" : "Linear"} />
+      ),
+      title: t("basicDatas"),
+      route: "/basicDatas",
     },
   ];
 

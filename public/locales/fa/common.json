@@ -51,5 +51,8 @@
   "errorSaveProductStepRoles": "خطا در ذخیره تنظیمات",
   "stepHasNoForm": "لطفا برای همه مراحل فرم تعریف کنید.",
   "stepHasNoOptionalFields": "فرم این مرحله فیلد انتخابی ندارد",
-  "addConditionFor": "افزودن شرط برای"
+  "addConditionFor": "افزودن شرط برای",
+  "successSaveProductStepconds": "شرط با موفقیت ذخیره شد",
+  "basicDatas": "داده های اولیه",
+  "items":"مورد"
 }
