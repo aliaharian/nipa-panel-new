@@ -24,6 +24,7 @@ const Products = React.lazy(() => import("../pages/products/index"));
 const ProductSteps = React.lazy(() => import("pages/productSteps/index"));
 
 const BasicDatas = React.lazy(() => import("../pages/basicDatas/index"));
+const BasicDataList = React.lazy(() => import("../pages/basicDataList/index"));
 
 const Router = (): JSX.Element => {
   return (
@@ -41,7 +42,8 @@ const Router = (): JSX.Element => {
             </Route>
             <Route path="/basicDatas">
               <Route path="" element={<BasicDatas />}></Route>
-       
+              <Route path=":id" element={<BasicDataList />}></Route>
+
             </Route>
          
             {/* <Route path="/formBuilder" element={<FormBuilder />} /> */}

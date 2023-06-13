@@ -24,6 +24,7 @@
   "description": "توضیحات",
   "addProductSuccess": "محصول با موفقیت اضافه شد",
   "deleteProductConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این محصول حذف خواهند شد. آیا مطمئن هستید؟",
+  "deleteBasicDataConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این داده اولیه حذف خواهند شد. آیا مطمئن هستید؟",
   "yes": "بله",
   "no": "خیر",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
@@ -54,5 +55,11 @@
   "addConditionFor": "افزودن شرط برای",
   "successSaveProductStepconds": "شرط با موفقیت ذخیره شد",
   "basicDatas": "داده های اولیه",
-  "items":"مورد"
+  "items": "مورد",
+  "code": "کد",
+  "createDate": "تاریخ ایجاد",
+  "changeState": "تغییر وضعیت",
+  "manage":"مدیریت",
+  "add":"افزودن",
+  "deleteBasicDataSuccess":"داده اولیه با موفقیت حذف شد."
 }

@@ -33,11 +33,11 @@ const Button = ({
     xs ? "h-[36px]" : sm ? "h-[38px]" : "h-12"
   } rounded-[8px] flex items-center justify-center bg-primary-main text-white ${
     bordered
-      ? "border border-primary-main bg-transparent text-primary-main"
+      ? "border border-primary-main bg-transparent !text-primary-main"
       : ""
   }
-   ${simple ? "border-none bg-transparent text-primary-main" : ""}
-   ${gray ? "border-none bg-text-200 text-text-500" : ""}
+   ${simple ? "border-none bg-transparent !text-primary-main" : ""}
+   ${gray ? "border-none bg-text-200 !text-text-500" : ""}
     ${disabled ? "opacity-90 cursor-not-allowed pointer-events-none" : ""}
   `;
   const handleIcon = () => {

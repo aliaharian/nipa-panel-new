@@ -20,6 +20,11 @@ export const renderChatTime = (timestamp: number) => {
   }
 };
 
+export const dateToTimestamp = (date: string) => {
+
+  return new Date(date).getTime();
+};
+
 export const renderDialogTime = (timestamp: number, time?: boolean) => {
   let now = Math.floor(Date.now());
 
@@ -84,4 +89,6 @@ export default {
   base64ToBlob,
   fileToBlob,
   toPersianDigits,
+  dateToTimestamp,
+  renderChatTime
 };
