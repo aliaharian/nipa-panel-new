@@ -14,7 +14,6 @@ import Table from "components/table/Table";
 import TableAction from "components/table/TableAction";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useTranslation } from "react-i18next";
-import { deleteProduct, setDeleteSuccess } from "app/redux/products/actions";
 import DeletePopup from "components/popup/DeletePopup";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,7 +36,9 @@ const BasicDataList = () => {
   const Navigate = useNavigate();
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
-  const [addProduct, setOpenAddProduct] = useState<boolean>(false);
+  const [addBasicDataItem, setOpenAddBasicDataItem] = useState<boolean>(false);
+  const [editData, setEditData] = useState<BasicDataItem>();
+
   const handleClosedeletePopup = () => {
     setOpenDeletePopup(false);
   };
@@ -83,6 +84,11 @@ const BasicDataList = () => {
         }
         //
         break;
+      case "edit":
+        setEditData(row);
+        setOpenAddBasicDataItem(true);
+        break;
+
       default:
         break;
     }
@@ -150,7 +156,7 @@ const BasicDataList = () => {
     }
   }, [data]);
 
-  const handleDeleteProduct = async () => {
+  const handleDeleteBasicDataItem = async () => {
     setDeleteLoading(true);
     console.log("selectedRow", selectedRow);
     await basicDataService.deleteBasicDataItem(selectedRow.id);
@@ -161,13 +167,13 @@ const BasicDataList = () => {
     SnackbarUtils.success(t("deleteBasicDataSuccess"));
     setOpenDeletePopup(false);
 
-    // Dispatch(deleteProduct(selectedRow.id));
+    // Dispatch(deleteBasicDataItem(selectedRow.id));
   };
   // useEffect(() => {
   //   if (deleteSuccess) {
   //     setDeleteLoading(false);
   //     setOpenDeletePopup(false);
-  //     SnackbarUtils.success(t("deleteProductSuccess"));
+  //     SnackbarUtils.success(t("deleteBasicDataItemSuccess"));
   //     setTimeout(() => {
   //       Dispatch(setDeleteSuccess(false));
   //     }, 100);
@@ -175,22 +181,24 @@ const BasicDataList = () => {
   // }, [deleteSuccess]);
 
   const handleCloseAddDialog = () => {
-    setOpenAddProduct(false);
+    setOpenAddBasicDataItem(false);
+    setEditData(undefined)
   };
   return (
     <div className="w-full h-full">
       <AddBasicDataItemDialog
-        open={addProduct}
+        open={addBasicDataItem}
         handleClose={handleCloseAddDialog}
         data={data}
         getBasicData={getBasicData}
+        editData={editData}
       />
 
       <DeletePopup
         title={t("deleteBasicDataConfirmation")}
         open={openDeletePopup}
         onClose={handleClosedeletePopup}
-        handleConfirm={handleDeleteProduct}
+        handleConfirm={handleDeleteBasicDataItem}
         loading={deleteLoading}
       />
       <Breadcrumb
@@ -200,7 +208,7 @@ const BasicDataList = () => {
               <Button
                 icon={<Add />}
                 text={t("add") + " " + data?.name}
-                onClick={() => setOpenAddProduct(true)}
+                onClick={() => setOpenAddBasicDataItem(true)}
               />
             </div>
           </>

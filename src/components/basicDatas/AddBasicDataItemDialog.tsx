@@ -12,19 +12,13 @@ import { useEffect, useState } from "react";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { BasicData, BasicDataItem } from "app/models/basicData";
 import basicDataService from "app/redux/basicData/service";
-import { basicDatasList } from "app/redux/basicData/actions";
 
 type OrderFiltersDialogProps = {
   open: boolean;
   handleClose?: () => void;
   data?: BasicData;
   getBasicData: (id: string) => void;
-};
-
-type initialValues = {
-  code: string;
-  name: string;
-  status: number;
+  editData?: BasicDataItem | null;
 };
 
 const AddBasicDataItemDialog = ({
@@ -32,6 +26,7 @@ const AddBasicDataItemDialog = ({
   handleClose,
   data,
   getBasicData,
+  editData,
 }: OrderFiltersDialogProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const Dispatch = useAppDispatch();
@@ -50,10 +45,10 @@ const AddBasicDataItemDialog = ({
   });
 
   const initialValues: BasicDataItem = {
-    id: 0,
-    code: "",
-    name: "",
-    status: 1,
+    id: editData?.id || 0,
+    code: editData?.code || "",
+    name: editData?.name || "",
+    status: editData?.status || 1,
   };
 
   const formik = useFormik({
@@ -62,14 +57,29 @@ const AddBasicDataItemDialog = ({
     onSubmit: async (values) => {
       console.log("valuekkkks", values);
       if (data?.id) {
-        let res = await basicDataService.addBasicDataItem(data?.id, values);
-        if (res.id) {
-          getBasicData(data.id.toString());
-          handleClose?.();
+        if (editData) {
+          let res = await basicDataService.editBasicDataItem(editData?.id, values);
+          if (res.id) {
+            getBasicData(data.id.toString());
+            handleClose?.();
+          }
+        } else {
+          let res = await basicDataService.addBasicDataItem(data?.id, values);
+          if (res.id) {
+            getBasicData(data.id.toString());
+            handleClose?.();
+          }
         }
       }
     },
   });
+
+  useEffect(() => {
+    formik.setFieldValue("id", editData?.id || 0);
+    formik.setFieldValue("name", editData?.name || "");
+    formik.setFieldValue("code", editData?.code || "");
+    formik.setFieldValue("status", editData?.status || 1);
+  }, [editData]);
   const handleSubmitForm = () => {
     formik.handleSubmit();
   };
@@ -84,17 +94,18 @@ const AddBasicDataItemDialog = ({
       SnackbarUtils.success(t("addProductSuccess"));
     }
   }, [saveSuccess]);
-  console.log("formik.values", formik.values);
+  // console.log("edit", editData);
+  // console.log("formik.values", formik.values);
   return (
     <SideDialog
-      headerText={t("addProduct")}
+      headerText={editData ? t("editBasicData") : t("addBasicData")}
       headerIcon={<Add />}
       open={open}
       handleClose={_handleClose}
     >
       <SideDialog.Content>
         <div className="p-7 font-bold text-[18px]">
-          <p className="text-right">{t("enterProductDetail")}</p>
+          <p className="text-right">{t("enterBasicDataDetail")}</p>
           <form onSubmit={formik.handleSubmit} className="w-full">
             <div className="mt-7 w-full grid grid-cols-2 gap-x-5 gap-y-7">
               <TextField
@@ -146,7 +157,7 @@ const AddBasicDataItemDialog = ({
             <Button
               disabled={submitdisabled}
               icon={<Add />}
-              text={t("addProduct")}
+              text={editData ? t("editBasicData") : t("addBasicData")}
               onClick={handleSubmitForm}
             />
           </div>

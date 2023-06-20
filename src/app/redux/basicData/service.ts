@@ -15,6 +15,10 @@ async function addBasicDataItem(id: number, data: BasicDataItem) {
   let response = await Api()?.post("/basicData/" + id + "/addItem", data);
   return response?.data;
 }
+async function editBasicDataItem(id: number, data: BasicDataItem) {
+  let response = await Api()?.put("/basicData/item/" + id, data);
+  return response?.data;
+}
 async function changeBasicDataItemState(id: number) {
   let response = await Api()?.post("/basicData/item/" + id + "/updateStatus");
   return response?.data;
@@ -30,5 +34,6 @@ export default {
   getBasicDataInfo,
   addBasicDataItem,
   changeBasicDataItemState,
-  deleteBasicDataItem
+  deleteBasicDataItem,
+  editBasicDataItem,
 };

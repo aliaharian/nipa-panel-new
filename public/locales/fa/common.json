@@ -61,5 +61,8 @@
   "changeState": "تغییر وضعیت",
   "manage":"مدیریت",
   "add":"افزودن",
-  "deleteBasicDataSuccess":"داده اولیه با موفقیت حذف شد."
+  "deleteBasicDataSuccess":"داده اولیه با موفقیت حذف شد.",
+  "addBasicData":"افزودن مقدار داده اولیه",
+  "editBasicData":"ویرایش مقدار داده اولیه",
+  "enterBasicDataDetail":"اطلاعات داده اولیه را وارد کنید"
 }
