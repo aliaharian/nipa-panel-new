@@ -7,8 +7,11 @@ export interface FormField {
   label: string;
   id: number;
   options?: FormOption[];
-  onlyImage?: boolean;
-  server_id?: number;
+  basicDataItems?: FormOption[];
+  basic_data_id?: number | null;
+  basic_data?: any | null;
+  onlyImage?: boolean ;
+  server_id?: number | null;
 }
 
 export interface FormOption {

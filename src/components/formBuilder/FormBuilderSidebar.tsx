@@ -23,6 +23,7 @@ type FormBuilderSidebarProps = {
   formElements: FormField[];
   saveConditions: (conditions: Condition[]) => void;
   savedConditions: Condition[];
+  setFromBasicData: (required: boolean) => void;
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -38,6 +39,7 @@ const FormBuilderSidebar = ({
   formElements,
   saveConditions,
   savedConditions,
+  setFromBasicData,
 }: FormBuilderSidebarProps) => {
   const handleSaveConditions = (conditions: Condition[]) => {
     saveConditions(conditions);
@@ -59,6 +61,8 @@ const FormBuilderSidebar = ({
             setOnlyImage={setOnlyImage}
             required={selectedField?.required || false}
             setRequired={setRequired}
+            fromBasicData={selectedField?.basic_data_id ? true : false}
+            setFromBasicData={setFromBasicData}
           />
         );
       case "formConditions":

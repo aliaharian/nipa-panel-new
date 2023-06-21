@@ -12,6 +12,7 @@ import { getRolesList } from "app/redux/users/actions";
 import ManageStepPermissionsDialog from "components/productSteps/Dialogs/ManageStepPermissionsDialog";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import ManageStepConditionsDialog from "components/productSteps/Dialogs/ManageStepConditionsDialog";
+import { Skeleton } from "@mui/material";
 
 const ProductSteps = () => {
   const { t } = useTranslation(["common", "validations"]);
@@ -167,20 +168,34 @@ const ProductSteps = () => {
         handleBack={handleBack}
       />
       <div className="w-full">
-        {steps
-          ?.filter((x: productStep) => x.parent_id == null)
-          .map((item: productStep, index: number) => (
-            <Accordion key={item.id} title={item.step_name}>
-              <Table
-                columns={columns}
-                data={
-                  steps?.filter(
-                    (x: productStep) => x.parent_id == item.global_step_id
-                  ) || []
-                }
+        {steps && roles ? (
+          steps
+            .filter((x: productStep) => x.parent_id == null)
+            .map((item: productStep, index: number) => (
+              <Accordion key={item.id} title={item.step_name}>
+                <Table
+                  columns={columns}
+                  data={
+                    steps?.filter(
+                      (x: productStep) => x.parent_id == item.global_step_id
+                    ) || []
+                  }
+                />
+              </Accordion>
+            ))
+        ) : (
+          <div className="grid grid-cols-1 gap-[40px]">
+            {Array.from(Array(3).keys()).map((item, index) => (
+              <Skeleton
+                key={index}
+                variant="rounded"
+                width={"100%"}
+                height={72}
+                animation="wave"
               />
-            </Accordion>
-          ))}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

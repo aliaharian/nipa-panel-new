@@ -32,6 +32,7 @@ const FormContent = ({
   saveFormLoading,
 }: FormContentProps) => {
   const { t } = useTranslation(["common", "validations"]);
+  console.log("el", formElements);
 
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
@@ -95,7 +96,7 @@ const FormContent = ({
             className="group"
             name={element.name}
             label={element.label}
-            options={element.options}
+            options={element.basicDataItems || element.options}
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
             formik={{

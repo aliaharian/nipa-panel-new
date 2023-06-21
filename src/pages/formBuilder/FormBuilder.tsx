@@ -175,6 +175,21 @@ const FormBuilder = () => {
       setSelectedField({ ...tmp[foundIndex] });
     }
   };
+  const setFromBasicData = (value: boolean) => {
+    let tmp = [...formElements];
+
+    let foundIndex = tmp.findIndex((x) => x.id == selectedField?.id);
+
+    if (foundIndex > -1) {
+      tmp[foundIndex] = {
+        ...tmp[foundIndex],
+        basic_data_id: value == true ? tmp[foundIndex].basic_data.id : null,
+      };
+      setFormElements([...tmp]);
+      setSelectedField({ ...tmp[foundIndex] });
+    }
+  };
+
   const saveConditions = (conditions: Condition[]) => {
     setSavedConditions([...conditions.filter((x) => x.saved)]);
   };
@@ -276,6 +291,7 @@ const FormBuilder = () => {
   };
   const handleSetFormElements = (form: any) => {
     let tmp: FormField[] = [];
+    console.log("dfvsvvsdvsdvdvsdv", form);
     form.fields?.forEach((item: any) => {
       let tmpItem: FormField = {
         id: item.id,
@@ -285,6 +301,19 @@ const FormBuilder = () => {
         label: item.label,
         placeholder: item.placeholder,
         required: item.required,
+        basic_data: item.basic_data,
+        basic_data_id: item.basic_data?.id || null,
+        basicDataItems:
+          ((item.basicDataItems && item.basicDataItems.length > 0) ||
+            item.type?.has_options) &&
+          item.basicDataItems?.map((option: any) => {
+            return {
+              id: option.id,
+              server_id: option.id,
+              value: option.option,
+              label: <p>{option.label}</p>,
+            };
+          }),
         options:
           ((item.options && item.options.length > 0) ||
             item.type?.has_options) &&
@@ -333,6 +362,20 @@ const FormBuilder = () => {
           max: 100,
           order: index,
           hasOptions: item.options && item.options.length > 0,
+          basic_data: item.basic_data,
+          basic_data_id: item.basic_data?.id || null,
+
+          basicDataItems:
+            item.basicDataItems &&
+            item.basicDataItems.length > 0 &&
+            item.basicDataItems?.map((option: any) => {
+              return {
+                id: option.id,
+                server_id: option.id,
+                value: option.option,
+                label: <p>{option.label}</p>,
+              };
+            }),
           options:
             item.options &&
             item.options.length > 0 &&
@@ -418,6 +461,7 @@ const FormBuilder = () => {
           formElements={formElements}
           saveConditions={saveConditions}
           savedConditions={savedConditions}
+          setFromBasicData={setFromBasicData}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent

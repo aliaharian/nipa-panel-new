@@ -48,6 +48,12 @@ const Api = () => {
       //   "qwerty",
       //   error.response.data.message || error.response.data.msg
       // );
+      // console.log("error.response", error.response);
+      if(error.response.status==401){
+        localStorage.removeItem("nipa_token")
+        document.location.href="/auth/login"
+      }
+
       if (error.response.data.errors) {
         //map errors object
         const errors = Object.keys(error.response.data.errors).map((key) => {

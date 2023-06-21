@@ -21,6 +21,8 @@ import basicDataService from "app/redux/basicData/service";
 import { BasicData, BasicDataItem } from "app/models/basicData";
 import transform from "app/utils/transform";
 import AddBasicDataItemDialog from "components/basicDatas/AddBasicDataItemDialog";
+import { Skeleton } from "@mui/material";
+import TableSkeleton from "components/skeleton/TableSkeleton";
 
 const BasicDataList = () => {
   const [columns, setColumns] = useState<any[]>([]);
@@ -28,10 +30,7 @@ const BasicDataList = () => {
   let { id } = useParams();
 
   const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
-  const Navigator = useNavigate();
-  const deleteSuccess = useAppSelector(
-    (state: any) => state.products.deleteSuccess
-  );
+
   const { t } = useTranslation("common");
   const Navigate = useNavigate();
   const [selectedRow, setSelectedRow] = useState<any>(null);
@@ -182,7 +181,7 @@ const BasicDataList = () => {
 
   const handleCloseAddDialog = () => {
     setOpenAddBasicDataItem(false);
-    setEditData(undefined)
+    setEditData(undefined);
   };
   return (
     <div className="w-full h-full">
@@ -205,22 +204,35 @@ const BasicDataList = () => {
         actions={
           <>
             <div className="w-[186px] mr-[16px]">
-              <Button
-                icon={<Add />}
-                text={t("add") + " " + data?.name}
-                onClick={() => setOpenAddBasicDataItem(true)}
-              />
+              {data ? (
+                <Button
+                  icon={<Add />}
+                  text={t("add") + " " + data?.name}
+                  onClick={() => setOpenAddBasicDataItem(true)}
+                />
+              ) : (
+                <Skeleton
+                  variant="rounded"
+                  width={186}
+                  height={48}
+                  animation="wave"
+                />
+              )}
             </div>
           </>
         }
         handleBack={() => Navigate("/basicDatas")}
-        title={t("manage") + " " + data?.name}
+        title={data?t("manage") + " " + data?.name:t("pleaseWait")}
       />
       <div>
         {/* <button onClick={zipArray}>zip</button>
         <button onClick={unzipArray}>unzip</button> */}
 
-        <Table columns={columns} data={data?.items || []} />
+        {data?.items ? (
+          <Table columns={columns} data={data?.items || []} />
+        ) : (
+          <TableSkeleton />
+        )}
       </div>
     </div>
   );

@@ -64,5 +64,7 @@
   "deleteBasicDataSuccess":"داده اولیه با موفقیت حذف شد.",
   "addBasicData":"افزودن مقدار داده اولیه",
   "editBasicData":"ویرایش مقدار داده اولیه",
-  "enterBasicDataDetail":"اطلاعات داده اولیه را وارد کنید"
+  "enterBasicDataDetail":"اطلاعات داده اولیه را وارد کنید",
+  "fromBasicDatas":"فیلد از داده های اولیه باشد",
+  "onlyImage":"فقط تصویر"
 }

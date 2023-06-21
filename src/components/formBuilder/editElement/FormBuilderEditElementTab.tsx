@@ -1,5 +1,5 @@
 import { Add, Edit2, PenTool, Trash } from "iconsax-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
 import Switch from "../../form/Switch";
@@ -8,6 +8,10 @@ import TextField from "../../form/TextField";
 import AddDropdownItemDialog, {
   initialValues,
 } from "../Dialogs/AddDropdownItemDialog";
+import { useTranslation } from "react-i18next";
+import DropDown from "components/form/Dropdown";
+import { useAppDispatch, useAppSelector } from "app/redux/hooks";
+import { basicDatasList } from "app/redux/basicData/actions";
 
 type FormBuilderEditElementTabProps = {
   selectedField?: FormField;
@@ -23,6 +27,8 @@ type FormBuilderEditElementTabProps = {
   setOnlyImage: (onlyImage: boolean) => void;
   required: boolean;
   setRequired: (required: boolean) => void;
+  fromBasicData: boolean;
+  setFromBasicData: (required: boolean) => void;
 };
 
 const FormBuilderEditElementTab = ({
@@ -35,21 +41,41 @@ const FormBuilderEditElementTab = ({
   setOnlyImage,
   required,
   setRequired,
+  fromBasicData,
+  setFromBasicData,
 }: FormBuilderEditElementTabProps) => {
   const [openAddDropdownItemDialog, setOpenAddDropdownItemDialog] =
     useState<boolean>(false);
+  // const [fromBasicData, setFromBasicData] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<FormOption>();
-
+  // const [selectedBasicData, setSelectedBasicData] = useState<any>();
+  const basicDatas = useAppSelector((state) => state.basicData.basicDatas);
+  const { t } = useTranslation();
+  const Dispatch = useAppDispatch();
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
       let tmp: FormField = { ...selectedField };
-      tmp = {
-        ...tmp,
-        [e.target.name]: e.target.value,
-      };
-      handleUpdateField({ ...tmp });
+      if (e.target.name == "basic_data") {
+        let basicDataTmp = basicDatas?.find((x) => x.id == e.target.value);
+        if (basicDataTmp) {
+          tmp = {
+            ...tmp,
+            [e.target.name]: basicDataTmp,
+          };
+          handleUpdateField({ ...tmp });
+        }
+      } else {
+        tmp = {
+          ...tmp,
+          [e.target.name]: e.target.value,
+        };
+        handleUpdateField({ ...tmp });
+      }
     }
   };
+  useEffect(() => {
+    !basicDatas && Dispatch(basicDatasList());
+  }, []);
   const _handleAddOption = (item: initialValues, update?: boolean) => {
     if (selectedField) {
       if (item.index !== undefined && item.index !== -1) {
@@ -152,17 +178,57 @@ const FormBuilderEditElementTab = ({
               label={"این فیلد اجباری می باشد"}
             />
           </div>
+
+          {selectedField.options ? (
+            <div className="w-full mt-[30px]">
+              <Switch
+                checked={fromBasicData}
+                setChecked={setFromBasicData}
+                label={t("fromBasicDatas") || ""}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+
+          {selectedField.options && fromBasicData ? (
+            <DropDown
+              className="group mt-[30px]"
+              name={"basic_data"}
+              label={"داده اولیه"}
+              options={
+                basicDatas
+                  ? basicDatas.map((data) => {
+                      return {
+                        label: <p>{data.name}</p>,
+                        value: data.id.toString(),
+                      };
+                    })
+                  : []
+              }
+              placeholder={"انتخاب کنید"}
+              formik={{
+                handleChange: (e: any) => _handleUpdateField(e),
+                values: {
+                  basic_data: selectedField.basic_data?.id.toString(),
+                },
+              }}
+            />
+          ) : (
+            ""
+          )}
+
           {selectedField.type === "uploadFile" && (
             <div className="w-full mt-[30px]">
               <Switch
                 checked={onlyImage}
                 setChecked={setOnlyImage}
-                label={"فقط تصویر"}
+                label={t("onlyImage") || ""}
               />
             </div>
           )}
 
-          {selectedField.options ? (
+          {selectedField.options && !fromBasicData ? (
             <AddDropdownItemDialog
               open={openAddDropdownItemDialog}
               handleClose={_handleCloseAddOptionDialog}
@@ -174,7 +240,7 @@ const FormBuilderEditElementTab = ({
             ""
           )}
 
-          {selectedField.options ? (
+          {selectedField.options && !fromBasicData ? (
             <div className="w-full mt-[25px]">
               {selectedField.options.map(
                 (option: FormOption, index: number) => (

@@ -22,6 +22,7 @@ import AddProductDialog from "components/products/AddProductDialog";
 import DeletePopup from "components/popup/DeletePopup";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { useNavigate } from "react-router-dom";
+import TableSkeleton from "components/skeleton/TableSkeleton";
 
 const Products = () => {
   const data = useAppSelector((state) => state.products.products);
@@ -173,7 +174,7 @@ const Products = () => {
         {/* <button onClick={zipArray}>zip</button>
         <button onClick={unzipArray}>unzip</button> */}
 
-        <Table columns={columns} data={data || []} />
+       {data? <Table columns={columns} data={data || []} />:<TableSkeleton />}
       </div>
     </div>
   );
