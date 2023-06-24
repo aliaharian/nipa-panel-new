@@ -29,6 +29,7 @@ const FormBuilder = () => {
   const [selectedField, setSelectedField] = useState<FormField>();
   const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
   const [saveFormLoading, setSaveFormLoading] = useState<boolean>(true);
+  const basicDatas = useAppSelector((state) => state.basicData.basicDatas);
 
   const [formId, setFormId] = useState<number>(0);
   const productStepInfo = useAppSelector(
@@ -141,7 +142,7 @@ const FormBuilder = () => {
     //server side delete if item has server_id
     if (server_id) {
       formService.deleteOption(server_id).then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
       });
     }
   };
@@ -176,20 +177,26 @@ const FormBuilder = () => {
     }
   };
   const setFromBasicData = (value: boolean) => {
+    // console.log('val',value)
     let tmp = [...formElements];
 
     let foundIndex = tmp.findIndex((x) => x.id == selectedField?.id);
 
     if (foundIndex > -1) {
+      let basicDataId = tmp[foundIndex].basic_data?.id || basicDatas?.[0].id;
+
+      console.log('bas',basicDataId)
       tmp[foundIndex] = {
         ...tmp[foundIndex],
-        basic_data_id: value == true ? tmp[foundIndex].basic_data.id : null,
+        basic_data_id: value == true ? basicDataId : null,
+        basic_data:
+          value == true ? tmp[foundIndex].basic_data || basicDatas?.[0] : null,
       };
       setFormElements([...tmp]);
       setSelectedField({ ...tmp[foundIndex] });
     }
   };
-
+  // console.log('form',formElements)
   const saveConditions = (conditions: Condition[]) => {
     setSavedConditions([...conditions.filter((x) => x.saved)]);
   };
@@ -291,7 +298,6 @@ const FormBuilder = () => {
   };
   const handleSetFormElements = (form: any) => {
     let tmp: FormField[] = [];
-    console.log("dfvsvvsdvsdvdvsdv", form);
     form.fields?.forEach((item: any) => {
       let tmpItem: FormField = {
         id: item.id,
@@ -350,6 +356,7 @@ const FormBuilder = () => {
     let res = formService.updateForm(formId, {
       name: "form" + productStepInfo?.id,
       fields: tmp.map((item, index) => {
+        // console.log("item", item);
         return {
           server_id: item.server_id,
           name: item.name,
@@ -363,7 +370,8 @@ const FormBuilder = () => {
           order: index,
           hasOptions: item.options && item.options.length > 0,
           basic_data: item.basic_data,
-          basic_data_id: item.basic_data?.id || null,
+          basic_data_id: item.basic_data_id || null,
+          // basic_data_id: item.basic_data?.id || null,
 
           basicDataItems:
             item.basicDataItems &&

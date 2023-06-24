@@ -32,7 +32,7 @@ const FormContent = ({
   saveFormLoading,
 }: FormContentProps) => {
   const { t } = useTranslation(["common", "validations"]);
-  console.log("el", formElements);
+  // console.log("el", formElements);
 
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
@@ -110,7 +110,7 @@ const FormContent = ({
             className="group"
             name={element.name}
             label={element.label}
-            options={element.options}
+            options={element.basicDataItems || element.options}
             placeholder={element.placeholder}
             inputActions={() => fieldActions(element)}
             formik={{
@@ -146,7 +146,7 @@ const FormContent = ({
     //copy element add add it just after the original element in the array
     let tmp = [...formElements];
     const index = tmp.indexOf(element);
-    console.log("item", index);
+    // console.log("item", index);
 
     if (index > -1) {
       tmp.splice(index + 1, 0, {

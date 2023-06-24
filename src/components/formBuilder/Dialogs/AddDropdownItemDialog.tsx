@@ -28,10 +28,6 @@ const AddDropdownItemDialog = ({
   handleAddOption,
   selectedOption,
 }: AddDropdownItemDialogProps) => {
-  console.log(
-    "selectedOptionselectedOptionselectedOptionselectedOptionselectedOption",
-    selectedOption
-  );
   const initialValues: initialValues = {
     index: selectedOption?.index || -1,
     id: selectedOption?.index || 0,
@@ -67,7 +63,6 @@ const AddDropdownItemDialog = ({
   const handleSubmitForm = () => {
     formik.submitForm();
   };
-  console.log("cscscscscscs", field);
   const _handleClose = () => {
     handleClose?.();
     formik.setFieldValue("fieldName", "");

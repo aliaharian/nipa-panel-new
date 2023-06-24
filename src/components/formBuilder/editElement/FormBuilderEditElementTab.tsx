@@ -1,9 +1,8 @@
-import { Add, Edit2, PenTool, Trash } from "iconsax-react";
+import { Add, Edit2, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { FormField, FormOption } from "../../../app/models/form";
 import Button from "../../button/Button";
 import Switch from "../../form/Switch";
-import SwitchButton from "../../form/SwitchButton";
 import TextField from "../../form/TextField";
 import AddDropdownItemDialog, {
   initialValues,
@@ -46,9 +45,7 @@ const FormBuilderEditElementTab = ({
 }: FormBuilderEditElementTabProps) => {
   const [openAddDropdownItemDialog, setOpenAddDropdownItemDialog] =
     useState<boolean>(false);
-  // const [fromBasicData, setFromBasicData] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<FormOption>();
-  // const [selectedBasicData, setSelectedBasicData] = useState<any>();
   const basicDatas = useAppSelector((state) => state.basicData.basicDatas);
   const { t } = useTranslation();
   const Dispatch = useAppDispatch();
@@ -57,10 +54,13 @@ const FormBuilderEditElementTab = ({
       let tmp: FormField = { ...selectedField };
       if (e.target.name == "basic_data") {
         let basicDataTmp = basicDatas?.find((x) => x.id == e.target.value);
+        console.log("basicDataTmp", basicDataTmp);
+
         if (basicDataTmp) {
           tmp = {
             ...tmp,
             [e.target.name]: basicDataTmp,
+            basic_data_id: basicDataTmp?.id,
           };
           handleUpdateField({ ...tmp });
         }
