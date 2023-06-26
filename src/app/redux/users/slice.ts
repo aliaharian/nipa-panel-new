@@ -21,9 +21,16 @@ const userSlice = createSlice({
       state.login = action.payload;
       // console.log("login", action.payload);
       localStorage.setItem("nipa_token", action.payload.token || "");
+      localStorage.setItem(
+        "nipa_user",
+        JSON.stringify(action.payload.user) || ""
+      );
     },
     getRolesList: (state, action: PayloadAction<any | undefined>) => {
       state.roles = action.payload;
+    },
+    getUserInfo: (state, action: PayloadAction<any | undefined>) => {
+      state.login = action.payload;
     },
   },
 });

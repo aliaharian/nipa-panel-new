@@ -51,6 +51,7 @@ export default function IconMenu({
     >
       {items.map((item, index) => (
         <MenuItem
+          disabled={item.disabled}
           sx={{
             "&:hover": {
               backgroundColor: "#e9edf3",

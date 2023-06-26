@@ -26,6 +26,8 @@ const ProductSteps = React.lazy(() => import("pages/productSteps/index"));
 const BasicDatas = React.lazy(() => import("../pages/basicDatas/index"));
 const BasicDataList = React.lazy(() => import("../pages/basicDataList/index"));
 
+const Permissions = React.lazy(() => import("../pages/permissions/index"));
+
 const Router = (): JSX.Element => {
   return (
     <Suspense fallback={<div>loading...</div>}>
@@ -35,20 +37,37 @@ const Router = (): JSX.Element => {
             <Route path="/" element={<Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/products">
+            <Route
+              path="/products"
+              element={<MiddlewareRoute permission="manage-products" />}
+            >
               <Route path="" element={<Products />}></Route>
               <Route path=":code/steps" element={<ProductSteps />}></Route>
-              <Route path=":code/steps/:step_id/form" element={<FormBuilder />}></Route>
+
+              <Route
+                path=""
+                element={<MiddlewareRoute permission="manage-forms" />}
+              >
+                <Route
+                  path=":code/steps/:step_id/form"
+                  element={<FormBuilder />}
+                ></Route>
+              </Route>
             </Route>
-            <Route path="/basicDatas">
+            <Route
+              path="/basicDatas"
+              element={<MiddlewareRoute permission="manage-basic-data" />}
+            >
               <Route path="" element={<BasicDatas />}></Route>
               <Route path=":id" element={<BasicDataList />}></Route>
-
             </Route>
-         
-            {/* <Route path="/formBuilder" element={<FormBuilder />} /> */}
 
-
+            <Route
+              path="/permissions"
+              element={<MiddlewareRoute permission="manage-permissions" />}
+            >
+              <Route path="" element={<Permissions />}></Route>
+            </Route>
           </Route>
         </Route>
 

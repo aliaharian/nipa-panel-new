@@ -6,6 +6,7 @@ import userSlice from "./users/slice";
 import productSlice from "./products/slice";
 import formSlice from "./forms/slice";
 import basicDataSlice from "./basicData/slice";
+import rolePermissionSlice from "./rolePermissions/slice";
 const customizedMiddleware = getDefaultMiddleware({
   serializableCheck: false,
 });
@@ -17,6 +18,7 @@ const store = configureStore({
     products: productSlice.reducer,
     forms: formSlice.reducer,
     basicData: basicDataSlice.reducer,
+    rolePermissions: rolePermissionSlice.reducer,
   },
   middleware: customizedMiddleware,
 });

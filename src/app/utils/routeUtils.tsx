@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { middlewareModel } from "../models/router";
 import store from "../redux/store";
-
+import userService from "../redux/users/service";
 export const PrivateRoute = () => {
   const token = localStorage.getItem("nipa_token" || "");
 
@@ -29,8 +29,11 @@ export const PublicRoute = () => {
 };
 
 export const MiddlewareRoute = ({ permission }: middlewareModel) => {
-  const userPermissions = store.getState().users.userInfo?.permissions;
-  if (userPermissions?.find((perm) => perm.slug === permission)) {
+  let userPermissions =
+    store.getState().users.userInfo?.permissions ||
+    JSON.parse(localStorage.getItem("nipa_user") || "{}")?.permissions;
+
+  if (userPermissions?.find((perm: any) => perm.slug === permission)) {
     return <Outlet />;
   } else {
     return <p>denied</p>;

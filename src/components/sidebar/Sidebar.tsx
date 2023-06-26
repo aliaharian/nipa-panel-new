@@ -8,6 +8,7 @@ import {
   ReceiptItem,
   RulerPen,
   Truck,
+  UserEdit,
   Wallet,
 } from "iconsax-react";
 import { useLocation } from "react-router-dom";
@@ -77,6 +78,13 @@ const Sidebar = () => {
       ),
       title: t("basicDatas"),
       route: "/basicDatas",
+    },
+    {
+      icon: (
+        <UserEdit variant={pathname.includes("permissions") ? "Bold" : "Linear"} />
+      ),
+      title: t("permissions"),
+      route: "/permissions",
     },
   ];
 

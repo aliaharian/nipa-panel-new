@@ -25,8 +25,13 @@ async function getRolesList() {
   let response = await Api()?.get("/roles");
   return response?.data;
 }
+async function getUserInfo() {
+  let response = await Api()?.get("/profile");
+  return response?.data;
+}
 export default {
   sendOtp,
   confirmOtp,
   getRolesList,
+  getUserInfo
 };

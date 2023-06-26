@@ -1,25 +1,6 @@
 import { BasicData } from "./basicData";
 import { usersResponseModel } from "./user";
 
-export interface userModel {
-  address: string;
-  avatar: string;
-  birth_date: string;
-  city: string;
-  country: string;
-  created_at: string;
-  created_at_p: string;
-  email: string;
-  family: string;
-  gender: string;
-  id: number;
-  is_active: string;
-  name: string;
-  permissions: permissionsModel[];
-  phone_number: string;
-  timezone: string;
-  updated_at: string;
-}
 export interface permissionsModel {
   id: number;
   name: string;
@@ -38,6 +19,9 @@ export interface productsSliceModel {
   deleteSuccess?: boolean;
   productSteps?: productStep[];
   productStepInfo?: productStepInfo;
+}
+export interface rolePermissionSliceModel {
+  roles?: any[] | null;
 }
 export interface productStepInfo {
   id: number;
@@ -90,8 +74,25 @@ export interface condition {
 }
 export interface usersSliceModel {
   mobile?: string | null;
-  login?: any | null;
+  login?: loginModel | null;
   roles?: role[] | null;
+}
+export interface loginModel {
+  token: string;
+  user: userModel;
+}
+export interface userModel {
+  created_at: string;
+  email: string | null;
+  email_verified_at: string | null;
+  id: number;
+  last_name: string;
+  mobile: string;
+  mobile_verified_at: string | null;
+  name: string;
+  roles?: role[] | null;
+  permissions: permission[];
+  updated_at: string;
 }
 export interface role {
   id: number;
