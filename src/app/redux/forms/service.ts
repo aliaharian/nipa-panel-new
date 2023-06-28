@@ -48,6 +48,13 @@ async function deleteOption(id: number) {
   let response = await Api()?.delete(`/formFieldOptions/${id}`);
   return response?.data;
 }
+async function deleteItem(id: number, formId: number) {
+  let response = await Api()?.post(`/formFields/${id}`, {
+    _method: "delete",
+    form_id: formId,
+  });
+  return response?.data;
+}
 export default {
   getForm,
   createForm,
@@ -55,5 +62,6 @@ export default {
   createFormField,
   updateFormField,
   updateForm,
-  deleteOption
+  deleteOption,
+  deleteItem,
 };

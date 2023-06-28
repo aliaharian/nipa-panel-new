@@ -7,14 +7,20 @@ import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useEffect } from "react";
 import { getFormFieldTypes } from "app/redux/forms/actions";
 import { Skeleton } from "@mui/material";
+import { FormField } from "app/models/form";
+import DropDown from "components/form/Dropdown";
+import { useTranslation } from "react-i18next";
 
 type FormBuilderElementsTabProps = {
-  addElement(element: any,id:number): void;
+  addElement(element: any, id: number, fromRelatedFields?: boolean): void;
+  relatedFields?: FormField[];
 };
 
 const FormBuilderElementsTab = ({
   addElement,
+  relatedFields,
 }: FormBuilderElementsTabProps) => {
+  const { t } = useTranslation();
   const formFieldTypes = useAppSelector((state) => state.forms.formFieldTypes);
   const Dispatch = useAppDispatch();
   useEffect(() => {
@@ -105,6 +111,44 @@ const FormBuilderElementsTab = ({
           icon={<TickSquare />}
           label={"چند انتخابی"}
         /> */}
+      </div>
+      <div className="px-4">
+        {relatedFields ? (
+          <DropDown
+            className="group mt-[30px]"
+            name={"relatedFields"}
+            label={t("selectFromRelatedFields")}
+            options={
+              relatedFields
+                ? relatedFields.map((data) => {
+                    return {
+                      label: (
+                        <p>
+                          {data.label} {t("fromStep")}{" "}
+                          {data.form?.step?.step_name}
+                        </p>
+                      ),
+                      value: data.server_id?.toString(),
+                      type: data.type,
+                    };
+                  })
+                : []
+            }
+            placeholder={"انتخاب کنید"}
+            formik={{
+              handleChange: (e: any) => {
+                console.log("e", e);
+                addElement(e.target.type, e.target.value, true);
+              },
+              values: {
+                relatedFields: 0,
+                // basic_data: selectedField.basic_data?.id.toString(),
+              },
+            }}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

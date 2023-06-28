@@ -24,6 +24,7 @@ type FormBuilderSidebarProps = {
   saveConditions: (conditions: Condition[]) => void;
   savedConditions: Condition[];
   setFromBasicData: (required: boolean) => void;
+  relatedFields?: FormField[];
 };
 const FormBuilderSidebar = ({
   handleChangeTab,
@@ -40,6 +41,7 @@ const FormBuilderSidebar = ({
   saveConditions,
   savedConditions,
   setFromBasicData,
+  relatedFields,
 }: FormBuilderSidebarProps) => {
   const handleSaveConditions = (conditions: Condition[]) => {
     saveConditions(conditions);
@@ -48,7 +50,12 @@ const FormBuilderSidebar = ({
   const _renderTab = (): ReactElement => {
     switch (selectedTab) {
       case "elements":
-        return <FormBuilderElementsTab addElement={addElement} />;
+        return (
+          <FormBuilderElementsTab
+            addElement={addElement}
+            relatedFields={relatedFields}
+          />
+        );
       case "editElement":
         return (
           <FormBuilderEditElementTab

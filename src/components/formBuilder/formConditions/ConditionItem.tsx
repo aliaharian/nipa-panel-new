@@ -99,9 +99,12 @@ const ConditionItem = ({
     let selectedField = conditionalfields.find(
       (x) => x.id.toString() == e.target.value
     );
+    console.log("seleeee", selectedField);
 
-    setSelectedField({ ...e, options: selectedField?.options });
-
+    setSelectedField({
+      ...e,
+      options: selectedField?.basicDataItems || selectedField?.options,
+    });
 
     setSelectedFieldValue([]);
     updateConditions({
@@ -148,8 +151,6 @@ const ConditionItem = ({
       });
     }
   };
-
-  
 
   return (
     <div className="w-full flex flex-col items-start justify-start px-4 border-b pb-[30px] border-text-400 mb-[18px]">

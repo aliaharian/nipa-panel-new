@@ -27,16 +27,16 @@ const DropDown = ({
   inputActions,
   options,
 }: TextFieldProps) => {
-
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
     setSelectedOption(e);
-    console.log('nice car')
+    console.log("nice car");
     // formik?.handleChange(e);
     formik.handleChange({
       target: {
         name,
         value: e.value,
+        type: e.type,
         // value: e.target.value.replace(/ /g, ""),
       },
     });
@@ -46,7 +46,9 @@ const DropDown = ({
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       <div className="text-sm mb-2 flex justify-between w-full">
-        <label className="font-normal" htmlFor={name}>{label}</label>
+        <label className="font-normal" htmlFor={name}>
+          {label}
+        </label>
         {inputActions?.()}
       </div>
       <Select

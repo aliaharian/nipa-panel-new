@@ -67,9 +67,12 @@
   "enterBasicDataDetail": "اطلاعات داده اولیه را وارد کنید",
   "fromBasicDatas": "فیلد از داده های اولیه باشد",
   "onlyImage": "فقط تصویر",
-  "usersCount":"تعداد کاربران",
-  "rolePermissions":"نقش ها و دسترسی ها",
-  "addRole":"افزودن نقش جدید",
-  "roleName":"نام نقش",
-  "roleCode":"کد نقش"
+  "usersCount": "تعداد کاربران",
+  "rolePermissions": "نقش ها و دسترسی ها",
+  "addRole": "افزودن نقش جدید",
+  "roleName": "نام نقش",
+  "roleCode": "کد نقش",
+  "fromStep": "از مرحله",
+  "selectFromRelatedFields": "انتخاب از فیلد های از پیش تعریف شده",
+  "fieldDeletedSuccessfully":"فیلد با موفقیت حذف شد"
 }

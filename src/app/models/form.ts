@@ -10,8 +10,10 @@ export interface FormField {
   basicDataItems?: FormOption[];
   basic_data_id?: number | null;
   basic_data?: any | null;
-  onlyImage?: boolean ;
+  onlyImage?: boolean;
   server_id?: number | null;
+  form?: any | null;
+  fromRelatedFields?: boolean;
 }
 
 export interface FormOption {

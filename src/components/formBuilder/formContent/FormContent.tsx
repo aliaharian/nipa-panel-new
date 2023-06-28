@@ -32,7 +32,7 @@ const FormContent = ({
   saveFormLoading,
 }: FormContentProps) => {
   const { t } = useTranslation(["common", "validations"]);
-  // console.log("el", formElements);
+  console.log("el", formElements);
 
   const renderElement = (element: FormField): ReactElement => {
     switch (element.type) {
@@ -124,20 +124,29 @@ const FormContent = ({
   };
   const fieldActions = (element: FormField) => {
     return (
-      <div className="flex opacity-0 pointer-events-none	group-hover:pointer-events-auto	 group-hover:opacity-100 transition-all ">
-        <div
-          onClick={() => handleDeleteItem(element)}
-          id="deleteItem"
-          className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
-        >
-          <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
+      <div className="flex">
+        <div className="flex opacity-0 pointer-events-none	group-hover:pointer-events-auto	 group-hover:opacity-100 transition-all ">
+          <div
+            onClick={() => handleDeleteItem(element)}
+            id="deleteItem"
+            className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
+          >
+            <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
+          </div>
+          {!element.fromRelatedFields && (
+            <div
+              onClick={() => handleCopyItem(element)}
+              className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-success-primary flex items-center justify-center"
+            >
+              <Copy className="w-[16px] h-[16px] text-success-primary" />
+            </div>
+          )}
         </div>
-        <div
-          onClick={() => handleCopyItem(element)}
-          className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-success-primary flex items-center justify-center"
-        >
-          <Copy className="w-[16px] h-[16px] text-success-primary" />
-        </div>
+        {element.fromRelatedFields && (
+          <div className="mr-3 bg-secondary-main flex items-center justify-center px-2 py-0.5 rounded-full text-[11px]">
+            {t("fromStep")} {element.form?.step?.step_name}
+          </div>
+        )}
       </div>
     );
   };
@@ -152,6 +161,7 @@ const FormContent = ({
       tmp.splice(index + 1, 0, {
         ...element,
         id: lastId + 1,
+        server_id: null,
         name: element.name + (lastId + 1).toString(),
         placeholder: element.placeholder + (lastId + 1).toString(),
       });

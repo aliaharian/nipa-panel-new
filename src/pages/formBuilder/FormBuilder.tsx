@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { getProductStepInfo } from "app/redux/products/actions";
 import formService from "app/redux/forms/service";
 import { CircularProgress } from "@mui/material";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
@@ -22,10 +23,13 @@ const FormBuilder = () => {
   });
   const [selectedTab, setSelectedTab] = useState<string>("elements");
   const handleChangeTab = (value: string): void => {
-    handleSaveForm();
+    // handleSaveForm();
     setSelectedTab(value);
   };
   const [formElements, setFormElements] = useState<FormField[]>([]);
+  const [formRelatedElements, setFormRelatedElements] = useState<FormField[]>(
+    []
+  );
   const [selectedField, setSelectedField] = useState<FormField>();
   const [savedConditions, setSavedConditions] = useState<Condition[]>([]);
   const [saveFormLoading, setSaveFormLoading] = useState<boolean>(true);
@@ -45,7 +49,11 @@ const FormBuilder = () => {
       Dispatch(getProductStepInfo(parseInt("0")));
     };
   }, []);
-  const handleAddElement = (element: string, id: number) => {
+  const handleAddElement = (
+    element: string,
+    id: number,
+    fromRelatedFields?: boolean
+  ) => {
     let tmp: FormField = {
       name: "input" + element + (lastId + 1).toString(),
       placeholder: element + (lastId + 1).toString(),
@@ -61,6 +69,16 @@ const FormBuilder = () => {
     if (element === "uploadFile") {
       tmp = { ...tmp, onlyImage: false };
     }
+
+    //if from related elements
+    if (fromRelatedFields) {
+      let relatedTmp = formRelatedElements.find((x) => x.server_id == id);
+      // console.log("relatedTmp", relatedTmp);
+      if (relatedTmp) {
+        tmp = { ...relatedTmp, fromRelatedFields: fromRelatedFields };
+      }
+    }
+
     setFormElements([...formElements, tmp]);
     setLastId(lastId + 1);
   };
@@ -185,7 +203,7 @@ const FormBuilder = () => {
     if (foundIndex > -1) {
       let basicDataId = tmp[foundIndex].basic_data?.id || basicDatas?.[0].id;
 
-      console.log('bas',basicDataId)
+      console.log("bas", basicDataId);
       tmp[foundIndex] = {
         ...tmp[foundIndex],
         basic_data_id: value == true ? basicDataId : null,
@@ -202,6 +220,7 @@ const FormBuilder = () => {
   };
   const handleDeleteItem = (element: FormField) => {
     //add alert for delete
+    console.log("eleme", element);
     let tmp = [...formElements];
     const index = tmp.indexOf(element);
     if (index > -1) {
@@ -211,6 +230,15 @@ const FormBuilder = () => {
         // setTimeout(() => {
         handleSelectField(undefined);
         // }, 1);
+      }
+
+      if (element.server_id) {
+        formService.deleteItem(element.server_id, formId).then((res) => {
+          console.log("res", res);
+          SnackbarUtils.success(t("fieldDeletedSuccessfully"));
+        });
+      } else {
+        SnackbarUtils.success(t("fieldDeletedSuccessfully"));
       }
     }
   };
@@ -233,6 +261,7 @@ const FormBuilder = () => {
   const loadForm = async (id: number) => {
     const response = await formService.getForm(id);
     handleSetFormElements(response);
+    handleSetFormElements(response, true);
     handleSetFormConditions(response);
     setSaveFormLoading(false);
   };
@@ -296,9 +325,13 @@ const FormBuilder = () => {
 
     setSavedConditions([...tmp]);
   };
-  const handleSetFormElements = (form: any) => {
+
+  const handleSetFormElements = (form: any, relatedFields?: boolean) => {
     let tmp: FormField[] = [];
-    form.fields?.forEach((item: any) => {
+    let parseableArray = relatedFields ? form.relatedFields : form.fields;
+    console.log("formId", form.id);
+    parseableArray?.forEach((item: any) => {
+      console.log("item", item);
       let tmpItem: FormField = {
         id: item.id,
         name: item.name,
@@ -309,6 +342,9 @@ const FormBuilder = () => {
         required: item.required,
         basic_data: item.basic_data,
         basic_data_id: item.basic_data?.id || null,
+        form: item.form && item.form?.id != form.id ? item.form : null,
+        fromRelatedFields:
+          item.form?.id && item.form?.id != form.id ? true : false,
         basicDataItems:
           ((item.basicDataItems && item.basicDataItems.length > 0) ||
             item.type?.has_options) &&
@@ -336,7 +372,7 @@ const FormBuilder = () => {
       };
       tmp.push(tmpItem);
     });
-    setFormElements(tmp);
+    relatedFields ? setFormRelatedElements(tmp) : setFormElements(tmp);
   };
 
   const createForm = async () => {
@@ -356,7 +392,6 @@ const FormBuilder = () => {
     let res = formService.updateForm(formId, {
       name: "form" + productStepInfo?.id,
       fields: tmp.map((item, index) => {
-        // console.log("item", item);
         return {
           server_id: item.server_id,
           name: item.name,
@@ -368,6 +403,7 @@ const FormBuilder = () => {
           min: 1,
           max: 100,
           order: index,
+          origin_form_id: item.fromRelatedFields ? item.form.id : null,
           hasOptions: item.options && item.options.length > 0,
           basic_data: item.basic_data,
           basic_data_id: item.basic_data_id || null,
@@ -413,6 +449,8 @@ const FormBuilder = () => {
 
       handleSetFormElements(response);
       handleSetFormConditions(response);
+      handleSetFormElements(response, true);
+
       setSaveFormLoading(false);
     });
     res.catch((error) => {
@@ -470,6 +508,7 @@ const FormBuilder = () => {
           saveConditions={saveConditions}
           savedConditions={savedConditions}
           setFromBasicData={setFromBasicData}
+          relatedFields={formRelatedElements}
         />
         <div className="basis-3/4 bg-white mr-[10px]">
           <FormContent
