@@ -49,6 +49,7 @@ const FormBuilderEditElementTab = ({
   const basicDatas = useAppSelector((state) => state.basicData.basicDatas);
   const { t } = useTranslation();
   const Dispatch = useAppDispatch();
+  console.log("selected", selectedField);
   const _handleUpdateField = (e: any) => {
     if (selectedField) {
       let tmp: FormField = { ...selectedField };
@@ -61,6 +62,12 @@ const FormBuilderEditElementTab = ({
             ...tmp,
             [e.target.name]: basicDataTmp,
             basic_data_id: basicDataTmp?.id,
+            basicDataItems: basicDataTmp.items.map((item) => ({
+              id: item.id,
+              label: <p>{item.name}</p>,
+              server_id: item.id,
+              value: item.code,
+            })),
           };
           handleUpdateField({ ...tmp });
         }
@@ -127,6 +134,8 @@ const FormBuilderEditElementTab = ({
     <div>
       {!selectedField ? (
         <p>لطفا یک فیلد را برای ویرایش انتخاب کنید</p>
+      ) : selectedField.fromRelatedFields ? (
+        <p>این فیلد از طریق این فرم قابل ویرایش نمی باشد</p>
       ) : (
         <div className="w-full flex flex-col items-start justify-start px-4">
           <p className="text-text-450 mb-[20px]">

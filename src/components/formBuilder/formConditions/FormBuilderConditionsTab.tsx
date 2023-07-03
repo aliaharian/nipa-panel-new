@@ -21,6 +21,7 @@ const FormBuilderConditionsTab = ({
   const [conditions, setConditions] = useState<Condition[]>([
     ...savedConditions,
   ]);
+  console.log('condiii',conditions)
   const handleAddCondition = () => {
     if (conditionalfields.length > 0 && formElements.length >= 2) {
       setConditions([

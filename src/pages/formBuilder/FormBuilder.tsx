@@ -23,7 +23,8 @@ const FormBuilder = () => {
   });
   const [selectedTab, setSelectedTab] = useState<string>("elements");
   const handleChangeTab = (value: string): void => {
-    // handleSaveForm();
+    console.log("value", value);
+    value === "formConditions" && handleSaveForm();
     setSelectedTab(value);
   };
   const [formElements, setFormElements] = useState<FormField[]>([]);
@@ -209,6 +210,17 @@ const FormBuilder = () => {
         basic_data_id: value == true ? basicDataId : null,
         basic_data:
           value == true ? tmp[foundIndex].basic_data || basicDatas?.[0] : null,
+        basicDataItems:
+          value == true
+            ? (tmp[foundIndex].basic_data || basicDatas?.[0]).items.map(
+                (item: any) => ({
+                  id: item.id,
+                  label: <p>{item.name}</p>,
+                  server_id: item.id,
+                  value: item.code,
+                })
+              )
+            : null,
       };
       setFormElements([...tmp]);
       setSelectedField({ ...tmp[foundIndex] });
@@ -217,6 +229,10 @@ const FormBuilder = () => {
   // console.log('form',formElements)
   const saveConditions = (conditions: Condition[]) => {
     setSavedConditions([...conditions.filter((x) => x.saved)]);
+    console.log("[...conditions.filter((x) => x.saved)]", [
+      ...conditions.filter((x) => x.saved),
+    ]);
+    handleSaveForm(null, [...conditions.filter((x) => x.saved)]);
   };
   const handleDeleteItem = (element: FormField) => {
     //add alert for delete
@@ -274,8 +290,9 @@ const FormBuilder = () => {
       //find field
       let field = fields.find((x: any) => x.id == item.form_field_id);
 
+      console.log("fff", field);
       //find field options
-      let options = field?.options?.map((x: any) => {
+      let options = (field?.basicDataItems || field?.options)?.map((x: any) => {
         return {
           id: x.id,
           label: x.label,
@@ -283,13 +300,18 @@ const FormBuilder = () => {
           value: x.option,
         };
       });
+      console.log("fff", options);
 
       let foundIndex = tmp.findIndex((x: any) => x.field == item.form_field_id);
       if (foundIndex > -1) {
         //find specific option
         let option = options?.find(
-          (x: any) => x.id == item.form_field_option_id
+          (x: any) =>
+            x.id == (item.basic_data_item_id || item.form_field_option_id)
         );
+        console.log("p[topnnnnsss", options);
+        console.log("p[topnnnnsss", option);
+        console.log("p[topnnnnsss", item);
 
         tmp[foundIndex]?.values?.push({
           id: option?.id,
@@ -300,8 +322,10 @@ const FormBuilder = () => {
       } else {
         //find specific option
         let option = options?.find(
-          (x: any) => x.id == item.form_field_option_id
+          (x: any) =>
+            x.id == (item.basic_data_item_id || item.form_field_option_id)
         );
+
         tmp.push({
           field: item.form_field_id,
           id: item.id,
@@ -323,6 +347,7 @@ const FormBuilder = () => {
       }
     });
 
+    console.log("tmp123", [...tmp]);
     setSavedConditions([...tmp]);
   };
 
@@ -384,11 +409,15 @@ const FormBuilder = () => {
     setFormId(response.id);
   };
 
-  const handleSaveForm = async () => {
+  const handleSaveForm = async (e?: any, passedConditions?: Condition[]) => {
     //save form fields and save their ids as server_id
     setSaveFormLoading(true);
     let tmp = [...formElements];
     let condTmp = [...savedConditions];
+    if (passedConditions) {
+      console.log("pass", passedConditions);
+      condTmp = [...passedConditions];
+    }
     let res = formService.updateForm(formId, {
       name: "form" + productStepInfo?.id,
       fields: tmp.map((item, index) => {

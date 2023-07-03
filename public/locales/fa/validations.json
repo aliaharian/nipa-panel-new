@@ -24,6 +24,7 @@
   "status.placeholder": "وضعیت را انتخاب کنید",
   "name.placeholder": "نام را انتخاب کنید",
   "code.placeholder": "کد را انتخاب کنید",
+  "type.placeholder":"نوع را وارد کنید",
   "status.required": "وضعیت اجباری است.",
   "name.required": "نام اجباری است.",
   "code.required": "کد اجباری است.",

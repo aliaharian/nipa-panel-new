@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 
-import { BasicDataItem } from "@/app/models/basicData";
+import { BasicData, BasicDataItem } from "app/models/basicData";
 import Api from "../../service/Api";
 
 async function basicDatasList() {
@@ -13,6 +13,10 @@ async function getBasicDataInfo(id: number) {
 }
 async function addBasicDataItem(id: number, data: BasicDataItem) {
   let response = await Api()?.post("/basicData/" + id + "/addItem", data);
+  return response?.data;
+}
+async function addBasicData(data: BasicData) {
+  let response = await Api()?.post("/basicData/", data);
   return response?.data;
 }
 async function editBasicDataItem(id: number, data: BasicDataItem) {
@@ -28,6 +32,10 @@ async function deleteBasicDataItem(id: number) {
   let response = await Api()?.delete("/basicData/item/" + id);
   return response?.data;
 }
+async function deleteBasicData(id: number) {
+  let response = await Api()?.delete("/basicData/" + id);
+  return response?.data;
+}
 
 export default {
   basicDatasList,
@@ -36,4 +44,6 @@ export default {
   changeBasicDataItemState,
   deleteBasicDataItem,
   editBasicDataItem,
+  addBasicData,
+  deleteBasicData,
 };

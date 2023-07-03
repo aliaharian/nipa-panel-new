@@ -39,6 +39,10 @@ const ConditionItem = ({
       let newSelectedFieldValue = selectedFieldValue;
       newSelectedFieldValue.splice(index, 1);
       setSelectedFieldValue([...newSelectedFieldValue]);
+      updateConditions({
+        ...condition,
+        values: [...newSelectedFieldValue],
+      });
     }
   };
 
@@ -59,10 +63,11 @@ const ConditionItem = ({
       // let selectedFieldValueTmp = selectedFieldTmp?.options;
 
       if (selectedFieldTmp && relationFieldTmp && condition.values) {
+        console.log();
         setSelectedField({
           label: selectedFieldTmp.label,
           value: selectedFieldTmp.id.toString(),
-          options: selectedFieldTmp.options,
+          options: selectedFieldTmp?.basicDataItems || selectedFieldTmp.options,
         });
 
         //its static
@@ -151,7 +156,7 @@ const ConditionItem = ({
       });
     }
   };
-
+  console.log("selecccc", selectedField);
   return (
     <div className="w-full flex flex-col items-start justify-start px-4 border-b pb-[30px] border-text-400 mb-[18px]">
       <DropDown

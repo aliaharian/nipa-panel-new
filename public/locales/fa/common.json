@@ -74,5 +74,7 @@
   "roleCode": "کد نقش",
   "fromStep": "از مرحله",
   "selectFromRelatedFields": "انتخاب از فیلد های از پیش تعریف شده",
-  "fieldDeletedSuccessfully":"فیلد با موفقیت حذف شد"
+  "fieldDeletedSuccessfully": "فیلد با موفقیت حذف شد",
+  "name": "نام",
+  "typeEn": "نوع به انگلیسی"
 }
