@@ -4,74 +4,66 @@ import TextField from "../form/TextField";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import Button from "../button/Button";
-import DropDown from "../form/Dropdown";
-import UploadGroup from "../form/UploadGroup";
-import TextArea from "../form/TextArea";
 import * as Yup from "yup";
-import { Image } from "app/models/product";
-import { saveProduct, setSaveSuccess } from "app/redux/products/actions";
-import { useAppDispatch, useAppSelector } from "app/redux/hooks";
-import { useEffect, useState } from "react";
+import { setSaveSuccess } from "app/redux/products/actions";
+import { useAppDispatch } from "app/redux/hooks";
+import { useState } from "react";
 import SnackbarUtils from "app/utils/SnackbarUtils";
+import { permission } from "@/app/models/redux-models";
+import Checkbox from "../form/Checkbox";
+import rolePermissionService from "app/redux/rolePermissions/service";
 
 type OrderFiltersDialogProps = {
   open: boolean;
   handleClose?: () => void;
+  permissions: permission[];
 };
 
 type initialValues = {
   code: string;
   name: string;
-  status: number;
-  custom: number;
-  description: string;
-  price: string;
-  images: Image[];
+  permissions: number[];
 };
 
-const AddRoleDialog = ({ open, handleClose }: OrderFiltersDialogProps) => {
+const AddRoleDialog = ({
+  open,
+  handleClose,
+  permissions,
+}: OrderFiltersDialogProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const Dispatch = useAppDispatch();
-  const saveSuccess = useAppSelector(
-    (state: any) => state.products.saveSuccess
-  );
 
   const [submitdisabled, setSubmitDisabled] = useState<boolean>(false);
   const validationSchema = Yup.object().shape({
     code: Yup.string().required(
-      t("productCode.required", { ns: "validations" }) || ""
+      t("roleCode.required", { ns: "validations" }) || ""
     ),
     name: Yup.string().required(
-      t("productName.required", { ns: "validations" }) || ""
+      t("roleName.required", { ns: "validations" }) || ""
     ),
-    description: Yup.string().required(
-      t("productDescription.required", { ns: "validations" }) || ""
-    ),
-    price: Yup.string().when("custom", {
-      is: 0,
-      then: Yup.string().required(
-        t("productPrice.required", { ns: "validations" }) || ""
-      ),
-      otherwise: Yup.string(),
-    }),
   });
 
   const initialValues: initialValues = {
     code: "",
     name: "",
-    status: 1,
-    custom: 1,
-    description: "",
-    price: "",
-    images: [],
+    permissions: [],
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("valuekkkks", values);
-      Dispatch(saveProduct(values));
+      setSubmitDisabled(true);
+      try {
+        await rolePermissionService.addRole(values);
+        _handleClose();
+        Dispatch(setSaveSuccess(false));
+        SnackbarUtils.success(t("addRoleSuccess"));
+        setSubmitDisabled(false);
+      } catch (e) {
+        setSubmitDisabled(false);
+      }
     },
   });
   const handleSubmitForm = () => {
@@ -81,13 +73,44 @@ const AddRoleDialog = ({ open, handleClose }: OrderFiltersDialogProps) => {
     handleClose && handleClose();
     formik.resetForm();
   };
-  useEffect(() => {
-    if (saveSuccess) {
-      _handleClose();
-      Dispatch(setSaveSuccess(false));
-      SnackbarUtils.success(t("addProductSuccess"));
+
+  const handleCheck = (e: permission) => {
+    let checkedTmp = [...formik.values.permissions];
+    let index = checkedTmp.indexOf(e.id);
+    if (index > -1) {
+      //remove item from array
+      checkedTmp.splice(index, 1);
+      //remove childs if exists
+      if (e.childs) {
+        e.childs.map(function (item: permission) {
+          index = checkedTmp.indexOf(item.id);
+          if (index > -1) {
+            checkedTmp.splice(index, 1);
+          }
+        });
+      }
+    } else {
+      checkedTmp.push(e.id);
+      //add all childs
+      if (e.childs) {
+        e.childs.map(function (item: permission) {
+          index = checkedTmp.indexOf(item.id);
+          if (index === -1) {
+            checkedTmp.push(item.id);
+          }
+        });
+      }
+      //check parent if child selected
+      if (e.parent_id) {
+        index = checkedTmp.indexOf(e.parent_id);
+        if (index === -1) {
+          checkedTmp.push(e.parent_id);
+        }
+      }
     }
-  }, [saveSuccess]);
+    formik.setFieldValue("permissions", [...checkedTmp]);
+  };
+
   return (
     <SideDialog
       headerText={t("addRole")}
@@ -119,11 +142,53 @@ const AddRoleDialog = ({ open, handleClose }: OrderFiltersDialogProps) => {
                 formik={formik}
               />
             </div>
-
-           
-
-
-           
+            <div className="mt-[35px]">
+              <p className="text-right text-[14px] text-text-900 font-normal mb-2">
+                {t("permissions")}
+              </p>
+              <div className="border px-[20px] py-[27px] border-text-400 rounded-[6px]">
+                {permissions ? (
+                  <div className="grid grid-cols-2">
+                    {permissions.map((item, index) => (
+                      <div key={index}>
+                        <Checkbox
+                          key={index}
+                          className="font-normal"
+                          name={"permissions"}
+                          value={item.slug}
+                          label={item.name}
+                          checked={
+                            formik.values.permissions.includes(item.id) || false
+                          }
+                          handleCheck={() => handleCheck(item)}
+                        />
+                        {item.childs && (
+                          <div className="pr-[35px]">
+                            {item.childs.map((child, index) => (
+                              <Checkbox
+                                key={index}
+                                className="font-normal"
+                                name={"permissions"}
+                                value={child.slug}
+                                label={child.name}
+                                checked={
+                                  formik.values.permissions.includes(
+                                    child.id
+                                  ) || false
+                                }
+                                handleCheck={() => handleCheck(child)}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
           </form>
         </div>
       </SideDialog.Content>
@@ -141,7 +206,7 @@ const AddRoleDialog = ({ open, handleClose }: OrderFiltersDialogProps) => {
             <Button
               disabled={submitdisabled}
               icon={<Add />}
-              text={t("addProduct")}
+              text={t("addRole")}
               onClick={handleSubmitForm}
             />
           </div>

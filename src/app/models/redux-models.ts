@@ -22,6 +22,7 @@ export interface productsSliceModel {
 }
 export interface rolePermissionSliceModel {
   roles?: any[] | null;
+  permissions?: permission[] | null;
 }
 export interface productStepInfo {
   id: number;
@@ -107,7 +108,9 @@ export interface permission {
   slug: string;
   created_at: string;
   updated_at: string;
-  pivot: {
+  childs?: any[];
+  parent_id?: number | null;
+  pivot?: {
     role_id: number;
     permission_id: number;
   };

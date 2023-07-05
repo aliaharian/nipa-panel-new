@@ -29,5 +29,8 @@
   "name.required": "نام اجباری است.",
   "code.required": "کد اجباری است.",
   "roleCode.placeholder": "کد نقش را وارد کنید",
-  "roleName.placeholder": "نام نقش را وارد کنید"
+  "roleName.placeholder": "نام نقش را وارد کنید",
+  "roleCode.required": "کد نقش الزامی است",
+  "roleName.required": "نام نقش الزامی است"
+
 }

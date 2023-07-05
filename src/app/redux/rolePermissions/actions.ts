@@ -16,3 +16,15 @@ export const rolesList = (): ThunkAction<
     dispatch(rolePermissionActions.rolesList(response));
   };
 };
+
+export const permissionsList = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const response = await rolePermissionService.permissionsList();
+    dispatch(rolePermissionActions.permissionsList(response));
+  };
+};

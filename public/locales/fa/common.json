@@ -25,6 +25,7 @@
   "addProductSuccess": "محصول با موفقیت اضافه شد",
   "deleteProductConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این محصول حذف خواهند شد. آیا مطمئن هستید؟",
   "deleteBasicDataConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این داده اولیه حذف خواهند شد. آیا مطمئن هستید؟",
+  "deleteRoleConfirmation":"آیا از حذف فرم اطمینان دارید؟",
   "yes": "بله",
   "no": "خیر",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
@@ -76,5 +77,7 @@
   "selectFromRelatedFields": "انتخاب از فیلد های از پیش تعریف شده",
   "fieldDeletedSuccessfully": "فیلد با موفقیت حذف شد",
   "name": "نام",
-  "typeEn": "نوع به انگلیسی"
+  "typeEn": "نوع به انگلیسی",
+  "permissions": "دسترسی ها",
+  "addRoleSuccess":"نقش با موفقیت اضافه شد"
 }

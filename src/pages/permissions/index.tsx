@@ -13,28 +13,22 @@ import Table from "components/table/Table";
 import TableAction from "components/table/TableAction";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useTranslation } from "react-i18next";
-import {
-  deleteProduct,
-  productsList,
-  setDeleteSuccess,
-} from "app/redux/products/actions";
-import AddProductDialog from "components/products/AddProductDialog";
+import { setDeleteSuccess } from "app/redux/products/actions";
 import DeletePopup from "components/popup/DeletePopup";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { useNavigate } from "react-router-dom";
 import TableSkeleton from "components/skeleton/TableSkeleton";
-import { rolesList } from "app/redux/rolePermissions/actions";
+import { permissionsList, rolesList } from "app/redux/rolePermissions/actions";
 import transform from "app/utils/transform";
 import AddRoleDialog from "components/rolePermission/AddRoleDialog";
+import rolePermissionService from "app/redux/rolePermissions/service";
 
 const Permissions = () => {
   const data = useAppSelector((state) => state.rolePermissions.roles);
   const [columns, setColumns] = useState<any[]>([]);
   const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
   const Navigator = useNavigate();
-  const deleteSuccess = useAppSelector(
-    (state: any) => state.products.deleteSuccess
-  );
+  
   const { t } = useTranslation("common");
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
@@ -42,6 +36,12 @@ const Permissions = () => {
   const handleClosedeletePopup = () => {
     setOpenDeletePopup(false);
   };
+  const permissions = useAppSelector(
+    (state: any) => state.rolePermissions.permissions
+  );
+  useEffect(() => {
+    !permissions && Dispatch(permissionsList());
+  }, []);
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
@@ -50,7 +50,6 @@ const Permissions = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("data123", data);
 
       let colTmp: any[] = [
         {
@@ -73,11 +72,7 @@ const Permissions = () => {
           selector: (row: any) => transform.toPersianDigits(row.users_count),
           sortable: true,
         },
-        // {
-        //   name: t("status"),
-        //   selector: (row: any) => t("active"),
-        //   sortable: true,
-        // },
+       
       ];
 
       colTmp.push({
@@ -121,39 +116,38 @@ const Permissions = () => {
         break;
     }
   };
-  const handleDeleteProduct = () => {
+  const handleDeleteRole = async () => {
     setDeleteLoading(true);
-    console.log("selectedRow", selectedRow);
-    Dispatch(deleteProduct(selectedRow.id));
-    // setTimeout(() => {
-    //   setDeleteLoading(false);
-    //   setOpenDeletePopup(false);
-    //   SnackbarUtils.success(t("deleteProductSuccess"));
-    // }, 1000);
-  };
-  useEffect(() => {
-    if (deleteSuccess) {
+    try {
+      await rolePermissionService.deleteRole({ roleId: selectedRow.id });
       setDeleteLoading(false);
       setOpenDeletePopup(false);
+      Dispatch(rolesList());
+
       SnackbarUtils.success(t("deleteProductSuccess"));
-      setTimeout(() => {
-        Dispatch(setDeleteSuccess(false));
-      }, 100);
+    } catch (e) {
+      setDeleteLoading(false);
+      setOpenDeletePopup(false);
     }
-  }, [deleteSuccess]);
+  };
+ 
 
   return (
     <div className="w-full h-full">
       <AddRoleDialog
         open={addProduct}
-        handleClose={() => setOpenAddProduct(false)}
+        handleClose={() => {
+          setOpenAddProduct(false);
+          Dispatch(rolesList());
+        }}
+        permissions={permissions}
       />
 
       <DeletePopup
-        title={t("deleteProductConfirmation")}
+        title={t("deleteRoleConfirmation")}
         open={openDeletePopup}
         onClose={handleClosedeletePopup}
-        handleConfirm={handleDeleteProduct}
+        handleConfirm={handleDeleteRole}
         loading={deleteLoading}
       />
       <Breadcrumb

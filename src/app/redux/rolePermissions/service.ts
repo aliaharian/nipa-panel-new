@@ -6,8 +6,34 @@ async function rolesList() {
   let response = await Api()?.get("/roles");
   return response?.data;
 }
+async function permissionsList() {
+  let response = await Api()?.get("/permissions");
+  return response?.data;
+}
+async function addRole({
+  name,
+  code,
+  permissions,
+}: {
+  name: string;
+  code: string;
+  permissions?: number[];
+}) {
+  let response = await Api()?.post("/roles", {
+    name: name,
+    slug: code,
+    permissions: permissions,
+  });
+  return response?.data;
+}
+async function deleteRole({ roleId }: { roleId: number }) {
+  let response = await Api()?.delete("/roles/" + roleId);
+  return response?.data;
+}
 
 export default {
   rolesList,
-
+  permissionsList,
+  addRole,
+  deleteRole
 };
