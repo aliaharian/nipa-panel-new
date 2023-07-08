@@ -17,6 +17,7 @@ type OrderFiltersDialogProps = {
   open: boolean;
   handleClose?: () => void;
   permissions: permission[];
+  selectedRole?: any;
 };
 
 type initialValues = {
@@ -29,6 +30,7 @@ const AddRoleDialog = ({
   open,
   handleClose,
   permissions,
+  selectedRole,
 }: OrderFiltersDialogProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const Dispatch = useAppDispatch();
@@ -44,9 +46,9 @@ const AddRoleDialog = ({
   });
 
   const initialValues: initialValues = {
-    code: "",
-    name: "",
-    permissions: [],
+    code: selectedRole?.code || "",
+    name: selectedRole?.name || "",
+    permissions: selectedRole?.permissions || [],
   };
 
   const formik = useFormik({
