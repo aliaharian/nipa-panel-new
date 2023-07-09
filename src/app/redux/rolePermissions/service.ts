@@ -26,6 +26,24 @@ async function addRole({
   });
   return response?.data;
 }
+async function updateRole({
+  name,
+  code,
+  permissions,
+  id,
+}: {
+  name: string;
+  code: string;
+  permissions?: number[];
+  id: number;
+}) {
+  let response = await Api()?.put("/roles/" + id, {
+    name: name,
+    slug: code,
+    permissions: permissions,
+  });
+  return response?.data;
+}
 async function deleteRole({ roleId }: { roleId: number }) {
   let response = await Api()?.delete("/roles/" + roleId);
   return response?.data;
@@ -35,5 +53,6 @@ export default {
   rolesList,
   permissionsList,
   addRole,
-  deleteRole
+  deleteRole,
+  updateRole,
 };

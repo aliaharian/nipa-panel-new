@@ -28,7 +28,7 @@ const Permissions = () => {
   const [columns, setColumns] = useState<any[]>([]);
   const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
   const Navigator = useNavigate();
-  
+
   const { t } = useTranslation("common");
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
@@ -50,7 +50,6 @@ const Permissions = () => {
 
   useEffect(() => {
     if (data) {
-
       let colTmp: any[] = [
         {
           name: t("title"),
@@ -72,7 +71,6 @@ const Permissions = () => {
           selector: (row: any) => transform.toPersianDigits(row.users_count),
           sortable: true,
         },
-       
       ];
 
       colTmp.push({
@@ -112,6 +110,10 @@ const Permissions = () => {
       case "delete":
         setOpenDeletePopup(true);
         break;
+      case "edit":
+        setOpenAddProduct(true);
+        break;
+
       default:
         break;
     }
@@ -130,7 +132,6 @@ const Permissions = () => {
       setOpenDeletePopup(false);
     }
   };
- 
 
   return (
     <div className="w-full h-full">
@@ -139,7 +140,9 @@ const Permissions = () => {
         handleClose={() => {
           setOpenAddProduct(false);
           Dispatch(rolesList());
+          setSelectedRow(null);
         }}
+        selectedRole={selectedRow}
         permissions={permissions}
       />
 

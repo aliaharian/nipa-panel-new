@@ -7,7 +7,7 @@ import Button from "../button/Button";
 import * as Yup from "yup";
 import { setSaveSuccess } from "app/redux/products/actions";
 import { useAppDispatch } from "app/redux/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { permission } from "@/app/models/redux-models";
 import Checkbox from "../form/Checkbox";
@@ -34,7 +34,7 @@ const AddRoleDialog = ({
 }: OrderFiltersDialogProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const Dispatch = useAppDispatch();
-
+  console.log("sele", selectedRole);
   const [submitdisabled, setSubmitDisabled] = useState<boolean>(false);
   const validationSchema = Yup.object().shape({
     code: Yup.string().required(
@@ -46,7 +46,7 @@ const AddRoleDialog = ({
   });
 
   const initialValues: initialValues = {
-    code: selectedRole?.code || "",
+    code: selectedRole?.slug || "",
     name: selectedRole?.name || "",
     permissions: selectedRole?.permissions || [],
   };
@@ -58,7 +58,14 @@ const AddRoleDialog = ({
       console.log("valuekkkks", values);
       setSubmitDisabled(true);
       try {
-        await rolePermissionService.addRole(values);
+        if (selectedRole) {
+          await rolePermissionService.updateRole({
+            ...values,
+            id: selectedRole.id,
+          });
+        } else {
+          await rolePermissionService.addRole(values);
+        }
         _handleClose();
         Dispatch(setSaveSuccess(false));
         SnackbarUtils.success(t("addRoleSuccess"));
@@ -68,6 +75,16 @@ const AddRoleDialog = ({
       }
     },
   });
+  useEffect(() => {
+    if (selectedRole) {
+      formik.setFieldValue("code", selectedRole?.slug);
+      formik.setFieldValue("name", selectedRole?.name);
+      formik.setFieldValue(
+        "permissions",
+        selectedRole?.permissions?.map((item: any) => item.id)
+      );
+    }
+  }, [selectedRole]);
   const handleSubmitForm = () => {
     formik.handleSubmit();
   };
@@ -115,7 +132,7 @@ const AddRoleDialog = ({
 
   return (
     <SideDialog
-      headerText={t("addRole")}
+      headerText={selectedRole ? t("editRole") : t("addRole")}
       headerIcon={<Add />}
       open={open}
       handleClose={_handleClose}
@@ -208,7 +225,7 @@ const AddRoleDialog = ({
             <Button
               disabled={submitdisabled}
               icon={<Add />}
-              text={t("addRole")}
+              text={selectedRole ? t("editRole") : t("addRole")}
               onClick={handleSubmitForm}
             />
           </div>
