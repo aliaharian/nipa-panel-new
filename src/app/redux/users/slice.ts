@@ -19,7 +19,6 @@ const userSlice = createSlice({
     },
     setUserLogin: (state, action: PayloadAction<any | null | undefined>) => {
       state.login = action.payload;
-      // console.log("login", action.payload);
       localStorage.setItem("nipa_token", action.payload.token || "");
       localStorage.setItem(
         "nipa_user",
@@ -31,6 +30,14 @@ const userSlice = createSlice({
     },
     getUserInfo: (state, action: PayloadAction<any | undefined>) => {
       state.login = action.payload;
+    },
+    logout: (state) => {
+      state.login = null;
+      state.mobile = null;
+      state.roles = [];
+      localStorage.removeItem("nipa_token");
+      localStorage.removeItem("nipa_user");
+      window.location.reload();
     },
   },
 });

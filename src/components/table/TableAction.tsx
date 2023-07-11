@@ -70,4 +70,5 @@ const TableAction = ({ row, handleAction, items }: TableActionProps) => {
   );
 };
 
+
 export default TableAction;

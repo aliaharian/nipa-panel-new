@@ -1,13 +1,13 @@
 import { Add, Edit, Eye, Setting4, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../app/redux/hooks";
-import { ordersList } from "../app/redux/orders/actions";
-import Breadcrumb from "../components/breadcrumb/Breadcrumb";
-import Button from "../components/button/Button";
-import OrderFiltersDialog from "../components/orders/OrderFiltersDialog";
-import SideDialog from "../components/sideDialog/SideDialog";
-import Table from "../components/table/Table";
-import TableAction from "../components/table/TableAction";
+import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
+import { ordersList } from "../../app/redux/orders/actions";
+import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
+import Button from "../../components/button/Button";
+import OrderFiltersDialog from "../../components/orders/OrderFiltersDialog";
+import SideDialog from "../../components/sideDialog/SideDialog";
+import Table from "../../components/table/Table";
+import TableAction from "../../components/table/TableAction";
 
 const Orders = () => {
   const data = useAppSelector((state) => state.orders.orders);
@@ -164,7 +164,7 @@ const Orders = () => {
               />
             </div>
             <div className="w-[186px] mr-[16px]">
-              <Button icon={<Add />} text="ثبت سفارش جدید" href="submit" />
+              <Button icon={<Add />} text="ثبت سفارش جدید" href="create" />
             </div>
           </>
         }

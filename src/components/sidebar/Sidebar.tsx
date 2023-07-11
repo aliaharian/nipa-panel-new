@@ -16,6 +16,7 @@ import { useAppSelector } from "../../app/redux/hooks";
 import Logo from "../logo/Logo";
 import NavItem from "./NavItem";
 import { useTranslation } from "react-i18next";
+import transform from "app/utils/transform";
 
 const Sidebar = () => {
   //div tag classnaming with tailwindcss
@@ -27,9 +28,12 @@ const Sidebar = () => {
   console.log("pathnme", pathname);
   const menus = [
     {
-      icon: <Category2 variant={pathname === "/dashboard" ? "Bold" : "Linear"} />,
+      icon: (
+        <Category2 variant={pathname === "/dashboard" ? "Bold" : "Linear"} />
+      ),
       title: t("dashboard"),
       route: "/dashboard",
+      permission: "manage-dashboard",
     },
     {
       icon: (
@@ -37,16 +41,19 @@ const Sidebar = () => {
       ),
       title: t("orders"),
       route: "/orders",
+      permission: "view-orders",
     },
     {
       icon: <Wallet variant={pathname === "/finance" ? "Bold" : "Linear"} />,
       title: t("finance"),
       route: "/finance",
+      permission: "manage-finance",
     },
     {
       icon: <Grid1 variant={pathname === "/maps" ? "Bold" : "Linear"} />,
       title: t("maps"),
       route: "/maps",
+      permission: "manage-maps",
     },
     {
       icon: (
@@ -54,16 +61,19 @@ const Sidebar = () => {
       ),
       title: t("production"),
       route: "/produce",
+      permission: "manage-production",
     },
     {
       icon: <RulerPen variant={pathname === "/install" ? "Bold" : "Linear"} />,
       title: t("measurement_and_installation"),
       route: "/install",
+      permission: "manage-install",
     },
     {
       icon: <Truck variant={pathname === "/send" ? "Bold" : "Linear"} />,
       title: t("shipping"),
       route: "/send",
+      permission: "manage-shipping",
     },
     {
       icon: (
@@ -71,6 +81,7 @@ const Sidebar = () => {
       ),
       title: t("products"),
       route: "/products",
+      permission: "manage-products",
     },
     {
       icon: (
@@ -78,13 +89,17 @@ const Sidebar = () => {
       ),
       title: t("basicDatas"),
       route: "/basicDatas",
+      permission: "manage-basic-data",
     },
     {
       icon: (
-        <UserEdit variant={pathname.includes("permissions") ? "Bold" : "Linear"} />
+        <UserEdit
+          variant={pathname.includes("permissions") ? "Bold" : "Linear"}
+        />
       ),
       title: t("permissions"),
       route: "/permissions",
+      permission: "manage-permissions",
     },
   ];
 
@@ -99,16 +114,19 @@ const Sidebar = () => {
           <Logo />
         </div>
         <nav className="flex-1 pl-[20px] py-[13px] pr-0 bg-gray-800">
-          {menus.map((menu, index) => (
-            <NavItem
-              key={index}
-              collapseMenu={collapseMenu}
-              route={menu.route}
-              icon={menu.icon}
-              title={menu.title}
-              active={pathname.includes(menu.route)}
-            />
-          ))}
+          {menus.map(
+            (menu, index) =>
+              transform.checkPermission(menu.permission) && (
+                <NavItem
+                  key={index}
+                  collapseMenu={collapseMenu}
+                  route={menu.route}
+                  icon={menu.icon}
+                  title={menu.title}
+                  active={pathname.includes(menu.route)}
+                />
+              )
+          )}
         </nav>
       </div>
     </div>

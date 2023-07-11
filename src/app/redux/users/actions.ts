@@ -54,3 +54,9 @@ export const getUserInfo = (): ThunkAction<
     dispatch(userActions.getUserInfo(response));
   };
 };
+
+export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch, getState) => {
+    dispatch(userActions.logout());
+  };
+};

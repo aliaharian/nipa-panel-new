@@ -1,4 +1,5 @@
 import { ExportCurve, TextBlock, TickSquare } from "iconsax-react";
+import store from "../redux/store";
 
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
@@ -21,7 +22,6 @@ export const renderChatTime = (timestamp: number) => {
 };
 
 export const dateToTimestamp = (date: string) => {
-
   return new Date(date).getTime();
 };
 
@@ -82,6 +82,21 @@ const toPersianDigits = (value: any) => {
   );
 };
 
+const checkPermission = (permission: any) => {
+  let userPermissions =
+    // store.getState().users.userInfo?.permissions ||
+    JSON.parse(localStorage.getItem("nipa_user") || "{}")?.permissions;
+
+  console.log("userPermissions", userPermissions);
+  console.log("permission", permission);
+  if (userPermissions?.find((perm: any) => perm.slug === permission)) {
+    return true;
+  } else {
+    return false;
+    // return <Navigate to="/access-denied" />;
+  }
+};
+
 export default {
   pluralize,
   fileToUrl,
@@ -90,5 +105,6 @@ export default {
   fileToBlob,
   toPersianDigits,
   dateToTimestamp,
-  renderChatTime
+  renderChatTime,
+  checkPermission,
 };

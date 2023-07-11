@@ -9,6 +9,7 @@ import CheckboxGroup from "../../form/CheckboxGroup";
 import TextArea from "../../form/TextArea";
 import UploadFile from "../../form/UploadFile";
 import { useTranslation } from "react-i18next";
+import { renderElement } from "app/utils/FormActions";
 
 type FormContentProps = {
   setFormElements: (formElements: any) => void;
@@ -34,94 +35,94 @@ const FormContent = ({
   const { t } = useTranslation(["common", "validations"]);
   console.log("el", formElements);
 
-  const renderElement = (element: FormField): ReactElement => {
-    switch (element.type) {
-      case "text":
-        return (
-          <TextField
-            className="group"
-            name={element.name}
-            label={element.label}
-            type="text"
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      case "textArea":
-        return (
-          <TextArea
-            className="group"
-            name={element.name}
-            label={element.label}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      case "number":
-        return (
-          <TextField
-            className="group"
-            name={element.name}
-            label={element.label}
-            type="number"
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      case "uploadFile":
-        return (
-          <UploadFile
-            className="group"
-            name={element.name}
-            label={element.label}
-            imageOnly={element.onlyImage}
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      case "dropDown":
-        return (
-          <DropDown
-            className="group"
-            name={element.name}
-            label={element.label}
-            options={element.basicDataItems || element.options}
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      case "checkbox":
-        return (
-          <CheckboxGroup
-            className="group"
-            name={element.name}
-            label={element.label}
-            options={element.basicDataItems || element.options}
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={{
-              handleChange: () => {},
-            }}
-          />
-        );
-      default:
-        return <p>not defined</p>;
-    }
-  };
+  // const renderElement = (element: FormField): ReactElement => {
+  //   switch (element.type) {
+  //     case "text":
+  //       return (
+  //         <TextField
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           type="text"
+  //           placeholder={element.placeholder}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     case "textArea":
+  //       return (
+  //         <TextArea
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     case "number":
+  //       return (
+  //         <TextField
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           type="number"
+  //           placeholder={element.placeholder}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     case "uploadFile":
+  //       return (
+  //         <UploadFile
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           imageOnly={element.onlyImage}
+  //           placeholder={element.placeholder}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     case "dropDown":
+  //       return (
+  //         <DropDown
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           options={element.basicDataItems || element.options}
+  //           placeholder={element.placeholder}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     case "checkbox":
+  //       return (
+  //         <CheckboxGroup
+  //           className="group"
+  //           name={element.name}
+  //           label={element.label}
+  //           options={element.basicDataItems || element.options}
+  //           placeholder={element.placeholder}
+  //           inputActions={() => fieldActions(element)}
+  //           formik={{
+  //             handleChange: () => {},
+  //           }}
+  //         />
+  //       );
+  //     default:
+  //       return <p>not defined</p>;
+  //   }
+  // };
   const fieldActions = (element: FormField) => {
     return (
       <div className="flex">
@@ -227,7 +228,7 @@ const FormContent = ({
             >
               <HambergerMenu />
             </div>
-            {renderElement(element)}
+            {renderElement(element, fieldActions)}
           </div>
         );
       })}

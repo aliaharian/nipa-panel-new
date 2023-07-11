@@ -14,6 +14,7 @@ type TextFieldProps = {
   inputActions?: any;
   className?: string;
   options?: FormOption[];
+  disabled?: boolean;
 };
 const DropDown = ({
   name,
@@ -26,6 +27,7 @@ const DropDown = ({
   mask,
   inputActions,
   options,
+  disabled,
 }: TextFieldProps) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
@@ -52,6 +54,7 @@ const DropDown = ({
         {inputActions?.()}
       </div>
       <Select
+        isDisabled={disabled}
         defaultValue={formik.values ? formik.values[name] : selectedOption}
         onChange={handleChange}
         value={

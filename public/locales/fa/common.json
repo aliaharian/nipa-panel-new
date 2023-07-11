@@ -25,10 +25,10 @@
   "addProductSuccess": "محصول با موفقیت اضافه شد",
   "deleteProductConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این محصول حذف خواهند شد. آیا مطمئن هستید؟",
   "deleteBasicDataConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این داده اولیه حذف خواهند شد. آیا مطمئن هستید؟",
-  "deleteRoleConfirmation":"آیا از حذف فرم اطمینان دارید؟",
+  "deleteRoleConfirmation": "آیا از حذف فرم اطمینان دارید؟",
   "yes": "بله",
   "no": "خیر",
-  "editRole":"ویرایش نقش",
+  "editRole": "ویرایش نقش",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
   "handleProductSteps": "مدیریت مراحل محصول",
   "order": "ترتیب",
@@ -80,5 +80,10 @@
   "name": "نام",
   "typeEn": "نوع به انگلیسی",
   "permissions": "دسترسی ها",
-  "addRoleSuccess":"نقش با موفقیت اضافه شد"
+  "addRoleSuccess": "نقش با موفقیت اضافه شد",
+  "selectedProduct": "محصول انتخابی",
+  "pleaseSelectProduct": "لطفا یک محصول انتخاب کنید",
+  "addProductToOrder": "افزودن محصول جدید به این خرید",
+  "backToPrevStep": "بازگشت به مرحله قبل",
+  "saveAndContinue": "ذخیره و ادامه"
 }

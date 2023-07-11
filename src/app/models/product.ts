@@ -6,6 +6,8 @@ export interface Product {
   status: boolean | number;
   description?: string | null;
   images?: Image[] | null;
+  id?: number | null;
+  initialFormId?: number | null;
 }
 
 export interface Image {
