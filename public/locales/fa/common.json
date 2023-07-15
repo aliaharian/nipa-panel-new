@@ -85,5 +85,7 @@
   "pleaseSelectProduct": "لطفا یک محصول انتخاب کنید",
   "addProductToOrder": "افزودن محصول جدید به این خرید",
   "backToPrevStep": "بازگشت به مرحله قبل",
-  "saveAndContinue": "ذخیره و ادامه"
+  "saveAndContinue": "ذخیره و ادامه",
+  "productsOfThisOrder": "محصولات این سفارش",
+  "submitForm":"ارسال درخواست"
 }

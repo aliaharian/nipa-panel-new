@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface FormField {
   name: string;
   placeholder: string;
@@ -6,6 +8,7 @@ export interface FormField {
   required: boolean;
   label: string;
   id: number;
+  setPending?: Dispatch<SetStateAction<boolean>>;
   options?: FormOption[];
   basicDataItems?: FormOption[];
   basic_data_id?: number | null;

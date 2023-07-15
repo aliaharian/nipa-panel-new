@@ -87,8 +87,8 @@ const checkPermission = (permission: any) => {
     // store.getState().users.userInfo?.permissions ||
     JSON.parse(localStorage.getItem("nipa_user") || "{}")?.permissions;
 
-  console.log("userPermissions", userPermissions);
-  console.log("permission", permission);
+  // console.log("userPermissions", userPermissions);
+  // console.log("permission", permission);
   if (userPermissions?.find((perm: any) => perm.slug === permission)) {
     return true;
   } else {

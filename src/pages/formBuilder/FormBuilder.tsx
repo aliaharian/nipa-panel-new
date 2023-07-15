@@ -13,6 +13,7 @@ import { getProductStepInfo } from "app/redux/products/actions";
 import formService from "app/redux/forms/service";
 import { CircularProgress } from "@mui/material";
 import SnackbarUtils from "app/utils/SnackbarUtils";
+import FullscreenLoading from "components/loading/FullscreenLoading";
 
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
@@ -236,7 +237,7 @@ const FormBuilder = () => {
   };
   const handleDeleteItem = (element: FormField) => {
     //add alert for delete
-    console.log("eleme", element);
+    // console.log("eleme", element);
     let tmp = [...formElements];
     const index = tmp.indexOf(element);
     if (index > -1) {
@@ -392,7 +393,7 @@ const FormBuilder = () => {
               label: <p>{option.label}</p>,
             };
           }),
-        onlyImage: item.onlyImage,
+        onlyImage: JSON.parse(item.validation)?.onlyImage,
         server_id: item.id,
       };
       tmp.push(tmpItem);
@@ -414,13 +415,19 @@ const FormBuilder = () => {
     setSaveFormLoading(true);
     let tmp = [...formElements];
     let condTmp = [...savedConditions];
+    console.log("pass", formElements);
+
     if (passedConditions) {
-      console.log("pass", passedConditions);
       condTmp = [...passedConditions];
     }
     let res = formService.updateForm(formId, {
       name: "form" + productStepInfo?.id,
       fields: tmp.map((item, index) => {
+        let validationTmp: any = {};
+        if (item.type === "uploadFile") {
+          validationTmp.onlyImage = item.onlyImage;
+        }
+
         return {
           server_id: item.server_id,
           name: item.name,
@@ -429,6 +436,7 @@ const FormBuilder = () => {
           placeholder: item.placeholder,
           required: item.required,
           helper_text: item.id,
+          validation: validationTmp,
           min: 1,
           max: 100,
           order: index,
@@ -490,10 +498,11 @@ const FormBuilder = () => {
   return (
     <div className="w-full h-full">
       {saveFormLoading && (
-        <div className="flex-col w-full h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.8)] z-[9999] pointer-events-auto flex justify-center items-center">
-          <CircularProgress />
-          <p className="text-white mt-4">لطفا چند لحظه صبر کنید...</p>
-        </div>
+        <FullscreenLoading/>
+        // <div className="flex-col w-full h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.8)] z-[9999] pointer-events-auto flex justify-center items-center">
+        //   <CircularProgress />
+        //   <p className="text-white mt-4">لطفا چند لحظه صبر کنید...</p>
+        // </div>
       )}
       <Breadcrumb
         handleBack={handleBack}

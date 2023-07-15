@@ -16,6 +16,7 @@ type UploadGroupProps = {
   className?: string;
   imageOnly?: boolean;
   setPending?: Dispatch<SetStateAction<boolean>>;
+  mock?: boolean;
 };
 
 const UploadGroup = ({
@@ -26,6 +27,7 @@ const UploadGroup = ({
   className,
   imageOnly,
   setPending,
+  mock,
 }: UploadGroupProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -123,8 +125,8 @@ const UploadGroup = ({
   }, [files]);
   useEffect(() => {
     //formik change listener
-    if (formik.values[name].length == 0 && files.length > 0) {
-      setFiles(formik.values[name] || []);
+    if (formik.values?.[name]?.length == 0 && files.length > 0) {
+      setFiles(formik.values?.[name] || []);
     }
   }, [formik]);
 
@@ -156,8 +158,10 @@ const UploadGroup = ({
               }
               formik={{
                 handleChange: (e: any) => {
-                  handleUploadFile(e);
-                  if (fileRef.current) fileRef.current.value = "";
+                  if (!mock) {
+                    handleUploadFile(e);
+                    if (fileRef.current) fileRef.current.value = "";
+                  }
                 },
               }}
             />

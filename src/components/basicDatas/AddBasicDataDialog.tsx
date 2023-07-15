@@ -46,7 +46,6 @@ const AddBasicDataDialog = ({
     type: "",
     items: [],
   };
-
   const formik = useFormik({
     initialValues,
     validationSchema,

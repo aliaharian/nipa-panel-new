@@ -37,7 +37,7 @@ const Button = ({
       : ""
   }
    ${simple ? "border-none bg-transparent !text-primary-main" : ""}
-   ${gray ? "border-none bg-text-200 !text-text-500" : ""}
+   ${gray ? "border-none !bg-text-200 !text-text-500" : ""}
     ${disabled ? "opacity-90 cursor-not-allowed pointer-events-none" : ""}
   `;
   const handleIcon = () => {

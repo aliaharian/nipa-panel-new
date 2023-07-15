@@ -228,7 +228,7 @@ const FormContent = ({
             >
               <HambergerMenu />
             </div>
-            {renderElement(element, fieldActions)}
+            {renderElement(element, fieldActions, undefined, true)}
           </div>
         );
       })}
