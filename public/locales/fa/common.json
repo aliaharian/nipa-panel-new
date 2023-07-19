@@ -87,5 +87,6 @@
   "backToPrevStep": "بازگشت به مرحله قبل",
   "saveAndContinue": "ذخیره و ادامه",
   "productsOfThisOrder": "محصولات این سفارش",
-  "submitForm":"ارسال درخواست"
+  "submitForm":"ارسال درخواست",
+  "viewFile":"مشاهده فایل"
 }

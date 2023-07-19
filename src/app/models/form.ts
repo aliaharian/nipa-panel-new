@@ -17,6 +17,7 @@ export interface FormField {
   server_id?: number | null;
   form?: any | null;
   fromRelatedFields?: boolean;
+  noBadge?: boolean;
 }
 
 export interface FormOption {

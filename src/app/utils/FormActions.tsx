@@ -12,7 +12,7 @@ export const renderElement = (
   element: FormField,
   fieldActions: (element: any) => void = (element: any) => {},
   formik?: any,
-  mock?: boolean
+  mock?: boolean,
 ): ReactElement => {
   const formikProp = formik
     ? formik
@@ -76,6 +76,7 @@ export const renderElement = (
           formik={formikProp}
           setPending={element.setPending}
           mock={mock || false}
+          noBadge={element.noBadge || false}
         />
       );
     case "dropDown":

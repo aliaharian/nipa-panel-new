@@ -8,6 +8,9 @@ import { productsList } from "app/redux/products/actions";
 import { Product } from "app/models/product";
 import OrderCreateForm from "components/addOrder/OrderCreateForm";
 import AddOrderSidebar from "components/addOrder/AddOrderSidebar";
+import formService from "app/redux/forms/service";
+import orderService from "app/redux/orders/service";
+import FullscreenLoading from "components/loading/FullscreenLoading";
 
 export type selectedOrderType = {
   product_id: number;
@@ -15,7 +18,8 @@ export type selectedOrderType = {
 };
 const AddOrder = () => {
   const Navigate = useNavigate();
-  const [orderGroup, setOrderGroup] = useState();
+  const [pending, setPending] = useState(false);
+  const user = JSON.parse(localStorage.getItem("nipa_user") || "");
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] =
     useState<selectedOrderType | null>();
@@ -25,10 +29,27 @@ const AddOrder = () => {
     Dispatch(productsList());
   }, []);
   const handleSelectProduct = (product_id: number) => {
-    setSelectedOrder({
-      product_id: product_id,
-      saved: false,
-    });
+    const prod = products?.find((x: any) => x.id == product_id);
+    console.log("prod", prod);
+    if (prod?.custom == 0) {
+      let tmp = {
+        product_id: product_id,
+        product_name: prod.name,
+        saved: true,
+        values: null,
+        form_id: null,
+        custom: 0,
+        id: Math.floor(Math.random() * 10000),
+        count: 1,
+      };
+      setOrders([...orders, { ...tmp }]);
+      setSelectedOrder(null);
+    } else {
+      setSelectedOrder({
+        product_id: product_id,
+        saved: false,
+      });
+    }
   };
   const handleClearOrder = () => {
     setSelectedOrder(null);
@@ -43,8 +64,10 @@ const AddOrder = () => {
       product_name: product.name,
       saved: true,
       values: values,
+      form_id: product.initialFormId,
       id: Math.floor(Math.random() * 10000),
       count: 1,
+      custom: 0,
     };
     if (addAnother) {
       setOrders([...orders, { ...tmp }]);
@@ -64,9 +87,37 @@ const AddOrder = () => {
       setOrders([...tmp]);
     }
   };
-  const handleSubmitForm = () => {};
+  const handleSubmitForm = async () => {
+    setPending(true);
+    //create order group
+    console.log("orders", orders);
+    const orderGroup = await orderService.createOrderGroup();
+    console.log("orderGroup", orderGroup);
+    //create orders
+    orders.map(async (order, index) => {
+      const savedOrder = await orderService.createOrder(
+        orderGroup.id,
+        order.product_id,
+        user.mobile
+      );
+      console.log("savedOrder", savedOrder);
+      //save form of each order if custom
+      if (order.form_id) {
+        const savedForm = await formService.addUserAnswer(
+          savedOrder.id,
+          order.form_id,
+          order.values
+        );
+      }
+      setPending(false);
+    });
+
+    //TODO:update order group if needed
+  };
   return (
     <div className="w-full h-full">
+      {pending && <FullscreenLoading />}
+
       <Breadcrumb
         title="ایجاد سفارش جدید"
         handleBack={() => Navigate("/orders")}

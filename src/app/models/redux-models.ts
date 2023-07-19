@@ -12,6 +12,7 @@ export interface blogSliceModel {
 }
 export interface ordersSliceModel {
   orders?: any;
+  orderGroups?:any;
 }
 export interface productsSliceModel {
   products?: any;

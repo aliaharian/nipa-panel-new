@@ -56,9 +56,7 @@ const OrderCreateForm = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      // console.log("valuekkkks", values);
-      // console.log("addanothe", selectedProduct);
-
+  
       selectedProduct && handleSaveOrder(selectedProduct, values, addAnother);
     },
   });
@@ -66,10 +64,8 @@ const OrderCreateForm = ({
   const handleSubmitForm = (addAnother?: boolean) => {
     setAddAnother(addAnother || false);
 
-    // console.log("ok", formik);
     formik.handleSubmit(formik.values);
     // if (Object.keys(formik.errors).length === 0) {
-    //   console.log("sdsdvdvvvdsvdvdvdvdv");
     // }
   };
 
@@ -127,7 +123,12 @@ const OrderCreateForm = ({
           }
         }
         if (item.type.type === "uploadFile") {
-          tmp = { ...tmp, onlyImage: JSON.parse(item.validation)?.onlyImage,setPending:setPending };
+          tmp = {
+            ...tmp,
+            onlyImage: JSON.parse(item.validation)?.onlyImage,
+            setPending: setPending,
+            noBadge: true,
+          };
         }
         fieldsTmp.push({ ...tmp });
       });
@@ -135,7 +136,6 @@ const OrderCreateForm = ({
       setFields([...fieldsTmp]);
     }
   };
-
   return (
     <form onSubmit={formik.handleSubmit}>
       {pending && <FullscreenLoading />}

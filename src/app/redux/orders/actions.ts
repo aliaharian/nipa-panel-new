@@ -1,16 +1,32 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import userService from "./service";
+import orderService from "./service";
 import { RootState } from "../store";
 import orderSlice from "./slice";
 
-const userActions = orderSlice.actions;
+const orderActions = orderSlice.actions;
 
-export const ordersList = (
-): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const ordersList = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
   return async (dispatch, getState) => {
-    const response = await userService.ordersList();
+    const response = await orderService.ordersList();
     console.log(response);
-    dispatch(userActions.ordersList(response));
+    dispatch(orderActions.ordersList(response));
   };
 };
 
+export const orderGroupsList = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const response = await orderService.orderGroupsList();
+    console.log(response);
+    dispatch(orderActions.orderGroupsList(response));
+  };
+};

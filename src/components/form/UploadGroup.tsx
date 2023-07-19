@@ -17,6 +17,7 @@ type UploadGroupProps = {
   imageOnly?: boolean;
   setPending?: Dispatch<SetStateAction<boolean>>;
   mock?: boolean;
+  noBadge?: boolean;
 };
 
 const UploadGroup = ({
@@ -28,6 +29,7 @@ const UploadGroup = ({
   imageOnly,
   setPending,
   mock,
+  noBadge,
 }: UploadGroupProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -112,11 +114,11 @@ const UploadGroup = ({
   };
   const handleViewImage = (file: any) => {
     //open file object in new tab
-    if (transform.imageValidExtensions.includes(file.type)) {
+    // if (transform.imageValidExtensions.includes(file.type)) {
       const blob = transform.fileToBlob(file);
       const blobUrl = URL.createObjectURL(blob);
       window.open(blobUrl, "_blank");
-    }
+    // }
   };
 
   useEffect(() => {
@@ -186,7 +188,7 @@ const UploadGroup = ({
                 handleViewImage={() => {
                   handleViewImage(file.value);
                 }}
-                badge={index === 0 ? t("mainImage") || "" : ""}
+                badge={index === 0 && !noBadge ? t("mainImage") || "" : ""}
               />
             </div>
           );
