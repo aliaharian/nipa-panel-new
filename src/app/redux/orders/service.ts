@@ -6,6 +6,10 @@ async function ordersList() {
   let response = await Api()?.get("/order");
   return response?.data;
 }
+async function orderDetail(orderId:number) {
+  let response = await Api()?.get("/order/"+orderId);
+  return response?.data;
+}
 
 async function orderGroupsList() {
   let response = await Api()?.get("/orderGroup");
@@ -33,5 +37,6 @@ export default {
   ordersList,
   createOrder,
   createOrderGroup,
-  orderGroupsList
+  orderGroupsList,
+  orderDetail
 };

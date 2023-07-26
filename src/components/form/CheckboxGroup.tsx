@@ -19,7 +19,7 @@ const CheckboxGroup = ({
   name,
   label,
   formik,
-  
+
   placeholder,
   maskChar,
   className,
@@ -38,8 +38,10 @@ const CheckboxGroup = ({
         tmp.splice(indexToRemove, 1);
         setSelectedOptions([...tmp]);
       }
+      formik.setFieldValue(name, [...tmp]);
     } else {
       setSelectedOptions([...selectedOptions, item.value]);
+      formik.setFieldValue(name, [...selectedOptions, item.value]);
     }
   };
   return (
@@ -59,7 +61,7 @@ const CheckboxGroup = ({
             name={name}
             value={item.value}
             label={item.label}
-            checked={selectedOptions.includes(item.value)||false}
+            checked={selectedOptions.includes(item.value) || false}
             handleCheck={() => handleChange(item)}
           />
         ))}

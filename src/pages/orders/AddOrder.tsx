@@ -98,7 +98,7 @@ const AddOrder = () => {
       const savedOrder = await orderService.createOrder(
         orderGroup.id,
         order.product_id,
-        user.mobile
+        user.name ? user.name + " " + user.last_name : user.mobile
       );
       console.log("savedOrder", savedOrder);
       //save form of each order if custom
@@ -111,7 +111,8 @@ const AddOrder = () => {
       }
       setPending(false);
     });
-
+    Navigate("/orders");
+    console.log("sdvvvdsvdvd");
     //TODO:update order group if needed
   };
   return (

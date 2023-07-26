@@ -50,8 +50,8 @@ const Api = () => {
       // );
       // console.log("error.response", error.response);
       if(error.response.status==401){
-        localStorage.removeItem("nipa_token")
-        document.location.href="/auth/login"
+        // localStorage.removeItem("nipa_token")
+        // document.location.href="/auth/login"
       }
 
       if (error.response.data.errors) {

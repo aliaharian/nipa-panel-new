@@ -142,12 +142,18 @@ export const renderFormValidation = (elements: FormField[]) => {
           : Yup.string();
         break;
       case "uploadFile":
-      case "dropDown":
         if (element.required) {
           res[element.name] = Yup.string()
             .nullable()
             .required("این فیلد اجباری است");
         }
+        break;
+      case "dropDown":
+        // if (element.required) {
+          res[element.name] = Yup.string()
+            .nullable()
+            .required("این فیلد اجباری است");
+        // }
         break;
       case "number":
         res[element.name] = element.required

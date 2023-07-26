@@ -1,25 +1,24 @@
 import { Add, Edit, Eye, Setting4, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
-import { ordersList } from "../../app/redux/orders/actions";
+import { orderGroupsList, ordersList } from "../../app/redux/orders/actions";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Button from "../../components/button/Button";
 import OrderFiltersDialog from "../../components/orders/OrderFiltersDialog";
 import SideDialog from "../../components/sideDialog/SideDialog";
 import Table from "../../components/table/Table";
 import TableAction from "../../components/table/TableAction";
+import { Skeleton } from "@mui/material";
+import Accordion from "components/accordion/Accordion";
+import transform from "app/utils/transform";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const data = useAppSelector((state) => state.orders.orders);
+  const orderGroups = useAppSelector((state) => state.orders.orderGroups);
   const [columns, setColumns] = useState<any[]>([]);
-  const arr1 = [1, 2, 3, 4];
-  const arr2 = ["a", "b", "c", "d"];
   const [openFilter, setOpenFilter] = useState<boolean>(false);
-  const zipped: [number | string, number | string][] = [
-    [1, "a"],
-    [2, "b"],
-    [3, "c"],
-  ];
+  const Navigate = useNavigate();
   // let columns: any = [
   //   {
   //     name: "کد سفارش",
@@ -44,6 +43,7 @@ const Orders = () => {
   const Dispatch = useAppDispatch();
   useEffect(() => {
     Dispatch(ordersList());
+    Dispatch(orderGroupsList());
   }, []);
 
   useEffect(() => {
@@ -90,6 +90,7 @@ const Orders = () => {
         width: "120px",
         cell: (row: any) => (
           <TableAction
+            handleAction={handleOrderAction}
             items={[
               {
                 icon: <Edit variant="Bold" />,
@@ -117,34 +118,19 @@ const Orders = () => {
       console.log("data.orders", data.cols);
     }
   }, [data]);
-  const zipArray = () => {
-    let zipped = arr1.map((k, i) => [k, arr2[i]]);
-    console.log("zipped", zipped);
+  const handleOrderAction = (row: any, action: string) => {
+    switch (action) {
+      case "edit":
+        break;
+      case "view":
+        Navigate(`/orders/${row.id}`);
+        break;
+      case "delete":
+        break;
+      default:
+        break;
+    }
   };
-  let array1: [number | string];
-  let array2: [number | string];
-  const unzipArray = () => {
-    //unzip zipped array to two arrays
-    //  [
-    //   [1, "a"],
-    //   [2, "b"],
-    //   [3, "c"],
-    // ];
-
-    let a = zipped.reduce((acc, val) => {
-      console.log("acc", acc);
-      console.log("val", val);
-      array1.push(val[0]);
-      array2.push(val[1]);
-      // acc[0].push(val[0]);
-      // acc[1].push(val[1]);
-      return acc;
-    });
-
-    console.log("array1", a);
-    // console.log("unzipped", unzipped);
-  };
-
   return (
     <div className="w-full h-full">
       <OrderFiltersDialog
@@ -171,10 +157,41 @@ const Orders = () => {
         title="سفارشات"
       />
       <div>
-        {/* <button onClick={zipArray}>zip</button>
-        <button onClick={unzipArray}>unzip</button> */}
-
-        <Table columns={columns} data={data?.orders} />
+        <div className="w-full">
+          {orderGroups ? (
+            orderGroups.map((item: any, index: number) => (
+              <Accordion
+                key={item.id}
+                title={`گروه سفارش ثبت شده در  ${transform.renderChatTime(
+                  transform.dateToTimestamp(item.created_at)
+                )} توسط ${
+                  data?.orders.filter(
+                    (x: any) => x.order_group[0].id === item.id
+                  )?.[0]?.customer_name
+                }`}
+              >
+                <Table
+                  columns={columns}
+                  data={data?.orders.filter(
+                    (x: any) => x.order_group[0].id === item.id
+                  )}
+                />
+              </Accordion>
+            ))
+          ) : (
+            <div className="grid grid-cols-1 gap-[40px]">
+              {Array.from(Array(3).keys()).map((item, index) => (
+                <Skeleton
+                  key={index}
+                  variant="rounded"
+                  width={"100%"}
+                  height={72}
+                  animation="wave"
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

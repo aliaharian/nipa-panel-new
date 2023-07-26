@@ -88,5 +88,11 @@
   "saveAndContinue": "ذخیره و ادامه",
   "productsOfThisOrder": "محصولات این سفارش",
   "submitForm":"ارسال درخواست",
-  "viewFile":"مشاهده فایل"
+  "viewFile":"مشاهده فایل",
+  "userName":"نام کاربر",
+  "orderCode":"کد سفارش",
+  "viewFactor":"مشاهده فاکتور",
+  "mobilePhone":"تلفن همراه",
+  "submitDate":"تاریخ ثبت",
+  "recieverName":"نام گیرنده"
 }

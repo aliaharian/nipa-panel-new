@@ -436,7 +436,7 @@ const FormBuilder = () => {
           placeholder: item.placeholder,
           required: item.required,
           helper_text: item.id,
-          validation: validationTmp,
+          validation: JSON.stringify(validationTmp),
           min: 1,
           max: 100,
           order: index,

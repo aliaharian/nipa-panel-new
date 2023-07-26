@@ -18,6 +18,7 @@ const VerifyPhone = React.lazy(() => import("../pages/auth/VerifyPhone"));
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 const Orders = React.lazy(() => import("../pages/orders"));
 const AddOrder = React.lazy(() => import("../pages/orders/AddOrder"));
+const OrderDetails = React.lazy(() => import("../pages/orders/OrderDetails"));
 const FormBuilder = React.lazy(
   () => import("../pages/formBuilder/FormBuilder")
 );
@@ -40,6 +41,7 @@ const Router = (): JSX.Element => {
             <Route path="/orders">
               <Route path="" element={<Orders />}></Route>
               <Route path="create" element={<AddOrder />}></Route>
+              <Route path=":orderId" element={<OrderDetails />}></Route>
             </Route>
             <Route
               path="/products"
