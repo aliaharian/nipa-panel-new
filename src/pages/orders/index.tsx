@@ -59,6 +59,10 @@ const Orders = () => {
           selector: (row: any) => row.jalali_date,
         },
         {
+          name: "تاریخ محصول",
+          selector: (row: any) => row.jalali_date,
+        },
+        {
           name: "نام مشتری",
           selector: (row: any) => row.user.name + " " + row.user.last_name,
         },

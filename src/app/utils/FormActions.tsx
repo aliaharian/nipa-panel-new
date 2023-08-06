@@ -12,7 +12,7 @@ export const renderElement = (
   element: FormField,
   fieldActions: (element: any) => void = (element: any) => {},
   formik?: any,
-  mock?: boolean,
+  mock?: boolean
 ): ReactElement => {
   const formikProp = formik
     ? formik
@@ -131,38 +131,95 @@ export const renderFormInitialValues = (elements: FormField[]) => {
   return res;
 };
 
-export const renderFormValidation = (elements: FormField[]) => {
+export const renderFormValidation = (
+  elements: FormField[],
+  conditions: any[],
+  formik: any
+) => {
   let res: any = {};
   elements.map((element) => {
-    switch (element.type) {
-      case "text":
-      case "textArea":
-        res[element.name] = element.required
-          ? Yup.string().required("این فیلد اجباری است")
-          : Yup.string();
-        break;
-      case "uploadFile":
-        if (element.required) {
-          res[element.name] = Yup.string()
-            .nullable()
-            .required("این فیلد اجباری است");
+    const cond = conditions.find(
+      (x) => x.relational_form_field_id == element.id
+    );
+    let showItem = true;
+    if (cond) {
+      //check conditions
+      const mainField = elements.find((x) => x.id == cond.form_field_id);
+      let opt;
+      if (mainField) {
+        if (mainField.basic_data_id) {
+          opt = mainField?.basicDataItems?.find(
+            (x) => x.server_id == cond.form_field_option_id
+          );
+        } else {
+          opt = mainField?.options?.find(
+            (x) => x.server_id == cond.form_field_option_id
+          );
         }
-        break;
-      case "dropDown":
-        // if (element.required) {
+      }
+      if (mainField && opt) {
+        if (cond.operation == 1) {
+          if (
+            formik.values[mainField.name] === opt.value ||
+            formik.values[mainField.name]?.indexOf(opt.value) > -1
+          ) {
+            showItem = true;
+          } else {
+            showItem = false;
+          }
+        } else {
+          if (
+            !(
+              formik.values[mainField.name] === opt.value ||
+              formik.values[mainField.name]?.indexOf(opt.value) > -1
+            )
+          ) {
+            showItem = true;
+          } else {
+            showItem = false;
+          }
+        }
+      }
+      // console.log("main", mainField);
+    }
+
+    if (showItem) {
+      switch (element.type) {
+        case "text":
+        case "textArea":
+          res[element.name] = element.required
+            ? Yup.string().required("این فیلد اجباری است")
+            : Yup.string();
+          break;
+        case "uploadFile":
+          if (element.required) {
+            res[element.name] = Yup.string()
+              .nullable()
+              .required("این فیلد اجباری است");
+          }
+          break;
+        case "dropDown":
+          // if (element.required) {
           res[element.name] = Yup.string()
             .nullable()
             .required("این فیلد اجباری است");
-        // }
-        break;
-      case "number":
-        res[element.name] = element.required
-          ? Yup.number().required("این فیلد اجباری است")
-          : Yup.number();
-        break;
-      case "checkbox":
-        // res[element.name] = [];
-        break;
+          // }
+          break;
+        case "number":
+          res[element.name] = element.required
+            ? Yup.number().required("این فیلد اجباری است")
+            : Yup.number();
+          break;
+        case "checkbox":
+          res[element.name] = element.required
+            ? Yup.array()
+                .of(Yup.string())
+                .min(1, "این فیلد اجباری است")
+                .required("این فیلد اجباری است")
+            : Yup.array().of(Yup.string()).nullable();
+          // res[element.name] = [];
+          break;
+      }
     }
   });
   return res;

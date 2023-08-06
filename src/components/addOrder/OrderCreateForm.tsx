@@ -32,6 +32,7 @@ const OrderCreateForm = ({
   const { t } = useTranslation();
   const [form, setForm] = useState<any>();
   const [fields, setFields] = useState<FormField[]>([]);
+  const [conditions, setConditions] = useState<any[]>([]);
   const [formSaved, setFormSaved] = useState(false);
   const [pending, setPending] = useState(false);
   const [addAnother, setAddAnother] = useState(false);
@@ -46,20 +47,21 @@ const OrderCreateForm = ({
   const [validationSchema, setValidationSchema] = useState<any>();
   // const validationSchema = Yup.object().shape(renderFormValidation(fields));
   const [initialValues, setInitialValues] = useState<any>();
-  useEffect(() => {
-    setInitialValues(renderFormInitialValues(fields));
-    setValidationSchema(Yup.object().shape(renderFormValidation(fields)));
-  }, [fields]);
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-  
       selectedProduct && handleSaveOrder(selectedProduct, values, addAnother);
     },
   });
+  useEffect(() => {
+    setInitialValues(renderFormInitialValues(fields));
+    setValidationSchema(
+      Yup.object().shape(renderFormValidation(fields, conditions, formik))
+    );
+  }, [fields, formik.values, conditions]);
 
   const handleSubmitForm = (addAnother?: boolean) => {
     setAddAnother(addAnother || false);
@@ -86,6 +88,7 @@ const OrderCreateForm = ({
       let fieldsTmp: any[] = [];
       response.fields?.map((item: any) => {
         let tmp: any = {
+          key: item.id,
           name: item.name,
           placeholder: item.placeholder,
           label: item.label,
@@ -104,6 +107,7 @@ const OrderCreateForm = ({
               basic_data: item.basic_data,
               basic_data_id: item.basic_data_id,
               basicDataItems: item.basicDataItems.map((opt: any) => ({
+                key: opt.id,
                 id: opt.id,
                 label: <p>{opt.label}</p>,
                 server_id: opt.id,
@@ -115,6 +119,7 @@ const OrderCreateForm = ({
               ...tmp,
               options: item.options.map((opt: any) => ({
                 id: opt.id,
+                key: opt.id,
                 label: <p>{opt.label}</p>,
                 server_id: opt.id,
                 value: opt.option,
@@ -132,10 +137,12 @@ const OrderCreateForm = ({
         }
         fieldsTmp.push({ ...tmp });
       });
+      setConditions([...response.conditions]);
 
       setFields([...fieldsTmp]);
     }
   };
+  console.log('formik',formik.errors)
   return (
     <form onSubmit={formik.handleSubmit}>
       {pending && <FullscreenLoading />}
@@ -144,9 +151,10 @@ const OrderCreateForm = ({
           className="group"
           name={"product"}
           label={t("selectedProduct")}
-          options={products?.map((product: Product) => ({
+          options={products?.map((product: Product, index: number) => ({
             label: <p>{product.name}</p>,
             value: product.id || 0,
+            key: product.id || index,
           }))}
           placeholder={t("pleaseSelectProduct")}
           disabled={true}
@@ -165,10 +173,59 @@ const OrderCreateForm = ({
             formik?.values &&
             Object.keys(formik?.values).length > 0 &&
             fields.map((element: any, index: number) => {
-              return (
+              const cond = conditions.find(
+                (x) => x.relational_form_field_id == element.id
+              );
+              let showItem = true;
+              if (cond) {
+                //check conditions
+                const mainField = fields.find(
+                  (x) => x.id == cond.form_field_id
+                );
+                let opt;
+                if (mainField) {
+                  if (mainField.basic_data_id) {
+                    opt = mainField?.basicDataItems?.find(
+                      (x) => x.server_id == cond.form_field_option_id
+                    );
+                  } else {
+                    opt = mainField?.options?.find(
+                      (x) => x.server_id == cond.form_field_option_id
+                    );
+                  }
+                }
+                if (mainField && opt) {
+                  if (cond.operation == 1) {
+                    if (
+                      formik.values[mainField.name] === opt.value ||
+                      formik.values[mainField.name]?.indexOf(opt.value) > -1
+                    ) {
+                      showItem = true;
+                    } else {
+                      showItem = false;
+                    }
+                  } else {
+                    if (
+                      !(
+                        formik.values[mainField.name] === opt.value ||
+                        formik.values[mainField.name]?.indexOf(opt.value) > -1
+                      )
+                    ) {
+                      showItem = true;
+                    } else {
+                      showItem = false;
+                    }
+                  }
+                }
+                // console.log("main", mainField);
+              }
+
+              return showItem ? (
                 <div className="mt-[30px]" key={index}>
                   {renderElement(element, () => {}, formik)}
                 </div>
+              ) : (
+                <></>
               );
             })}
         </div>
