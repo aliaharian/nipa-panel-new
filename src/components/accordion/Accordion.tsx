@@ -18,7 +18,7 @@ const Accordion = ({ children, title }: AccordionProps) => {
         onClick={handleToggle}
         className="border border-text-300 w-full h-[72px] bg-white flex items-center justify-between px-[16px] rounded-[5px]"
       >
-        <p className="text-primary-dark text-[18px] font-bold cursor-pointer">
+        <p className="text-primary-dark text-[16px] font-bold cursor-pointer">
           {title}
         </p>
         <div className="w-[28px] h-[28px] bg-text-300 flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-text-400 transition-all">

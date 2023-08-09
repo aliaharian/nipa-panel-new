@@ -98,6 +98,7 @@ const AddOrder = () => {
       const savedOrder = await orderService.createOrder(
         orderGroup.id,
         order.product_id,
+        order.count || 1,
         user.name ? user.name + " " + user.last_name : user.mobile
       );
       console.log("savedOrder", savedOrder);

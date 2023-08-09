@@ -55,11 +55,11 @@ const Orders = () => {
           sortable: true,
         },
         {
-          name: "تاریخ ثبت",
-          selector: (row: any) => row.jalali_date,
+          name: "نام محصول",
+          selector: (row: any) => row.product.name,
         },
         {
-          name: "تاریخ محصول",
+          name: "تاریخ ثبت",
           selector: (row: any) => row.jalali_date,
         },
         {
@@ -67,8 +67,8 @@ const Orders = () => {
           selector: (row: any) => row.user.name + " " + row.user.last_name,
         },
         {
-          name: "نام دریافت کننده",
-          selector: (row: any) => row.customer_name,
+          name: "تعداد",
+          selector: (row: any) => transform.toPersianDigits(row.count || 1),
         },
       ];
       //append cols to columns
@@ -86,7 +86,7 @@ const Orders = () => {
       });
       colTmp.push({
         name: "وضعیت",
-        selector: (row: any) => row.year,
+        selector: (row: any) => row?.step?.step_name,
       });
       colTmp.push({
         allowOverflow: true,
@@ -166,18 +166,22 @@ const Orders = () => {
             orderGroups.map((item: any, index: number) => (
               <Accordion
                 key={item.id}
-                title={`گروه سفارش ثبت شده در  ${transform.renderChatTime(
-                  transform.dateToTimestamp(item.created_at)
+                title={` سفارش کد ${transform.toPersianDigits(
+                  item.id
+                )} ثبت شده در ${transform.toPersianDigits(
+                  transform.renderChatTime(
+                    transform.dateToTimestamp(item.created_at)
+                  )
                 )} توسط ${
                   data?.orders.filter(
-                    (x: any) => x.order_group[0].id === item.id
+                    (x: any) => x?.order_group?.[0]?.id === item.id
                   )?.[0]?.customer_name
                 }`}
               >
                 <Table
                   columns={columns}
                   data={data?.orders.filter(
-                    (x: any) => x.order_group[0].id === item.id
+                    (x: any) => x.order_group?.[0]?.id === item.id
                   )}
                 />
               </Accordion>

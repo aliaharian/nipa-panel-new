@@ -6,8 +6,8 @@ async function ordersList() {
   let response = await Api()?.get("/order");
   return response?.data;
 }
-async function orderDetail(orderId:number) {
-  let response = await Api()?.get("/order/"+orderId);
+async function orderDetail(orderId: number) {
+  let response = await Api()?.get("/order/" + orderId);
   return response?.data;
 }
 
@@ -24,12 +24,14 @@ async function createOrderGroup() {
 async function createOrder(
   orderGroupId: number,
   productId: number,
+  count: number,
   customerName?: string
 ) {
   let response = await Api()?.post("/order", {
     product_id: productId,
     order_group_id: orderGroupId,
     customer_name: customerName,
+    count: count,
   });
   return response?.data;
 }
@@ -38,5 +40,5 @@ export default {
   createOrder,
   createOrderGroup,
   orderGroupsList,
-  orderDetail
+  orderDetail,
 };
