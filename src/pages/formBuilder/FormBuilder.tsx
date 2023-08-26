@@ -287,7 +287,7 @@ const FormBuilder = () => {
     let { conditions, fields, id } = response;
     let tmp: Condition[] = [];
     //group conditions by form_field_id
-    conditions.map((item: any) => {
+    conditions?.map((item: any) => {
       //find field
       let field = fields.find((x: any) => x.id == item.form_field_id);
 

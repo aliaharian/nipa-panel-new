@@ -8,6 +8,7 @@ export interface FormField {
   required: boolean;
   label: string;
   id: number;
+  answer?:any;
   setPending?: Dispatch<SetStateAction<boolean>>;
   options?: FormOption[];
   basicDataItems?: FormOption[];

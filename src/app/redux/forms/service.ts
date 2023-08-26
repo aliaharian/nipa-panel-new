@@ -4,12 +4,15 @@ import { Product } from "app/models/product";
 import Api from "../../../app/service/Api";
 import i18next from "i18next";
 
-async function getForm(id: number) {
-  let response = await Api()?.get(`/forms/${id}`, {
-    headers: {
-      languege: i18next.language,
-    },
-  });
+async function getForm(id: number, orderId?: any) {
+  let response = await Api()?.get(
+    `/forms/${id}${orderId ? "?orderId=" + orderId : ""}`,
+    {
+      headers: {
+        languege: i18next.language,
+      },
+    }
+  );
   return response?.data;
 }
 async function createForm(data: any) {

@@ -35,10 +35,17 @@ async function createOrder(
   });
   return response?.data;
 }
+
+async function getCompleteInfo(orderId: number) {
+  let response = await Api()?.get("/order/" + orderId + "/complete");
+  return response?.data;
+}
+
 export default {
   ordersList,
   createOrder,
   createOrderGroup,
   orderGroupsList,
   orderDetail,
+  getCompleteInfo
 };

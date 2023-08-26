@@ -45,7 +45,6 @@ const OrderCreateForm = ({
   }, []);
 
   const [validationSchema, setValidationSchema] = useState<any>();
-  // const validationSchema = Yup.object().shape(renderFormValidation(fields));
   const [initialValues, setInitialValues] = useState<any>();
 
   const formik = useFormik({

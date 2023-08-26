@@ -1,4 +1,4 @@
-import { Add, Edit, Eye, Setting4, Trash } from "iconsax-react";
+import { Add, Additem, Edit, Eye, Setting4, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { orderGroupsList, ordersList } from "../../app/redux/orders/actions";
@@ -92,29 +92,49 @@ const Orders = () => {
         allowOverflow: true,
         button: true,
         width: "120px",
-        cell: (row: any) => (
-          <TableAction
-            handleAction={handleOrderAction}
-            items={[
-              {
-                icon: <Edit variant="Bold" />,
-                text: "ویرایش",
-                name: "edit",
-              },
-              {
-                icon: <Eye variant="Bold" />,
-                text: "مشاهده جزئیات",
-                name: "view",
-              },
-              {
-                icon: <Trash variant={"Bold"} />,
-                text: "حذف",
-                name: "delete",
-              },
-            ]}
-            row={row}
-          />
-        ),
+        cell: (row: any) => {
+          //////////////
+          const actions: any[] = [];
+
+          actions.push({
+            icon: <Eye variant="Bold" />,
+            text: "مشاهده جزئیات",
+            name: "view",
+          });
+          if (
+            data.permissions.canCompelete &&
+            row.step.global_step.description === "initialOrder"
+          ) {
+            actions.push({
+              icon: <Additem variant={"Bold"} />,
+              text: "تکمیل سفارش",
+              name: "complete",
+            });
+          }
+          if (data.permissions.canEdit) {
+            actions.push({
+              icon: <Edit variant="Bold" />,
+              text: "ویرایش",
+              name: "edit",
+            });
+          }
+          if (data.permissions.canDelete) {
+            actions.push({
+              icon: <Trash variant={"Bold"} />,
+              text: "حذف",
+              name: "delete",
+            });
+          }
+
+          /////////////////////
+          return (
+            <TableAction
+              handleAction={handleOrderAction}
+              items={[...actions]}
+              row={row}
+            />
+          );
+        },
       });
 
       setColumns([...colTmp]);
@@ -128,6 +148,9 @@ const Orders = () => {
         break;
       case "view":
         Navigate(`/orders/${row.id}`);
+        break;
+      case "complete":
+        Navigate(`/orders/${row.id}/compelete`);
         break;
       case "delete":
         break;
