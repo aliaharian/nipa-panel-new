@@ -43,7 +43,7 @@ const Router = (): JSX.Element => {
               <Route path="" element={<Orders />}></Route>
               <Route path="create" element={<AddOrder />}></Route>
               <Route path=":orderId" element={<OrderDetails />}></Route>
-              <Route path=":orderId/compelete" element={<CompleteOrder />}></Route>
+              <Route path=":orderId/complete" element={<CompleteOrder />}></Route>
             </Route>
             <Route
               path="/products"

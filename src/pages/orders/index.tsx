@@ -102,13 +102,15 @@ const Orders = () => {
             name: "view",
           });
           if (
-            data.permissions.canCompelete &&
+            data.permissions.canComplete &&
             row.step.global_step.description === "initialOrder"
           ) {
             actions.push({
               icon: <Additem variant={"Bold"} />,
-              text: "تکمیل سفارش",
-              name: "complete",
+              text: row.nextStep.step_name || "",
+              name:
+                row.nextStep.global_step.description ||
+                "step" + row.nextStep.global_step.id,
             });
           }
           if (data.permissions.canEdit) {
@@ -149,8 +151,8 @@ const Orders = () => {
       case "view":
         Navigate(`/orders/${row.id}`);
         break;
-      case "complete":
-        Navigate(`/orders/${row.id}/compelete`);
+      case "completeOrder":
+        Navigate(`/orders/${row.id}/complete`);
         break;
       case "delete":
         break;
