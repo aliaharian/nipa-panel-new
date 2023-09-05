@@ -101,16 +101,26 @@ const Orders = () => {
             text: "مشاهده جزئیات",
             name: "view",
           });
+          //my roles
+          const myRoles = JSON.parse(
+            localStorage.getItem("nipa_user") || "{}"
+          )?.roles;
+
+          let atLeastOneMatch = false;
+          if (myRoles) {
+            atLeastOneMatch = row.nextStep.roles.some((role: any) =>
+              myRoles.some((myRole: any) => myRole.slug == role.slug)
+            );
+          }
           if (
-            data.permissions.canComplete &&
-            row.step.global_step.description === "initialOrder"
+            atLeastOneMatch
+            // data.permissions.canCompelete &&
+            // row.step.global_step.description === "initialOrder"
           ) {
             actions.push({
               icon: <Additem variant={"Bold"} />,
               text: row.nextStep.step_name || "",
-              name:
-                row.nextStep.global_step.description ||
-                "step" + row.nextStep.global_step.id,
+              name: "nextStep",
             });
           }
           if (data.permissions.canEdit) {
@@ -151,8 +161,11 @@ const Orders = () => {
       case "view":
         Navigate(`/orders/${row.id}`);
         break;
-      case "completeOrder":
-        Navigate(`/orders/${row.id}/complete`);
+      // case "completeOrder":
+      // Navigate(`/orders/${row.id}/complete`);
+      //   break;
+      case "nextStep":
+        Navigate(`/orders/${row.id}/${row.nextStep.id}/showForm`);
         break;
       case "delete":
         break;

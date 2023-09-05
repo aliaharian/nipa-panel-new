@@ -41,11 +41,19 @@ async function getCompleteInfo(orderId: number) {
   return response?.data;
 }
 
+async function getStepInfo(stepId: number, orderId: number) {
+  let response = await Api()?.get(
+    "/step/" + stepId + "/" + orderId + "/complete"
+  );
+  return response?.data;
+}
+
 export default {
   ordersList,
   createOrder,
   createOrderGroup,
   orderGroupsList,
   orderDetail,
-  getCompleteInfo
+  getCompleteInfo,
+  getStepInfo,
 };
