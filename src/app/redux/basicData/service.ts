@@ -16,7 +16,7 @@ async function addBasicDataItem(id: number, data: BasicDataItem) {
   return response?.data;
 }
 async function addBasicData(data: BasicData) {
-  let response = await Api()?.post("/basicData/", data);
+  let response = await Api()?.post("/basicData", data);
   return response?.data;
 }
 async function editBasicDataItem(id: number, data: BasicDataItem) {
