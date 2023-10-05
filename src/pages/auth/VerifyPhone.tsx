@@ -27,7 +27,7 @@ const VerifyPhone = () => {
   //formik
   const mobile = useAppSelector((state) => state.users.mobile);
   const login = useAppSelector((state) => state.users.login);
-
+  const [loading, setLoading] = React.useState<boolean>(false);
   const initialValues: initialValues = {
     mobile: mobile,
     otp: "",
@@ -38,6 +38,7 @@ const VerifyPhone = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
+      setLoading(true);
       Dispatch(confirmOtp(values));
     },
   });
@@ -46,6 +47,7 @@ const VerifyPhone = () => {
     !mobile && Navigate("/auth/login", { replace: true });
   }, []);
   useEffect(()=>{
+    login?.token && setLoading(false);
     login?.token && Navigate("/dashboard", { replace: true });
 
   },[login?.token])
@@ -63,7 +65,7 @@ const VerifyPhone = () => {
           />
         </div>
         <div className="mt-20">
-          <Button text="تایید و دریافت کد" type="submit" />
+          <Button text="تایید و دریافت کد" type="submit" loading={loading} disabled={loading} />
         </div>
       </form>
     </div>

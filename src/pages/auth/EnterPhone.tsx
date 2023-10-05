@@ -23,18 +23,23 @@ const EnterPhone = () => {
   };
   const Navigate = useNavigate();
   const Dispatch = useAppDispatch();
+  const [loading, setLoading] = React.useState<boolean>(false);
   const mobile = useAppSelector((state) => state.users.mobile);
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      Dispatch(sendOtp({mobile: values.mobile.replaceAll(" ", "")}));
+      setLoading(true);
+      Dispatch(sendOtp({ mobile: values.mobile.replaceAll(" ", "") }));
     },
   });
 
   console.log("mobile", mobile);
   useEffect(() => {
-    mobile && Navigate("/auth/verify", { replace: true });
+    if (mobile) {
+      setLoading(false);
+      Navigate("/auth/verify", { replace: true });
+    }
   }, [mobile]);
 
   return (
@@ -54,8 +59,13 @@ const EnterPhone = () => {
           />
         </div>
         <div className="mt-20">
-          <Button text="تایید و دریافت کد" type="submit" />
-          <Button text="ورود با کلمه عبور" href={"/auth/verify"} simple/>
+          <Button
+            loading={loading}
+            disabled={loading}
+            text="تایید و دریافت کد"
+            type="submit"
+          />
+          <Button text="ورود با کلمه عبور" href={"/auth/verify"} simple />
         </div>
       </form>
     </div>

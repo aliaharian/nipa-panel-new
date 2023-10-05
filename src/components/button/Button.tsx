@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -14,6 +15,7 @@ type ButtonProps = {
   xs?: boolean;
   gray?: boolean;
   disabled?: boolean;
+  loading?: boolean;
 };
 const Button = ({
   type,
@@ -28,6 +30,7 @@ const Button = ({
   xs,
   gray,
   disabled,
+  loading,
 }: ButtonProps) => {
   const classNames = `w-full ${
     xs ? "h-[36px]" : sm ? "h-[38px]" : "h-12"
@@ -52,21 +55,21 @@ const Button = ({
       {href && (
         <Link to={href} className={classNames}>
           {!after && handleIcon()}
-          {text}
+          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
           {after && handleIcon()}
         </Link>
       )}
       {type && (
         <button className={classNames} type={type}>
           {!after && handleIcon()}
-          {text}
+          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
           {after && handleIcon()}
         </button>
       )}
       {onClick && (
         <button className={classNames} onClick={onClick}>
           {!after && handleIcon()}
-          {text}
+          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
           {after && handleIcon()}
         </button>
       )}
