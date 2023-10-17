@@ -1,6 +1,7 @@
 {
   "products": "محصولات",
   "addProduct": "افزودن محصول جدید",
+  "editProduct": "ویرایش محصول",
   "productCode": "کد محصول",
   "title": "عنوان",
   "productType": "نوع محصول",
@@ -23,6 +24,7 @@
   "price": "قیمت",
   "description": "توضیحات",
   "addProductSuccess": "محصول با موفقیت اضافه شد",
+  "updateProductSuccess":"محصول با موفقیت ویرایش شد",
   "deleteProductConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این محصول حذف خواهند شد. آیا مطمئن هستید؟",
   "deleteBasicDataConfirmation": "تمام فرم ها و سفارشات و موارد مربوط به این داده اولیه حذف خواهند شد. آیا مطمئن هستید؟",
   "deleteRoleConfirmation": "آیا از حذف فرم اطمینان دارید؟",

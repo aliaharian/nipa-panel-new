@@ -37,9 +37,28 @@ async function saveProduct(product: Product) {
   return response?.data;
 }
 
+async function updateProduct(id: number, product: Product) {
+  let response = await Api()?.put(`/products/${id}`, {
+    name: product.name,
+    code: product.code,
+    custom: product.custom,
+    price: product.price,
+    status: product.status,
+    description: product.description,
+    images:
+      //array of image hash codes
+      product.images?.map((image) => image.hashCode),
+  });
+  return response?.data;
+}
 //delete product
 async function deleteProduct(id: number) {
   let response = await Api()?.delete(`/products/${id}`);
+  return response?.data;
+}
+//get product
+async function getProduct(id: number) {
+  let response = await Api()?.get(`/products/${id}`);
   return response?.data;
 }
 //add product condition
@@ -61,4 +80,6 @@ export default {
   productStepInfo,
   setProductStepRoles,
   addProductConditions,
+  getProduct,
+  updateProduct
 };

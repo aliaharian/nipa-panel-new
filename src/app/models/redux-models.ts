@@ -17,6 +17,7 @@ export interface ordersSliceModel {
 export interface productsSliceModel {
   products?: any;
   saveSuccess?: boolean;
+  updateSuccess?: boolean;
   deleteSuccess?: boolean;
   productSteps?: productStep[];
   productStepInfo?: productStepInfo;

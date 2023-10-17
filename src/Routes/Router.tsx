@@ -34,6 +34,8 @@ const BasicDataList = React.lazy(() => import("../pages/basicDataList/index"));
 
 const Permissions = React.lazy(() => import("../pages/permissions/index"));
 
+const Factors = React.lazy(() => import("../pages/financial/index"));
+
 const Router = (): JSX.Element => {
   return (
     <Suspense fallback={<div>loading...</div>}>
@@ -78,6 +80,13 @@ const Router = (): JSX.Element => {
             >
               <Route path="" element={<BasicDatas />}></Route>
               <Route path=":id" element={<BasicDataList />}></Route>
+            </Route>
+
+            <Route
+              path="/finance"
+              element={<MiddlewareRoute permission="manage-finance" />}
+            >
+              <Route path="" element={<Factors />}></Route>
             </Route>
 
             <Route

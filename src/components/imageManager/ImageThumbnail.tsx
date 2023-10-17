@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import transform from "app/utils/transform";
 import { CircularProgress } from "@mui/material";
 type ImageThumbnailProps = {
-  src: any;
+  src?: any;
   badge?: string;
   handleDelete?: () => void;
   handleFullscreen?: () => void;
@@ -25,9 +25,14 @@ const ImageThumbnail = ({
   const { t } = useTranslation(["common", "validations"]);
 
   useEffect(() => {
-    transform.fileToUrl(src).then((url) => {
-      setUrl(url);
-    });
+    if (src.hash_code) {
+      const base = (process.env.REACT_APP_BASE_URL || "") + (process.env.REACT_APP_IMAGE_URL || "")
+      setUrl(base + src.hash_code);
+    } else {
+      transform.fileToUrl(src).then((url) => {
+        setUrl(url);
+      });
+    }
   }, []);
   useEffect(() => {
 
@@ -56,9 +61,8 @@ const ImageThumbnail = ({
         )}
         {/* //overlay */}
         <div
-          className={`absolute top-0 left-0 bg-black-60 w-full h-full flex grid grid-rows-3 ${
-            hashCode ? "opacity-0" : "opacity-100"
-          } pointer-events-none group-hover/item:opacity-100 group-hover/item:pointer-events-auto transition-all`}
+          className={`absolute top-0 left-0 bg-black-60 w-full h-full flex grid grid-rows-3 ${hashCode ? "opacity-0" : "opacity-100"
+            } pointer-events-none group-hover/item:opacity-100 group-hover/item:pointer-events-auto transition-all`}
         >
           <div></div>
           <div>
@@ -78,7 +82,7 @@ const ImageThumbnail = ({
           <div className="w-full flex items-center justify-between px-[10px] py-[12px] text-white">
             {hashCode && handleFullscreen && (
               <div className="cursor-pointer" onClick={handleFullscreen}>
-               {isImage && <MaximizeCircle />}
+                {isImage && <MaximizeCircle />}
               </div>
             )}
             {hashCode && handleDelete && (

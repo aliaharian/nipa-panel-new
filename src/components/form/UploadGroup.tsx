@@ -115,9 +115,9 @@ const UploadGroup = ({
   const handleViewImage = (file: any) => {
     //open file object in new tab
     // if (transform.imageValidExtensions.includes(file.type)) {
-      const blob = transform.fileToBlob(file);
-      const blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl, "_blank");
+    const blob = transform.fileToBlob(file);
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, "_blank");
     // }
   };
 
@@ -125,18 +125,20 @@ const UploadGroup = ({
     //formik change listener
     formik.setFieldValue(name, files);
   }, [files]);
-  useEffect(() => {
-    //formik change listener
-    if (formik.values?.[name]?.length == 0 && files.length > 0) {
-      setFiles(formik.values?.[name] || []);
-    }
-  }, [formik]);
+  // useEffect(() => {
+
+  //   //formik change listener
+  if (formik.values?.[name]?.length > 0 && files.length == 0) {
+    setFiles(formik.values?.[name] || []);
+  }
+  // }, [formik]);
 
   useEffect(() => {
     if (setPending) {
       setPending(uploading);
     }
   }, [uploading]);
+
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
@@ -173,11 +175,11 @@ const UploadGroup = ({
         {files.map((file: any, index: any) => {
           return (
             <div
-              key={file.name}
+              key={index}
               className="bg-white rounded-[6px] w-full h-[144px]"
             >
               <ImageThumbnail
-                src={file.value}
+                src={file?.value || file?.file}
                 hashCode={file.hashCode}
                 handleDelete={() => {
                   handleDeleteFile(file, index);

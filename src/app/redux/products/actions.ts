@@ -30,7 +30,7 @@ export const getProductStepInfo = (
   id: number
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    if(id === 0) return dispatch(productActions.productStepInfo(null));
+    if (id === 0) return dispatch(productActions.productStepInfo(null));
     const response = await productService.productStepInfo(id);
     dispatch(productActions.productStepInfo(response));
   };
@@ -42,6 +42,16 @@ export const saveProduct = (
   return async (dispatch, getState) => {
     const response = await productService.saveProduct(product);
     dispatch(productActions.saveProduct(response));
+  };
+};
+export const updateProduct = (
+  productId: number,
+  product: Product
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch, getState) => {
+    const response = await productService.updateProduct(productId, product);
+    dispatch(productActions.updateProduct(response));
+    dispatch(productsList());
   };
 };
 

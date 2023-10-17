@@ -20,6 +20,10 @@ const productSlice = createSlice({
       state.products = [...state.products, action.payload];
       state.saveSuccess = true;
     },
+    updateProduct: (state, action: PayloadAction<any | undefined>) => {
+      state.saveSuccess = true;
+    },
+   
     setSaveSuccess: (state, action: PayloadAction<boolean>) => {
       state.saveSuccess = action.payload;
     },

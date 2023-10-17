@@ -8,10 +8,17 @@ export interface Product {
   images?: Image[] | null;
   id?: number | null;
   initialFormId?: number | null;
+  details?: ProductDetails[];
+}
+
+export interface ProductDetails {
+  price?: string | null;
+  description?: string | null;
 }
 
 export interface Image {
   hashCode?: string | null;
   name: string;
   value?: File | null;
+  file?:any;
 }

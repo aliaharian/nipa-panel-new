@@ -2,8 +2,6 @@ import {
   Add,
   ArrangeVertical,
   Edit,
-  Eye,
-  Setting4,
   Trash,
 } from "iconsax-react";
 import { useEffect, useState } from "react";
@@ -24,7 +22,7 @@ import SnackbarUtils from "app/utils/SnackbarUtils";
 import { useNavigate } from "react-router-dom";
 import TableSkeleton from "components/skeleton/TableSkeleton";
 
-const Products = () => {
+const Factors = () => {
   const data = useAppSelector((state) => state.products.products);
   const [columns, setColumns] = useState<any[]>([]);
   const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
@@ -190,4 +188,4 @@ const Products = () => {
     </div>
   );
 };
-export default Products;
+export default Factors;
