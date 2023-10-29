@@ -18,6 +18,7 @@ import FullscreenLoading from "components/loading/FullscreenLoading";
 const FormBuilder = () => {
   const Dispatch = useAppDispatch();
   let { code, step_id } = useParams();
+  const formFieldTypes = useAppSelector((state) => state.forms.formFieldTypes);
 
   useEffect(() => {
     Dispatch(setCollapseMenu(true));
@@ -235,28 +236,32 @@ const FormBuilder = () => {
     ]);
     handleSaveForm(null, [...conditions.filter((x) => x.saved)]);
   };
-  const handleDeleteItem = (element: FormField) => {
-    //add alert for delete
-    // console.log("eleme", element);
-    let tmp = [...formElements];
-    const index = tmp.indexOf(element);
-    if (index > -1) {
-      tmp.splice(index, 1);
-      setFormElements(tmp);
-      if (element.id == selectedField?.id) {
-        // setTimeout(() => {
-        handleSelectField(undefined);
-        // }, 1);
+  const handleDeleteItem = async (element: FormField) => {
+    try {
+      //set loading
+      setSaveFormLoading(true);
+      if (element.server_id) {
+        await formService.deleteItem(element.server_id, formId);
+      }
+      //add alert for delete
+      // console.log("eleme", element);
+      let tmp = [...formElements];
+      const index = tmp.indexOf(element);
+      if (index > -1) {
+        tmp.splice(index, 1);
+        setFormElements(tmp);
+        if (element.id == selectedField?.id) {
+          // setTimeout(() => {
+          handleSelectField(undefined);
+          // }, 1);
+        }
       }
 
-      if (element.server_id) {
-        formService.deleteItem(element.server_id, formId).then((res) => {
-          console.log("res", res);
-          SnackbarUtils.success(t("fieldDeletedSuccessfully"));
-        });
-      } else {
-        SnackbarUtils.success(t("fieldDeletedSuccessfully"));
-      }
+      SnackbarUtils.success(t("fieldDeletedSuccessfully"));
+      setSaveFormLoading(false);
+    } catch (error) {
+      // SnackbarUtils.error(t("error"));
+      setSaveFormLoading(false);
     }
   };
   const handleBack = () => {
@@ -264,17 +269,19 @@ const FormBuilder = () => {
   };
 
   useEffect(() => {
-    if (productStepInfo) {
+    if (productStepInfo && formFieldTypes) {
       if (productStepInfo.forms?.length > 0) {
         setSaveFormLoading(true);
         setFormId(productStepInfo.forms?.[0].id);
         loadForm(productStepInfo.forms?.[0].id);
       } else {
-        createForm();
-        setSaveFormLoading(false);
+        createForm(
+          productStepInfo.global_step,
+          productStepInfo.product?.count_type
+        );
       }
     }
-  }, [productStepInfo]);
+  }, [productStepInfo, formFieldTypes]);
   const loadForm = async (id: number) => {
     const response = await formService.getForm(id);
     handleSetFormElements(response);
@@ -395,19 +402,63 @@ const FormBuilder = () => {
           }),
         onlyImage: JSON.parse(item.validation)?.onlyImage,
         server_id: item.id,
+        readOnly: JSON.parse(item.validation)?.readOnly,
       };
       tmp.push(tmpItem);
     });
     relatedFields ? setFormRelatedElements(tmp) : setFormElements(tmp);
   };
 
-  const createForm = async () => {
+  const createForm = async (globalStepInfo: any, countType: string) => {
+    const stepDesc = globalStepInfo?.description;
     const response = await formService.createForm({
       name: "form" + productStepInfo?.id,
       product_id: productStepInfo?.product_id,
       product_steps: productStepInfo?.id?.toString(),
     });
     setFormId(response.id);
+    if (stepDesc === "initialOrder" && countType === "m2") {
+      //create two items and add to DB readonly
+      await formService.updateForm(response.id, {
+        conditions: [],
+        fields: [
+          {
+            basic_data_id: null,
+            form_field_type_id: formFieldTypes?.find((x) => x.type == "number")
+              ?.id,
+            helper_text: 1,
+            label: "عرض",
+            max: 100,
+            min: 1,
+            name: "width",
+            order: 0,
+            origin_form_id: null,
+            placeholder: "عرض را وارد کنید",
+            required: true,
+            validation: `{"readOnly":true}`,
+          },
+          {
+            basic_data_id: null,
+            form_field_type_id: formFieldTypes?.find((x) => x.type == "number")
+              ?.id,
+            helper_text: 2,
+            label: "ارتفاع",
+            max: 100,
+            min: 1,
+            name: "height",
+            order: 1,
+            origin_form_id: null,
+            placeholder: "ارتفاع را وارد کنید",
+            required: true,
+            validation: `{"readOnly":true}`,
+          },
+        ],
+        name: "form" + productStepInfo?.id,
+      });
+    }
+    loadForm(response.id);
+
+    setSaveFormLoading(false);
   };
 
   const handleSaveForm = async (e?: any, passedConditions?: Condition[]) => {
@@ -420,12 +471,33 @@ const FormBuilder = () => {
     if (passedConditions) {
       condTmp = [...passedConditions];
     }
+    console.log("tmp", tmp);
+    //check if we dont have two field with same name
+    let names = tmp.map((item) => item.name);
+    let duplicateNames = names.filter(
+      (item, index) => names.indexOf(item) != index
+    );
+    if (duplicateNames.length > 0) {
+      //tell in error that which fields are duplicate
+      let duplicateFields = tmp.filter((item) =>
+        duplicateNames.includes(item.name)
+      );
+      let duplicateFieldsNames = duplicateFields.map((item) => item.label);
+      SnackbarUtils.error(
+        t("validations:fieldNamesMustBeUnique") + duplicateFieldsNames
+      );
+      setSaveFormLoading(false);
+      return;
+    }
     let res = formService.updateForm(formId, {
       name: "form" + productStepInfo?.id,
       fields: tmp.map((item, index) => {
         let validationTmp: any = {};
         if (item.type === "uploadFile") {
           validationTmp.onlyImage = item.onlyImage;
+        }
+        if (item.readOnly) {
+          validationTmp.readOnly = item.readOnly;
         }
 
         return {
@@ -489,16 +561,18 @@ const FormBuilder = () => {
       handleSetFormElements(response, true);
 
       setSaveFormLoading(false);
+      SnackbarUtils.success(t("formSavedSuccessfully"));
     });
     res.catch((error) => {
       setSaveFormLoading(false);
+      SnackbarUtils.error(t("formSaveError"));
     });
   };
 
   return (
     <div className="w-full h-full">
       {saveFormLoading && (
-        <FullscreenLoading/>
+        <FullscreenLoading />
         // <div className="flex-col w-full h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.8)] z-[9999] pointer-events-auto flex justify-center items-center">
         //   <CircularProgress />
         //   <p className="text-white mt-4">لطفا چند لحظه صبر کنید...</p>

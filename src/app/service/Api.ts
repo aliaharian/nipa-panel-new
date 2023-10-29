@@ -64,8 +64,9 @@ const Api = () => {
           SnackbarUtils.error(error);
         });
       } else {
+        console.log('err',error.response)
         SnackbarUtils.error(
-          error.response.data.message || error.response.data.msg
+          error.response.data.message || error.response.data.msg || error.response.data.error
         );
       }
       store.dispatch(setApiLoading(false));

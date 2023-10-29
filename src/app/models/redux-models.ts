@@ -12,7 +12,7 @@ export interface blogSliceModel {
 }
 export interface ordersSliceModel {
   orders?: any;
-  orderGroups?:any;
+  orderGroups?: any;
 }
 export interface productsSliceModel {
   products?: any;
@@ -54,6 +54,7 @@ export interface product {
   status: number;
   created_at: string;
   updated_at: string;
+  count_type: string;
 }
 
 export interface productStep {
@@ -79,6 +80,8 @@ export interface usersSliceModel {
   mobile?: string | null;
   login?: loginModel | null;
   roles?: role[] | null;
+  permissions?: permission[] | null;
+  customers?: any[];
 }
 export interface loginModel {
   token: string;

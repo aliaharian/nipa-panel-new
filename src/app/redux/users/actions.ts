@@ -41,6 +41,17 @@ export const getRolesList = (): ThunkAction<
     dispatch(userActions.getRolesList(response));
   };
 };
+export const getCustomersList = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const response = await userService.getCustomersList();
+    dispatch(userActions.getCustomersList(response.customers));
+  };
+};
 
 export const getUserInfo = (): ThunkAction<
   void,

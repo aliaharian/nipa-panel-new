@@ -66,6 +66,11 @@ const Products = () => {
           sortable: true,
         },
         {
+          name: t("countType"),
+          selector: (row: any) => (t(row.count_type)),
+          sortable: true,
+        },
+        {
           name: t("status"),
           selector: (row: any) => t("active"),
           sortable: true,

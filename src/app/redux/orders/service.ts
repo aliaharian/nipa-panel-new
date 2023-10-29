@@ -16,8 +16,10 @@ async function orderGroupsList() {
   return response?.data;
 }
 
-async function createOrderGroup() {
-  let response = await Api()?.post("/orderGroup");
+async function createOrderGroup(selectedCustomer: string) {
+  let response = await Api()?.post("/orderGroup", {
+    customer_code: selectedCustomer,
+  });
   return response?.data;
 }
 

@@ -33,6 +33,7 @@ type initialValues = {
   custom: number | boolean;
   description: string;
   price: string;
+  count_type: string;
   images: Image[];
 };
 
@@ -69,6 +70,10 @@ const AddProductDialog = ({
     description: Yup.string().required(
       t("productDescription.required", { ns: "validations" }) || ""
     ),
+    //countType
+    count_type: Yup.string().required(
+      t("countType.required", { ns: "validations" }) || ""
+    ),
     price: Yup.string().when("custom", {
       is: 0,
       then: Yup.string().required(
@@ -85,6 +90,7 @@ const AddProductDialog = ({
     custom: 1,
     description: "",
     price: "",
+    count_type: "quantity",
     images: [],
   };
 
@@ -124,6 +130,7 @@ const AddProductDialog = ({
         formik.setFieldValue("name", selectedProduct.name);
         formik.setFieldValue("status", selectedProduct.status);
         formik.setFieldValue("custom", selectedProduct.custom);
+        formik.setFieldValue("count_type", selectedProduct.count_type);
         formik.setFieldValue(
           "description",
           selectedProduct.details?.[0]?.description
@@ -195,7 +202,21 @@ const AddProductDialog = ({
                 formik={formik}
               />
             </div>
-
+            <div className="mt-7 w-full grid grid-cols-1 gap-x-5 gap-y-7">
+              <DropDown
+                className="group"
+                name="count_type"
+                label={t("countType")}
+                options={[
+                  { label: <p>{t("quantity")}</p>, value: "quantity" },
+                  { label: <p>{t("m2")}</p>, value: "m2" },
+                ]}
+                placeholder={t("countType.placeholder", {
+                  ns: "validations",
+                })}
+                formik={formik}
+              />
+            </div>
             {formik.values.custom == 0 && (
               <div className="mt-7 w-full grid grid-cols-1 gap-x-5 gap-y-7">
                 <TextField

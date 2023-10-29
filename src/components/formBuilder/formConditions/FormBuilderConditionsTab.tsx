@@ -21,7 +21,7 @@ const FormBuilderConditionsTab = ({
   const [conditions, setConditions] = useState<Condition[]>([
     ...savedConditions,
   ]);
-  console.log('condiii',conditions)
+  console.log("condiii", conditions);
   const handleAddCondition = () => {
     if (conditionalfields.length > 0 && formElements.length >= 2) {
       setConditions([
@@ -85,6 +85,12 @@ const FormBuilderConditionsTab = ({
             (x) => x.id == condTemp.relationField
           );
           if (relationFieldIndex > -1) {
+            //if related fields has readonly true cant save condition
+            if (formElements[relationFieldIndex].readOnly) {
+              SnackbarUtils.error("فیلد انتخاب شده در فرم قابل شرط گذاری نیست");
+              return;
+            }
+
             //finally save form!
             let newConditions = conditions;
             newConditions[index].saved = true;

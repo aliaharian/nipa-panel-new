@@ -127,13 +127,15 @@ const FormContent = ({
     return (
       <div className="flex">
         <div className="flex opacity-0 pointer-events-none	group-hover:pointer-events-auto	 group-hover:opacity-100 transition-all ">
-          <div
-            onClick={() => handleDeleteItem(element)}
-            id="deleteItem"
-            className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
-          >
-            <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
-          </div>
+          {(!element.readOnly || element.fromRelatedFields) && (
+            <div
+              onClick={() => handleDeleteItem(element)}
+              id="deleteItem"
+              className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
+            >
+              <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
+            </div>
+          )}
           {!element.fromRelatedFields && (
             <div
               onClick={() => handleCopyItem(element)}
@@ -163,8 +165,10 @@ const FormContent = ({
         ...element,
         id: lastId + 1,
         server_id: null,
+        label: element.label + " " + t("copy"),
         name: element.name + (lastId + 1).toString(),
         placeholder: element.placeholder + (lastId + 1).toString(),
+        readOnly: false,
       });
       setFormElements(tmp);
       setLastId(lastId + 1);

@@ -19,6 +19,7 @@ export interface FormField {
   form?: any | null;
   fromRelatedFields?: boolean;
   noBadge?: boolean;
+  readOnly?: boolean;
 }
 
 export interface FormOption {

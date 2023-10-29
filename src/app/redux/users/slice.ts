@@ -5,6 +5,8 @@ const initialUserState: usersSliceModel = {
   mobile: null,
   login: null,
   roles: [],
+  permissions: [],
+  customers: undefined,
 };
 
 const userSlice = createSlice({
@@ -24,6 +26,8 @@ const userSlice = createSlice({
         "nipa_user",
         JSON.stringify(action.payload.user) || ""
       );
+      state.permissions = action.payload.user.permissions;
+      state.roles = action.payload.user.roles;
     },
     getRolesList: (state, action: PayloadAction<any | undefined>) => {
       state.roles = action.payload;
@@ -31,10 +35,14 @@ const userSlice = createSlice({
     getUserInfo: (state, action: PayloadAction<any | undefined>) => {
       state.login = action.payload;
     },
+    getCustomersList: (state, action: PayloadAction<any | undefined>) => {
+      state.customers = action.payload;
+    },
     logout: (state) => {
       state.login = null;
       state.mobile = null;
       state.roles = [];
+      state.permissions = [];
       localStorage.removeItem("nipa_token");
       localStorage.removeItem("nipa_user");
       window.location.reload();

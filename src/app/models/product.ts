@@ -3,6 +3,7 @@ export interface Product {
   code: string;
   custom: boolean | number;
   price?: string | number | null;
+  count_type?: string | null;
   status: boolean | number;
   description?: string | null;
   images?: Image[] | null;

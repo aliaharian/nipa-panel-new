@@ -87,11 +87,13 @@ const AddOrder = () => {
       setOrders([...tmp]);
     }
   };
-  const handleSubmitForm = async () => {
+  const handleSubmitForm = async (selectedCustomer?: string) => {
     setPending(true);
     //create order group
     console.log("orders", orders);
-    const orderGroup = await orderService.createOrderGroup();
+    const orderGroup = await orderService.createOrderGroup(
+      selectedCustomer ? selectedCustomer : user.customer?.code
+    );
     console.log("orderGroup", orderGroup);
     //create orders
     orders.map(async (order, index) => {

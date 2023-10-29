@@ -64,7 +64,9 @@ const Orders = () => {
         },
         {
           name: "نام مشتری",
-          selector: (row: any) => row.user.name + " " + row.user.last_name,
+          selector: (
+            row: any //find order group from row.order_group[0].id in orderGroups and get customer name
+          ) => row.customer
         },
         {
           name: "تعداد",
@@ -211,9 +213,9 @@ const Orders = () => {
                     transform.dateToTimestamp(item.created_at)
                   )
                 )} توسط ${
-                  data?.orders.filter(
-                    (x: any) => x?.order_group?.[0]?.id === item.id
-                  )?.[0]?.customer_name
+                  item.user.name
+                    ? item.user.name + " " + item.user.last_name
+                    : item.user.mobile
                 }`}
               >
                 <Table

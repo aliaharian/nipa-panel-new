@@ -97,5 +97,12 @@
   "mobilePhone":"تلفن همراه",
   "submitDate":"تاریخ ثبت",
   "recieverName":"نام گیرنده",
-  "submitForm2":"ثبت فرم"
+  "submitForm2":"ثبت فرم",
+  "quantity":"تعدادی",
+  "m2":"متر مربع",
+  "countType":"واحد شمارش",
+  "pleaseSelectCustomer":"مشتری این سفارش را انتخاب کنید",
+  "customer":"مشتری",
+  "formSavedSuccessfully":"فرم با موفقیت ذخیره شد",
+  "formSaveError":"خطا در ذخیره فرم"
 }

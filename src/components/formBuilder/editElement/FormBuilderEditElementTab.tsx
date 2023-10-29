@@ -136,6 +136,8 @@ const FormBuilderEditElementTab = ({
         <p>لطفا یک فیلد را برای ویرایش انتخاب کنید</p>
       ) : selectedField.fromRelatedFields ? (
         <p>این فیلد از طریق این فرم قابل ویرایش نمی باشد</p>
+      ) : selectedField.readOnly ? (
+        <p>این فیلد قابل ویرایش نمی باشد</p>
       ) : (
         <div className="w-full flex flex-col items-start justify-start px-4">
           <p className="text-text-450 mb-[20px]">

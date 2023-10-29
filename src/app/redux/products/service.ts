@@ -28,6 +28,7 @@ async function saveProduct(product: Product) {
     code: product.code,
     custom: product.custom,
     price: product.price,
+    count_type: product.count_type,
     status: product.status,
     description: product.description,
     images:
@@ -42,6 +43,7 @@ async function updateProduct(id: number, product: Product) {
     name: product.name,
     code: product.code,
     custom: product.custom,
+    count_type: product.count_type,
     price: product.price,
     status: product.status,
     description: product.description,
@@ -81,5 +83,5 @@ export default {
   setProductStepRoles,
   addProductConditions,
   getProduct,
-  updateProduct
+  updateProduct,
 };

@@ -3,11 +3,14 @@ import ProductSidebarItem from "./ProductSidebarItem";
 import { useEffect, useState } from "react";
 import transform from "app/utils/transform";
 import Button from "../button/Button";
+import DropDown from "../form/Dropdown";
+import { useAppDispatch, useAppSelector } from "app/redux/hooks";
+import { getCustomersList } from "app/redux/users/actions";
 
 type AddOrderSidebarProps = {
   orders: any[];
   handleEditOrder: (order: any) => void;
-  handleSubmitForm: () => void;
+  handleSubmitForm: (selectedCustomer?: string) => void;
 };
 
 const AddOrderSidebar = ({
@@ -18,6 +21,12 @@ const AddOrderSidebar = ({
   console.log("orders", orders);
   const { t } = useTranslation();
   const [total, setTotal] = useState(0);
+  const customers = useAppSelector((state) => state.users.customers);
+  const Dispatch = useAppDispatch();
+  const [selectedCustomer, setSelectedCustomer] = useState<string>();
+  useEffect(() => {
+    !customers &&transform.checkPermission("add-order-as-another") && Dispatch(getCustomersList());
+  }, []);
   useEffect(() => {
     let tmp = 0;
     orders?.map((item) => {
@@ -39,6 +48,34 @@ const AddOrderSidebar = ({
   };
   return (
     <div>
+      <div>
+        {transform.checkPermission("add-order-as-another") && (
+          <div className="flex rounded-[8px] items-center justify-between mb-5">
+            <DropDown
+              className="group"
+              name={"customers"}
+              label={t("customer")}
+              options={customers?.map((item) => ({
+                label: (
+                  <p>{`${item.code} - ${
+                    item.user.name
+                      ? item.user.name + " " + item.user.last_name
+                      : item.user.mobile
+                  }`}</p>
+                ),
+                value: item.code,
+              }))}
+              placeholder={t("pleaseSelectCustomer")}
+              formik={{
+                handleChange: (e: any) => {
+                  setSelectedCustomer(e.target.value);
+                },
+              }}
+            />
+          </div>
+        )}
+      </div>
+
       <div className="flex items-center justify-between text-primary-main font-bold mb-[29px]">
         <p>{t("productsOfThisOrder")}</p>
         <p>
@@ -55,7 +92,11 @@ const AddOrderSidebar = ({
       ))}
 
       <div className="mt-[32px]">
-        <Button after onClick={handleSubmitForm} text={t("submitForm")} />
+        <Button
+          after
+          onClick={() => handleSubmitForm(selectedCustomer)}
+          text={t("submitForm")}
+        />
       </div>
     </div>
   );

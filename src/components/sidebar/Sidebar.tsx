@@ -41,7 +41,7 @@ const Sidebar = () => {
       ),
       title: t("orders"),
       route: "/orders",
-      permission: "view-orders",
+      // permission: "view-orders",
     },
     {
       icon: <Wallet variant={pathname === "/finance" ? "Bold" : "Linear"} />,
@@ -116,7 +116,9 @@ const Sidebar = () => {
         <nav className="flex-1 pl-[20px] py-[13px] pr-0 bg-gray-800">
           {menus.map(
             (menu, index) =>
-              transform.checkPermission(menu.permission) && (
+              ((menu.permission &&
+                transform.checkPermission(menu.permission)) ||
+                !menu.permission) && (
                 <NavItem
                   key={index}
                   collapseMenu={collapseMenu}
