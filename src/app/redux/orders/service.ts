@@ -23,18 +23,30 @@ async function createOrderGroup(selectedCustomer: string) {
   return response?.data;
 }
 
-async function createOrder(
-  orderGroupId: number,
-  productId: number,
-  count: number,
-  customerName?: string
-) {
-  let response = await Api()?.post("/order", {
-    product_id: productId,
-    order_group_id: orderGroupId,
-    customer_name: customerName,
-    count: count,
-  });
+// async function createOrder(
+//   orderGroupId: number,
+//   productId: number,
+//   count: number,
+//   customerName?: string
+// ) {
+//   let response = await Api()?.post("/order", {
+//     product_id: productId,
+//     order_group_id: orderGroupId,
+//     customer_name: customerName,
+//     count: count,
+//   });
+//   return response?.data;
+// }
+async function createOrder(request: {
+  customer_code: string;
+  orders?: {
+    count: number;
+    product_id: number;
+    form_id?: number | null;
+    data?: any;
+  }[];
+}) {
+  let response = await Api()?.post("/order", request);
   return response?.data;
 }
 

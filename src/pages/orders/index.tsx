@@ -110,7 +110,7 @@ const Orders = () => {
 
           let atLeastOneMatch = false;
           if (myRoles) {
-            atLeastOneMatch = row.nextStep.roles.some((role: any) =>
+            atLeastOneMatch = row.nextStep?.roles?.some((role: any) =>
               myRoles.some((myRole: any) => myRole.slug == role.slug)
             );
           }

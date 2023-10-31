@@ -89,33 +89,47 @@ const AddOrder = () => {
   };
   const handleSubmitForm = async (selectedCustomer?: string) => {
     setPending(true);
-    //create order group
-    console.log("orders", orders);
-    const orderGroup = await orderService.createOrderGroup(
-      selectedCustomer ? selectedCustomer : user.customer?.code
-    );
-    console.log("orderGroup", orderGroup);
-    //create orders
-    orders.map(async (order, index) => {
-      const savedOrder = await orderService.createOrder(
-        orderGroup.id,
-        order.product_id,
-        order.count || 1,
-        user.name ? user.name + " " + user.last_name : user.mobile
-      );
-      console.log("savedOrder", savedOrder);
-      //save form of each order if custom
-      if (order.form_id) {
-        const savedForm = await formService.addUserAnswer(
-          savedOrder.id,
-          order.form_id,
-          order.values
-        );
-      }
-      setPending(false);
-    });
-    Navigate("/orders");
-    console.log("sdvvvdsvdvd");
+    const customerCode = selectedCustomer
+      ? selectedCustomer
+      : user.customer?.code;
+    console.log("all neede data", customerCode, orders);
+
+    const requestObject = {
+      customer_code: customerCode,
+      orders: orders.map((order) => {
+        return {
+          count: order.count,
+          product_id: order.product_id,
+          form_id: order.form_id || null,
+          data: order.form_id ? order.values : null,
+        };
+      }),
+    };
+    console.log("requestObject", requestObject);
+
+    const response = await orderService.createOrder(requestObject);
+    console.log("response", response);
+    // const orderGroup = await orderService.createOrderGroup(customerCode);
+    // //create orders
+    // orders.map(async (order, index) => {
+    //   const savedOrder = await orderService.createOrder(
+    //     orderGroup.id,
+    //     order.product_id,
+    //     order.count || 1,
+    //     user.name ? user.name + " " + user.last_name : user.mobile
+    //   );
+    //   console.log("savedOrder", savedOrder);
+    //   //save form of each order if custom
+    //   if (order.form_id) {
+    //     const savedForm = await formService.addUserAnswer(
+    //       savedOrder.id,
+    //       order.form_id,
+    //       order.values
+    //     );
+    //   }
+    // });
+    setPending(false);
+    await Navigate("/orders");
     //TODO:update order group if needed
   };
   return (
