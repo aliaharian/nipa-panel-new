@@ -48,18 +48,19 @@ const ShowOrderStepForm = () => {
     },
   });
   useEffect(() => {
+    console.log("called!", fields)
     setInitialValues(renderFormInitialValues(fields));
     setValidationSchema(
       Yup.object().shape(renderFormValidation(fields, conditions, formik))
     );
-    if (formik.values) {
-      fields?.map((field) => {
-        if (field.answer) {
-          formik.setFieldValue(field.name, field.answer);
-        }
-      });
-    }
-  }, [fields, formik.values, conditions]);
+    // if (formik.values) {
+    //   fields?.map((field) => {
+    //     if (field.answer) {
+    //       formik.setFieldValue(field.name, field.answer);
+    //     }
+    //   });
+    // }
+  }, [fields, conditions]);
 
   useEffect(() => {
     ////
@@ -140,6 +141,9 @@ const ShowOrderStepForm = () => {
     setConditions([...response.conditions]);
 
     setFields([...fieldsTmp]);
+    //do another works
+
+
   };
 
   const handleSubmitForm = () => {

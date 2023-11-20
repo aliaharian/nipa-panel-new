@@ -114,17 +114,17 @@ export const renderFormInitialValues = (elements: FormField[]) => {
     switch (element.type) {
       case "text":
       case "textArea":
-        res[element.name] = "";
+        res[element.name] = element.answer || "";
         break;
       case "uploadFile":
       case "dropDown":
-        res[element.name] = null;
+        res[element.name] = element.answer || null;
         break;
       case "number":
-        res[element.name] = 0;
+        res[element.name] = element.answer || 0;
         break;
       case "checkbox":
-        res[element.name] = [];
+        res[element.name] = element.answer || [];
         break;
     }
   });
