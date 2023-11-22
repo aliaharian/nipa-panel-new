@@ -15,6 +15,7 @@ import orderService from "app/redux/orders/service";
 import formService from "app/redux/forms/service";
 import * as Yup from "yup";
 import Button from "components/button/Button";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 
 const ShowOrderStepForm = () => {
   const Navigate = useNavigate();
@@ -44,6 +45,8 @@ const ShowOrderStepForm = () => {
         );
         //change state to next step!
         setPending(false);
+        SnackbarUtils.success(t("submitFormSuccess"));
+        Navigate(`/orders/`);
       }
     },
   });
@@ -66,6 +69,7 @@ const ShowOrderStepForm = () => {
     ////
     loadForm();
   }, []);
+  // console.log("initial",initialValues)
 
   const loadForm = async () => {
     let orderData = await orderService.getStepInfo(

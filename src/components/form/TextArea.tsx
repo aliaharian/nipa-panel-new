@@ -35,7 +35,7 @@ const TextArea = ({
 
       <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue=""
+        initialValue={formik.values?.[name] || ""}
         id={name}
         value={formik.values?.[name]}
         onEditorChange={(newText) => {

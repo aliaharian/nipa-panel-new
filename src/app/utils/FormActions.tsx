@@ -21,6 +21,7 @@ export const renderElement = (
         setFieldValue: () => {},
         values: null,
       };
+      // console.log("element",element)
   switch (element.type) {
     case "text":
       return (
