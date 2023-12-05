@@ -10,6 +10,7 @@ import {
   Truck,
   UserEdit,
   Wallet,
+  WalletMinus,
 } from "iconsax-react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/redux/hooks";
@@ -90,6 +91,14 @@ const Sidebar = () => {
       title: t("basicDatas"),
       route: "/basicDatas",
       permission: "manage-basic-data",
+    },
+    {
+      icon: (
+        <WalletMinus variant={pathname.includes("wallet") ? "Bold" : "Linear"} />
+      ),
+      title: t("walletAndTransactions"),
+      route: "/wallet",
+      // permission: "manage-basic-data",
     },
     {
       icon: (

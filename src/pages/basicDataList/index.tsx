@@ -210,6 +210,7 @@ const BasicDataList = () => {
                   text={t("add") + " " + data?.name}
                   onClick={() => setOpenAddBasicDataItem(true)}
                 />
+
               ) : (
                 <Skeleton
                   variant="rounded"

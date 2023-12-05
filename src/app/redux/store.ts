@@ -7,6 +7,7 @@ import productSlice from "./products/slice";
 import formSlice from "./forms/slice";
 import basicDataSlice from "./basicData/slice";
 import rolePermissionSlice from "./rolePermissions/slice";
+import walletSlice from "./wallet/slice";
 const customizedMiddleware = getDefaultMiddleware({
   serializableCheck: false,
 });
@@ -19,6 +20,7 @@ const store = configureStore({
     forms: formSlice.reducer,
     basicData: basicDataSlice.reducer,
     rolePermissions: rolePermissionSlice.reducer,
+    wallet:walletSlice.reducer,
   },
   middleware: customizedMiddleware,
 });

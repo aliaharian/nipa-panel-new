@@ -22,6 +22,10 @@ export interface productsSliceModel {
   productSteps?: productStep[];
   productStepInfo?: productStepInfo;
 }
+export interface walletSliceModel {
+  transactions?: any;
+ 
+}
 export interface rolePermissionSliceModel {
   roles?: any[] | null;
   permissions?: permission[] | null;
@@ -134,3 +138,4 @@ export interface appSliceModel {
 export interface basicDatasSliceModel {
   basicDatas: BasicData[] | null;
 }
+

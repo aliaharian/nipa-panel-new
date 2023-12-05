@@ -4,9 +4,15 @@ import store from "../redux/store";
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
 
-export const renderChatTime = (timestamp: number) => {
+export const renderChatTime = (timestamp: number,percise?:boolean) => {
   let now = Math.floor(Date.now());
+  if(percise){
+    //format :: ddmmyy h:i no seconds
+      return new Date(timestamp).toLocaleDateString("fa-IR") + " , " + new Date(timestamp).toLocaleTimeString("fa-IR").slice(0,5);
+      //return new Date(timestamp).toLocaleDateString("fa-IR") + " " + new Date(timestamp).toLocaleTimeString("fa-IR");
 
+
+  }
   let diff = Math.floor((now - timestamp) / 1000);
   if (diff < 60) {
     return "چند لحظه پیش";
@@ -97,14 +103,33 @@ const checkPermission = (permission: any) => {
   }
 };
 
+const toPersianDigitsPutCommas = (value: any) => {
+  const charCodeZero = "۰".charCodeAt(0);
+  !value && (value = "");
+  const val = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  const result = String(val).replace(/[0-9]/g, (w) =>
+    String.fromCharCode(w.charCodeAt(0) + charCodeZero - 48)
+  );
+  return result;
+}
+
+const convetToEnglishDigitsRemoveCommas = (value: any) => {
+  const charCodeZero = "۰".charCodeAt(0);
+  return String(value).replace(/[۰-۹]/g, (w) =>
+    String.fromCharCode(w.charCodeAt(0) - charCodeZero + 48)
+  );
+}
 export default {
   pluralize,
   fileToUrl,
   imageValidExtensions,
   base64ToBlob,
+  toPersianDigitsPutCommas,
   fileToBlob,
   toPersianDigits,
   dateToTimestamp,
   renderChatTime,
   checkPermission,
+  convetToEnglishDigitsRemoveCommas
 };

@@ -33,5 +33,6 @@
   "roleCode.required": "کد نقش الزامی است",
   "roleName.required": "نام نقش الزامی است",
   "countType.placeholder": "نوع شمارش را انتخاب کنید",
-  "fieldNamesMustBeUnique": "نامک فیلد ها باید یکتا باشد: "
+  "fieldNamesMustBeUnique": "نامک فیلد ها باید یکتا باشد: ",
+  "wallet.addAmount":"مبلغ مورد نظر را وارد کنید"
 }

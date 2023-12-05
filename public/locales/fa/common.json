@@ -105,5 +105,12 @@
   "customer": "مشتری",
   "formSavedSuccessfully": "فرم با موفقیت ذخیره شد",
   "formSaveError": "خطا در ذخیره فرم",
-  "submitFormSuccess": "فرم با موفقیت ثبت شد"
+  "submitFormSuccess": "فرم با موفقیت ثبت شد",
+  "walletAndtransactions":"کیف پول و تراکنش ها",
+  "yourBalance":"موجودی کیف پول شما",
+  "chargeWallet":"شارژ کیف پول",
+  "dateTime":"تاریخ و ساعت",
+  "transactionDescription":"توضیحات تراکنش",
+  "remainingAmount":"مانده موجودی",
+  "transactionType":"نوع تراکنش"
 }

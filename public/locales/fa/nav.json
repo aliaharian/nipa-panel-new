@@ -8,5 +8,6 @@
   "shipping": "ارسال",
   "products": "محصولات",
   "basicDatas": "داده های اولیه",
-  "permissions": "دسترسی ها"
+  "permissions": "دسترسی ها",
+  "walletAndTransactions":"کیف پول و تراکنش ها"
 }

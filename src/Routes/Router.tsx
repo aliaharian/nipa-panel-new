@@ -35,6 +35,7 @@ const BasicDataList = React.lazy(() => import("../pages/basicDataList/index"));
 const Permissions = React.lazy(() => import("../pages/permissions/index"));
 
 const Factors = React.lazy(() => import("../pages/financial/index"));
+const Wallet = React.lazy(() => import("../pages/wallet/index"));
 
 const Router = (): JSX.Element => {
   return (
@@ -87,6 +88,13 @@ const Router = (): JSX.Element => {
               element={<MiddlewareRoute permission="manage-finance" />}
             >
               <Route path="" element={<Factors />}></Route>
+            </Route>
+
+            <Route
+              path="/wallet"
+              // element={<MiddlewareRoute permission="manage-finance" />}
+            >
+              <Route path="" element={<Wallet />}></Route>
             </Route>
 
             <Route
