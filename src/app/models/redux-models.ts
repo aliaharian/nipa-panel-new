@@ -103,6 +103,11 @@ export interface userModel {
   roles?: role[] | null;
   permissions: permission[];
   updated_at: string;
+  wallet:{
+    balance: number;
+    credit: number;
+    blocked: number;
+  }
 }
 export interface role {
   id: number;

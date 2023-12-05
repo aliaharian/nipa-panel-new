@@ -111,6 +111,10 @@
   "chargeWallet":"شارژ کیف پول",
   "dateTime":"تاریخ و ساعت",
   "transactionDescription":"توضیحات تراکنش",
-  "remainingAmount":"مانده موجودی",
-  "transactionType":"نوع تراکنش"
+  "remainingAmount":"مانده موجودی بعد از تراکنش",
+  "transactionType":"نوع تراکنش",
+  "incomeSum":"مجموع درآمد بعد از تراکنش",
+  "price2":"مبلغ",
+  "financial_impact":"تاثیر مالی",
+  "customerName":"نام مشتری"
 }

@@ -13,19 +13,30 @@ import TextField from "components/form/TextField";
 import { transactionsList } from "app/redux/wallet/actions";
 import transform from "app/utils/transform";
 import { Tooltip, Typography } from "@mui/material";
-
+import Pagination from "components/pagination/Pagination";
+import { getUserInfo } from "app/redux/users/actions";
+import walletService from "app/redux/wallet/service";
 const Wallet = () => {
   const data = useAppSelector((state) => state.wallet.transactions);
+  const user = useAppSelector((state) => state.users.login);
   const [columns, setColumns] = useState<any[]>([]);
+  const [dataTmp, setDataTmp] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
   const Navigator = useNavigate();
 
   const { t } = useTranslation("common");
-  const [amountInput, setAmountInput] = useState<Number | null>()
+  const [amountInput, setAmountInput] = useState<number | null>()
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
-    Dispatch(transactionsList());
+    Dispatch(transactionsList(page));
+    Dispatch(getUserInfo())
   }, []);
+  useEffect(() => {
+    if (data && data.pagination.current_page !== page)
+      Dispatch(transactionsList(page));
+  }, [page])
+  console.log("userrtttt", user)
 
   useEffect(() => {
     if (data) {
@@ -34,14 +45,68 @@ const Wallet = () => {
         {
           name: t("dateTime"),
           selector: (row: any) =>
-            transform.renderChatTime(transform.dateToTimestamp(row.updated_at), true),
+            row.id === 'footer' ? <p className="text-[14px] font-bold text-text-900">{row.title}</p> : transform.renderChatTime(transform.dateToTimestamp(row.updated_at), true),
           sortable: true,
         },
+      ];
+      if (data.accessAll) {
+        colTmp.push({
+          name: t("customerName"),
+          selector: (row: any) =>
+            row.full_name,
+          sortable: false,
+        })
+      }
+      colTmp.push(
         {
-          name: t("price"),
-          selector: (row: any) => transform.toPersianDigitsPutCommas(row.price?.toString() || "") + " تومان",
+          name: t("price2"),
+          selector: (row: any) =>
+            <p className={`font-bold text-[14px] 
+              ${data.accessAll ? "text-text-800" : ""}
+              ${row.id === 'footer' ?
+                "text-text-900" :
+                row.isValid ?
+                  !data.accessAll ?
+                    row.increase ?
+                      "text-success-primary" :
+                      "text-error-primary" :
+                    "" :
+                  "text-text-400"}
+                   `}>
+              {transform.toPersianDigitsPutCommas(row.price?.toString() || "")}
+              {row.id !== 'footer' ? data.accessAll ? "" : row.increase ? " + " : " - " : ""}
+            </p>,
           sortable: true,
-        },
+        }
+      )
+
+      if (data.accessAll) {
+        colTmp.push({
+          name: t("financial_impact"),
+          selector: (row: any) =>
+            <p className={`font-bold text-[14px] 
+            ${row.id === 'footer' ?
+                "text-text-900" :
+                row.isValid && row.financial_impact > 0 ?
+                  !row.increase ?
+                    "text-success-primary" :
+                    "text-error-primary" :
+                  "text-text-400"}
+                 `}>
+              {transform.toPersianDigitsPutCommas(row.financial_impact?.toString() || "")}
+              {row.id !== 'footer' ? row.financial_impact > 0 ? !row.increase ? " + " : " - " : "" : ""}
+            </p>,
+          sortable: false,
+        }, {
+          name: t("transactionType"),
+          selector: (row: any) =>
+            row.transaction_type,
+          sortable: false,
+        })
+
+      }
+
+      colTmp.push(...[
         {
           name: t("transactionDescription"),
           selector: (row: any) => <Tooltip title={
@@ -55,23 +120,34 @@ const Wallet = () => {
         },
         {
           name: t("status"),
-          selector: (row: any) => row.status.name,
+          selector: (row: any) => row.status?.name,
           sortable: true,
         },
         {
-          name: t("transactionType"),
-          selector: (row: any) => row.transaction_type,
-          sortable: true,
+          name: data.accessAll ? t("incomeSum") : t("remainingAmount"),
+          selector: (row: any) =>
+            <p className={`font-bold text-[14px] ${row.id === 'footer' ? "text-text-900" : "text-success-primary"}`}>
+              {transform.toPersianDigitsPutCommas(row.remainingSum?.toString() || "")}
+            </p>,
+          sortable: true
         },
-        {
-          name: t("remainingAmount"),
-          selector: (row: any) => t("active"),
-          sortable: true,
-        },
-      ];
+      ]);
 
 
       setColumns([...colTmp]);
+      setDataTmp([...data.transactions, {
+        id: "footer",
+        price: data.sum || "---",
+        description: "",
+        title: "مجموع",
+        status: {
+          name: ""
+        },
+        financial_impact: data.sum2 || '---',
+        remainingSum: data.sum3 || '---',
+        increase: true,
+        updated_at: null
+      }])
 
       console.log("data.orders", data.cols);
     }
@@ -90,6 +166,13 @@ const Wallet = () => {
     },
 
   };
+
+  const handlePay = async() => {
+    const response =await walletService.increaseWalletBalance(amountInput);
+    alert('ok!')
+    Dispatch(transactionsList(page));
+    Dispatch(getUserInfo())
+  }
   return (
     <div className="w-full h-full">
       <Breadcrumb
@@ -103,15 +186,21 @@ const Wallet = () => {
               {t("yourBalance")}
             </p>
             <p className="text-text-900 text-[14px] leading-[38px]">
-              <span className="text-success-primary font-bold text-[20px]">۱,۲۰۰,۰۰۰</span> تومان
+              <span className="text-success-primary font-bold text-[20px]">
+                {user ?
+                  transform.toPersianDigitsPutCommas(
+                    (user.user.wallet?.balance + user.user.wallet.credit)?.toString()
+                    || "")
+                  : "---"}
+              </span> تومان
             </p>
           </div>
-          <div className="h-full w-1/2 flex flex-col items-center justify-start">
+          <div className="h-full w-1/2 flex flex-col items-start pr-10 justify-start">
             <p className="text-text-800 text-[16px] mb-4 font-bold">
               {t("chargeWallet")}
             </p>
 
-            <div className="w-full flex items-center mr-10">
+            <div className="w-full flex items-center">
               <div className="min-w-[254px] w-[100%]">
                 <TextField
                   name="amount"
@@ -130,7 +219,7 @@ const Wallet = () => {
               <div className="max-w-[170px] min-w-[120px] w-[calc(100%-300px)] mr-4">
                 <Button
                   text="تایید و پرداخت"
-                  onClick={() => { }}
+                  onClick={handlePay}
                 />
               </div>
             </div>
@@ -139,7 +228,19 @@ const Wallet = () => {
         </div>
         <Section headerTitle="لیست تراکنش ها">
           {data ? (
-            <Table columns={columns} data={data || []} />
+
+            <>
+              <Table columns={columns} data={dataTmp || []} />
+              <div className="mt-8">
+                <Pagination
+                  total={data.pagination.total_pages}
+                  current={data.pagination.current_page}
+                  onChange={(page) => { setPage(page) }}
+                />
+              </div>
+
+            </>
+
           ) : (
             <TableSkeleton />
           )}
