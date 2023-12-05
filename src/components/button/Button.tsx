@@ -16,6 +16,7 @@ type ButtonProps = {
   gray?: boolean;
   disabled?: boolean;
   loading?: boolean;
+  className?: string;
 };
 const Button = ({
   type,
@@ -31,8 +32,9 @@ const Button = ({
   gray,
   disabled,
   loading,
+  className
 }: ButtonProps) => {
-  const classNames = `w-full ${
+  const classNames = `w-full ${className} ${
     xs ? "h-[36px]" : sm ? "h-[38px]" : "h-12"
   } rounded-[8px] flex items-center justify-center bg-primary-main text-white ${
     bordered

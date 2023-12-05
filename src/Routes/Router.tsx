@@ -16,7 +16,7 @@ const EnterPhone = React.lazy(() => import("../pages/auth/EnterPhone"));
 const VerifyPhone = React.lazy(() => import("../pages/auth/VerifyPhone"));
 
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
-const Orders = React.lazy(() => import("../pages/orders"));
+const Orders = React.lazy(() => import("../components/wallet"));
 const AddOrder = React.lazy(() => import("../pages/orders/AddOrder"));
 const OrderDetails = React.lazy(() => import("../pages/orders/OrderDetails"));
 const CompleteOrder = React.lazy(() => import("../pages/orders/CompleteOrder"));

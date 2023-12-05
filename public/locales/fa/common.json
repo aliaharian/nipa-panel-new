@@ -116,5 +116,7 @@
   "incomeSum":"مجموع درآمد بعد از تراکنش",
   "price2":"مبلغ",
   "financial_impact":"تاثیر مالی",
-  "customerName":"نام مشتری"
+  "customerName":"نام مشتری",
+  "clearFilters":"حذف فیلترها",
+  "applyFilters":"اعمال فیلترها"
 }

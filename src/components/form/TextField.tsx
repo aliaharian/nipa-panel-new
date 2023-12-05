@@ -8,7 +8,7 @@ type TextFieldProps = {
   label?: any;
   type?: string;
   placeholder?: string | null;
-  formik: any;
+  formik?: any;
   mask?: string;
   maskChar?: string;
   inputActions?: any;
@@ -43,10 +43,10 @@ const TextField = ({
       {!normal ? <ReactInputMask
         mask={mask ? mask : ""}
         maskChar={maskChar ? maskChar : " "}
-        value={formik.values?.[name]}
+        value={formik?.values?.[name]}
         type={type}
         dir="rtl"
-        className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik.errors?.[name] && formik.touched?.[name]
+        className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
           ? "!border-error-primary"
           : ""
           }`}
@@ -56,7 +56,7 @@ const TextField = ({
         placeholder={placeholder || ""}
         onChange={(e) => {
           //formik handlechange without mask
-          formik.handleChange({
+          formik?.handleChange({
             target: {
               name,
               value: e.target.value,
@@ -69,8 +69,8 @@ const TextField = ({
         <Input
           value={type == "number"?
             //convert to persian digits put commas
-            transform.toPersianDigitsPutCommas(formik.values?.[name])
-            : formik.values?.[name]
+            transform.toPersianDigitsPutCommas(formik?.values?.[name])
+            : formik?.values?.[name]
           }
           type={"text"}
           id={name}
@@ -80,7 +80,7 @@ const TextField = ({
           onChange={(e) => {
             const value = transform.convetToEnglishDigitsRemoveCommas(e.target.value);
             //formik handlechange without mask
-            formik.handleChange({
+            formik?.handleChange({
               //accept only number
               target: {
                 name,
@@ -93,16 +93,16 @@ const TextField = ({
           
           disableUnderline
           endAdornment={<InputAdornment position="end" >{endEndorement}</InputAdornment>}
-          className={`text-text-400 w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik.errors?.[name] && formik.touched?.[name]
+          className={`text-text-400 w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
             ? "!border-error-primary"
             : ""
             }`}
         />
       }
 
-      {formik.errors?.[name] && formik.touched?.[name] && (
+      {formik?.errors?.[name] && formik?.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">
-          {formik.errors?.[name]}
+          {formik?.errors?.[name]}
         </p>
       )}
     </div>
