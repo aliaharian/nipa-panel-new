@@ -36,6 +36,7 @@ module.exports = {
         500: "#263C5E",
         600: "#eef3fa",
         nav: "rgba(47, 98, 176, 0.1)",
+        o50: "rgba(47, 98, 176, 0.4)",
         dark:"#234a84"
       },
       secondary: {

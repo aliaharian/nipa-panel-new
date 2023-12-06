@@ -19,6 +19,7 @@ import WalletInfo from "../../components/wallet/WalletInfo";
 import AdminFilterActions from "../../components/wallet/AdminFilterActions";
 const Wallet = () => {
   const data = useAppSelector((state) => state.wallet.transactions);
+  const listLoading = useAppSelector((state) => state.wallet.transactionsListLoading);
   const user = useAppSelector((state) => state.users.login);
   const [columns, setColumns] = useState<any[]>([]);
   const [dataTmp, setDataTmp] = useState<any[]>([]);
@@ -158,6 +159,7 @@ const Wallet = () => {
 
   return (
     <div className="w-full h-full">
+      {/* {listLoading && <FullscreenLoading />} */}
       <Breadcrumb
 
         title={t("walletAndtransactions")}
@@ -167,7 +169,7 @@ const Wallet = () => {
         <Section headerTitle="لیست تراکنش ها"
           headerActions={data?.accessAll && <AdminFilterActions />}
         >
-          {data ? (
+          {(data && !listLoading) ? (
 
             <>
               <Table columns={columns} data={dataTmp || []} />

@@ -24,6 +24,7 @@ export interface productsSliceModel {
 }
 export interface walletSliceModel {
   transactions?: any;
+  transactionsListLoading?: boolean;
  
 }
 export interface rolePermissionSliceModel {

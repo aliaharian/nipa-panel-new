@@ -43,7 +43,7 @@ const SideDialog = ({
       }`}
     >
       <div
-        className={`h-full w-[60%] min-w-[820px] bg-white transition-all	${
+        className={`h-full w-[60%] min-w-[900px] bg-white transition-all	${
           open ? "translate-x-0 delay-300" : "translate-x-[100%] delay-200"
         }`}
       >

@@ -1,5 +1,4 @@
-import { ExportCurve, TextBlock, TickSquare } from "iconsax-react";
-import store from "../redux/store";
+//set timestamp to persian date
 
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
@@ -120,7 +119,26 @@ const convetToEnglishDigitsRemoveCommas = (value: any) => {
     String.fromCharCode(w.charCodeAt(0) - charCodeZero + 48)
   );
 }
+function toISOLocal(d: Date) {
+  var z  = (n:any) =>  ('0' + n).slice(-2);
+  var zz = (n:any) => ('00' + n).slice(-3);
+  var off = d.getTimezoneOffset();
+  var sign = off > 0? '-' : '+';
+  off = Math.abs(off);
+
+  return d.getFullYear() + '-'
+         + z(d.getMonth()+1) + '-' +
+         z(d.getDate()) 
+         
+        //  + 'T' +
+        //  z(d.getHours()) + ':'  + 
+        //  z(d.getMinutes()) + ':' +
+        //  z(d.getSeconds()) + '.' +
+        //  zz(d.getMilliseconds()) +
+        //  sign + z(off/60|0) + ':' + z(off%60); 
+}
 export default {
+  toISOLocal,
   pluralize,
   fileToUrl,
   imageValidExtensions,

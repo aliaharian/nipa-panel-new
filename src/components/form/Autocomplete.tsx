@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormOption } from "../../app/models/form";
-import { Autocomplete as MuiAutocomplete, TextField } from "@mui/material";
+import { CircularProgress, Autocomplete as MuiAutocomplete, TextField, debounce } from "@mui/material";
 import { ArrowDown, ArrowDown2 } from "iconsax-react";
 
 type AutocompleteProps = {
@@ -13,8 +13,9 @@ type AutocompleteProps = {
   maskChar?: string;
   inputActions?: any;
   className?: string;
-  options?: FormOption[];
+  options: FormOption[];
   disabled?: boolean;
+  fetchList: (value: string) => Promise<FormOption[]>;
 };
 const Autocomplete = ({
   name,
@@ -28,11 +29,17 @@ const Autocomplete = ({
   inputActions,
   options,
   disabled,
+  fetchList
 }: AutocompleteProps) => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [optionsTmp, setOptionsTmp] = useState<FormOption[]>(options || [])
+  const [loading, setLoading] = useState<boolean>(false);
+  //update optionsTmp on update options
+  React.useEffect(() => {
+    options.length > 0 && setOptionsTmp(options || [])
+  }, [options])
   const handleChange = (e: any) => {
     setSelectedOption(e);
-    console.log("nice car", e);
     // formik?.handleChange(e);
     formik.handleChange({
       target: {
@@ -43,6 +50,29 @@ const Autocomplete = ({
       },
     });
   };
+
+  const fetch = React.useMemo(
+    () =>
+      debounce(
+        (
+          request: { input: string },
+          callback: (results?: readonly any[]) => void,
+        ) => {
+          if (request.input.length < 3 && request.input.length > 0) return
+          console.log(request);
+          setLoading(true)
+          fetchList(request.input).then((res: FormOption[]) => {
+            setOptionsTmp(res)
+            callback(res);
+            setLoading(false)
+          }
+          );
+        },
+        400,
+      ),
+    [],
+  );
+
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
@@ -53,86 +83,39 @@ const Autocomplete = ({
         </label>
         {inputActions?.()}
       </div>
-      {/* <Select
-        isDisabled={disabled}
-        defaultValue={formik.values ? formik.values[name] : selectedOption}
-        onChange={handleChange}
-        value={
-          formik.values
-            ? options?.find((x) => x.value === formik.values[name])
-            : selectedOption
-        }
-        placeholder={placeholder}
-        options={options}
-        className="w-full h-12 !outline-none"
-        classNames={{
-          control: (state) =>
-            `h-12 !rounded-[6px] !outline-none !shadow-none ${state.isFocused ? "!border-primary-main" : "border-text-300"
-            }`,
-          placeholder: (state) => `text-right text-xs`,
-          singleValue: (state) => `text-right text-xs`,
-          valueContainer: (state) => `!outline-none`,
-          indicatorSeparator: (state) => `!hidden`,
-          menu: (state) =>
-            `!shadow-none border border-text-400 !rounded-[6px] py-[6px]`,
-          option: (state) => `p-[6px] ${state.isFocused ? "" : ""}`,
-        }}
-        styles={{
-          option: (baseStyles, state) => ({
-            "&>p": {
-              cursor: "pointer",
-              backgroundColor:
-                state.isFocused || state.isSelected ? "#eef3fa" : "#fff",
-              height: 40,
-              display: "flex",
-              fontWeight: "normal",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              padding: "10px",
-              borderRadius: "4px",
-              color: "#1f1f1f",
-            },
-          }),
-        }}
-      /> */}
 
       <MuiAutocomplete
         value={formik.values
-          ? options?.find((x) => x.value === formik.values[name])
+          ? optionsTmp?.find((x) => x.value === formik.values[name])
           : selectedOption
         }
         onChange={(event, newValue) => {
-          handleChange(event)
+          handleChange({
+            value: newValue,
+            type: newValue,
+          })
         }}
-        // filterOptions={(options, params) => {
-        //   const filtered = filter(options, params);
-
-        //   if (params.inputValue !== "" && freeSolo) {
-        //     filtered.push({
-        //       inputValue: params.inputValue,
-        //       title: `افزودن "${params.inputValue}"`,
-        //     });
-        //   }
-
-        //   return filtered;
-        // }}
+        //print no result found if no option found
+        onInputChange={
+          (event, newInputValue) => {
+            fetch({ input: newInputValue }, (results?: readonly any[]) => {
+              console.log(results);
+              //update options              
+            }
+            );
+          }
+        }
         id={`AutoComplete${name}`}
-        options={options || []}
+        options={optionsTmp || []}
         getOptionLabel={(option: any) => {
-          //find option from its value
-          // const found = _options.find((item) => item.value == option);
-          // //if found return its title
-          // if (found) return found.title;
-          // //else return option itself
-          // return null;
-          return option?.name || "";
+          return option?.label || "";
         }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
         renderOption={(props, option) => (
           <li key={option.value} {...props}>
-            <p>{option?.name}</p>
+            <p>{option?.label}</p>
           </li>
         )}
         sx={{
@@ -152,6 +135,7 @@ const Autocomplete = ({
           },
           "& input": {
             //disable focus glow
+            // marginRight:5,s
             "&:focus": {
               boxShadow: "none !important",
             },
@@ -163,6 +147,8 @@ const Autocomplete = ({
           <TextField
             {...params}
             label=""
+            placeholder="حداقل ۳ کاراکتر تایپ کنید"
+
             classes={
               //set border
               {
@@ -171,23 +157,23 @@ const Autocomplete = ({
             }
             InputProps={{
               ...params.InputProps,
-              disableUnderline: true,
               classes: {
-                root: "h-12",
-                input: "text-xs hover:!border-primary-main focus:!border-primary-main",
+                root: " h-12 !pr-2",
+                input: "!text-sm !font-bold hover:!border-primary-main focus:!border-primary-main",
                 //change fieldset hove
                 notchedOutline: "!border-none !outline-none !shadow-none",
 
               },
               endAdornment: (
                 <>
-                  {/* {loading ? (
+                  {loading ? (
                     <CircularProgress
                       color="inherit"
                       size={20}
                     />
-                  ) : null} */}
-                  <ArrowDown2 style={{width:20,height:20, color:"#757575"}} />
+                  ) :
+                    <ArrowDown2 style={{ width: 20, height: 20, color: "#757575" }} />
+                  }
                 </>
               ),
             }}

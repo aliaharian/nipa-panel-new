@@ -3,17 +3,20 @@ import walletService from "./service";
 import { RootState } from "app/redux/store";
 import walletSlice from "./slice";
 
-const walletactions = walletSlice.actions;
+const walletActions = walletSlice.actions;
 
-export const transactionsList = (page:number): ThunkAction<
+export const transactionsList = (page: number, filters?: any): ThunkAction<
   void,
   RootState,
   unknown,
   AnyAction
 > => {
   return async (dispatch, getState) => {
-    const response = await walletService.transactionsList(page);
-    dispatch(walletactions.transactionsList(response));
+    // console.log("values", page, filters)
+    const prevFilters = getState().wallet.transactions?.filters;
+    dispatch(walletActions.transactionsListLoading(true));
+    const response = await walletService.transactionsList(page, filters || prevFilters);
+    dispatch(walletActions.transactionsList(response));
   };
 };
 

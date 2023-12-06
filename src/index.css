@@ -17,6 +17,13 @@
   src: url("../public/fonts/woff/IRANSansX-Regular.woff") format("woff"),
     url("../public/fonts/woff2/IRANSansX-Regular.woff2") format("woff2");
 }
+@font-face {
+  font-family: IRANSansFanum;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../public/fonts/woff/IRANSansXFaNum-Regular.woff") format("woff"),
+    url("../public/fonts/woff2/IRANSansXFaNum-Regular.woff2") format("woff2");
+}
 
 body {
   margin: 0;
@@ -28,6 +35,17 @@ body {
 }
 div,span,p {
   font-family: "IRANSansX", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif !important;
+}
+
+h1,h2,h3,h4,h5,h6,button{
+  font-family: "IRANSansFanum", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif !important;
+}
+.MuiPickersCalendarHeader-label{
+  font-family: "IRANSansFanum", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif !important;
 }
