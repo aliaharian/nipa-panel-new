@@ -85,7 +85,7 @@ const Router = (): JSX.Element => {
 
             <Route
               path="/finance"
-              element={<MiddlewareRoute permission="manage-finance" />}
+              // element={<MiddlewareRoute permission="manage-finance" />}
             >
               <Route path="" element={<Factors />}></Route>
             </Route>

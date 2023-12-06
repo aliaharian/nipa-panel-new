@@ -46,7 +46,10 @@ const Wallet = () => {
         {
           name: t("dateTime"),
           selector: (row: any) =>
-            row.id === 'footer' ? <p className="text-[14px] font-bold text-text-900">{row.title}</p> : transform.renderChatTime(transform.dateToTimestamp(row.updated_at), true),
+            row.id === 'footer' ? 
+            <p className="text-[14px] font-bold text-text-900">{row.title}</p> :
+             transform.renderChatTime(transform.dateToTimestamp(row.updated_at), true)
+             ,
           sortable: false,
         },
       ];

@@ -118,5 +118,12 @@
   "financial_impact":"تاثیر مالی",
   "customerName":"نام مشتری",
   "clearFilters":"حذف فیلترها",
-  "applyFilters":"اعمال فیلترها"
+  "applyFilters":"اعمال فیلترها",
+  "advancedFilter":"فیلتر پیشرفته",
+  "financial":"مالی",
+  "forOrderNumber":"بابت سفارش شماره",
+  "factorNo":"شماره فاکتور",
+  "forWhat":"بابت",
+  "createdAt":"تاریخ صدور",
+  "sumPrice":"جمع کل"
 }

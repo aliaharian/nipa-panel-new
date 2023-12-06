@@ -48,7 +48,7 @@ const Sidebar = () => {
       icon: <Wallet variant={pathname === "/finance" ? "Bold" : "Linear"} />,
       title: t("finance"),
       route: "/finance",
-      permission: "manage-finance",
+      // permission: "manage-finance",
     },
     {
       icon: <Grid1 variant={pathname === "/maps" ? "Bold" : "Linear"} />,

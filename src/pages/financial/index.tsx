@@ -1,7 +1,6 @@
 import {
-  Add,
-  ArrangeVertical,
   Edit,
+  Setting4,
   Trash,
 } from "iconsax-react";
 import { useEffect, useState } from "react";
@@ -11,61 +10,75 @@ import Table from "components/table/Table";
 import TableAction from "components/table/TableAction";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useTranslation } from "react-i18next";
-import {
-  deleteProduct,
-  productsList,
-  setDeleteSuccess,
-} from "app/redux/products/actions";
-import AddProductDialog from "components/products/AddProductDialog";
-import DeletePopup from "components/popup/DeletePopup";
-import SnackbarUtils from "app/utils/SnackbarUtils";
 import { useNavigate } from "react-router-dom";
 import TableSkeleton from "components/skeleton/TableSkeleton";
+import { invoicesList } from "app/redux/financial/actions";
+import { Tooltip, Typography } from "@mui/material";
+import transform from "app/utils/transform";
+import Pagination from "components/pagination/Pagination";
+import FinancialFiltersDialog from "components/financial/FinancialFiltersDialog";
 
 const Factors = () => {
-  const data = useAppSelector((state) => state.products.products);
+  const data = useAppSelector((state) => state.financial.invoices);
+  const loading = useAppSelector((state) => state.financial.invoicesListLoading);
   const [columns, setColumns] = useState<any[]>([]);
-  const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
   const Navigator = useNavigate();
-  const deleteSuccess = useAppSelector(
-    (state: any) => state.products.deleteSuccess
-  );
   const { t } = useTranslation("common");
   const [selectedRow, setSelectedRow] = useState<any>(null);
-  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [addProduct, setOpenAddProduct] = useState<boolean>(false);
-  const handleClosedeletePopup = () => {
-    setOpenDeletePopup(false);
-  };
+  const [page, setPage] = useState<number>(1);
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
-    Dispatch(productsList());
+    Dispatch(invoicesList(page));
   }, []);
 
   useEffect(() => {
-    if (data) {
-      console.log("data123", data);
+    if (data && data.pagination.current_page !== page)
+      Dispatch(invoicesList(page));
+  }, [page]);
+
+
+
+  useEffect(() => {
+    if (data?.factors) {
 
       let colTmp: any[] = [
         {
-          name: t("productCode"),
+          name: t("factorNo"),
           selector: (row: any) => row.code,
           sortable: true,
         },
         {
-          name: t("title"),
-          selector: (row: any) => row.name,
+          name: t("forWhat"),
+          selector: (row: any) =>
+            <Tooltip title={`${t("forOrderNumber")} ${row.order_group_id}`}>
+              <Typography className="!text-[13px]">
+                {t("forOrderNumber")} {row.order_group_id}
+              </Typography>
+            </Tooltip>,
           sortable: true,
         },
         {
-          name: t("productType"),
-          selector: (row: any) => (row.custom ? t("custom") : t("normal")),
+          name: t("createdAt"),
+          selector: (row: any) =>
+            transform.renderChatTime(transform.dateToTimestamp(row.created_at), true),
+          sortable: true,
+        },
+        {
+          name: t("sumPrice"),
+          selector: (row: any) => row.total_price ? transform.toPersianDigitsPutCommas(row.total_price.toString()) + " تومان " : "تعیین نشده",
           sortable: true,
         },
         {
           name: t("status"),
-          selector: (row: any) => t("active"),
+          selector: (row: any) =>
+            <Tooltip title={row.last_status?.factor_status_enum?.name}>
+              <Typography noWrap className="!text-[13px] bg-primary-main p-2 text-white rounded-[6px]">
+                {row.last_status?.factor_status_enum?.name}
+              </Typography>
+            </Tooltip>,
           sortable: true,
         },
       ];
@@ -82,11 +95,6 @@ const Factors = () => {
                 text: "ویرایش",
                 name: "edit",
               },
-              row.custom && {
-                icon: <ArrangeVertical variant="Bold" />,
-                text: "مدیریت مراحل",
-                name: "steps",
-              },
               {
                 icon: <Trash variant={"Bold"} />,
                 text: "حذف",
@@ -100,87 +108,57 @@ const Factors = () => {
       });
 
       setColumns([...colTmp]);
-
-      console.log("data.orders", data.cols);
     }
   }, [data]);
   const handleTableAction = (row: any, action: string) => {
-    console.log("row", row);
-    console.log("action", action);
     setSelectedRow(row);
     switch (action) {
       case "delete":
-        setOpenDeletePopup(true);
-        break;
-      case "steps":
-        Navigator(`${row.code}/steps`);
-        break;
-      case "edit":
-        setOpenAddProduct(true);
+        // setOpenDeletePopup(true);
         break;
       default:
         break;
     }
   };
-  const handleDeleteProduct = () => {
-    setDeleteLoading(true);
-    console.log("selectedRow", selectedRow);
-    Dispatch(deleteProduct(selectedRow.id));
-    // setTimeout(() => {
-    //   setDeleteLoading(false);
-    //   setOpenDeletePopup(false);
-    //   SnackbarUtils.success(t("deleteProductSuccess"));
-    // }, 1000);
-  };
-  useEffect(() => {
-    if (deleteSuccess) {
-      setDeleteLoading(false);
-      setOpenDeletePopup(false);
-      SnackbarUtils.success(t("deleteProductSuccess"));
-      setTimeout(() => {
-        Dispatch(setDeleteSuccess(false));
-      }, 100);
-    }
-  }, [deleteSuccess]);
-  const handleCloseAddProductDialog = () => {
-    setOpenAddProduct(false);
-    setSelectedRow(null);
-  };
+
+
   return (
     <div className="w-full h-full">
-      <AddProductDialog
-        open={addProduct}
-        handleClose={handleCloseAddProductDialog}
-        selectedProductId={selectedRow?.id || undefined}
-      />
-
-      <DeletePopup
-        title={t("deleteProductConfirmation")}
-        open={openDeletePopup}
-        onClose={handleClosedeletePopup}
-        handleConfirm={handleDeleteProduct}
-        loading={deleteLoading}
+      <FinancialFiltersDialog
+        open={openFilter}
+        handleClose={() => setOpenFilter(false)}
+        handleSubmit={() => { }}
       />
       <Breadcrumb
         actions={
           <>
-            <div className="w-[186px] mr-[16px]">
+            <div className="w-[153px] mr-[16px]">
               <Button
-                icon={<Add />}
-                text={t("addProduct")}
-                onClick={() => setOpenAddProduct(true)}
+                icon={<Setting4 />}
+                text={t("advancedFilter")}
+                onClick={() => { setOpenFilter(true) }}
+                simple
+                className="!bg-white !text-text-800"
               />
             </div>
           </>
         }
-        title={t("products")}
+        title={t("financial")}
       />
       <div>
-        {/* <button onClick={zipArray}>zip</button>
-        <button onClick={unzipArray}>unzip</button> */}
 
         {data ? (
-          <Table columns={columns} data={data || []} />
+          <>
+            <Table columns={columns} data={data?.factors || []} />
+
+            <div className="mt-8">
+              <Pagination
+                total={data.pagination.total_pages}
+                current={data.pagination.current_page}
+                onChange={(page) => { setPage(page) }}
+              />
+            </div>
+          </>
         ) : (
           <TableSkeleton />
         )}

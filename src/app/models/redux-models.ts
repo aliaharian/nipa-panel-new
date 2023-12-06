@@ -27,6 +27,11 @@ export interface walletSliceModel {
   transactionsListLoading?: boolean;
  
 }
+export interface financialSliceModel {
+  invoices?: any;
+  invoicesListLoading?: boolean;
+ 
+}
 export interface rolePermissionSliceModel {
   roles?: any[] | null;
   permissions?: permission[] | null;
