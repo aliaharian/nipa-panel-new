@@ -14,9 +14,20 @@ export const invoicesList = (page: number, filters?: any): ThunkAction<
   return async (dispatch, getState) => {
     // console.log("values", page, filters)
     const prevFilters = getState().financial.invoices?.filters;
-    dispatch(financialActions.transactionsListLoading(true));
+    dispatch(financialActions.invoicesListLoading(true));
     const response = await financialService.invoicesList(page, filters || prevFilters);
-    dispatch(financialActions.transactionsList(response));
+    dispatch(financialActions.invoicesList(response));
   };
 };
 
+export const getFactorStatuses = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const response = await financialService.getFactorStatuses();
+    dispatch(financialActions.getFactorStatuses(response));
+  };
+};

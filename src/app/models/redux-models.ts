@@ -25,11 +25,13 @@ export interface productsSliceModel {
 export interface walletSliceModel {
   transactions?: any;
   transactionsListLoading?: boolean;
+  transactionStatuses?:any[]|null;
  
 }
 export interface financialSliceModel {
   invoices?: any;
   invoicesListLoading?: boolean;
+  factorStatuses?:any[] | null
  
 }
 export interface rolePermissionSliceModel {

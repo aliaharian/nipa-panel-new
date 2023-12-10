@@ -31,7 +31,7 @@ const Wallet = () => {
   const Dispatch = useAppDispatch();
   useEffect(() => {
     Dispatch(transactionsList(page));
-    Dispatch(getUserInfo())
+    !user && Dispatch(getUserInfo())
   }, []);
   useEffect(() => {
     if (data && data.pagination.current_page !== page)

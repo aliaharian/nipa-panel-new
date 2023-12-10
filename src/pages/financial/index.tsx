@@ -25,13 +25,12 @@ const Factors = () => {
   const Navigator = useNavigate();
   const { t } = useTranslation("common");
   const [selectedRow, setSelectedRow] = useState<any>(null);
-  const [addProduct, setOpenAddProduct] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [openFilter, setOpenFilter] = useState<boolean>(false);
-
+  console.log(data?.factors)
   const Dispatch = useAppDispatch();
   useEffect(() => {
-    Dispatch(invoicesList(page));
+    !data && Dispatch(invoicesList(page));
   }, []);
 
   useEffect(() => {
@@ -49,21 +48,30 @@ const Factors = () => {
           name: t("factorNo"),
           selector: (row: any) => row.code,
           sortable: true,
-        },
-        {
-          name: t("forWhat"),
-          selector: (row: any) =>
-            <Tooltip title={`${t("forOrderNumber")} ${row.order_group_id}`}>
-              <Typography className="!text-[13px]">
-                {t("forOrderNumber")} {row.order_group_id}
-              </Typography>
-            </Tooltip>,
+        }];
+
+      if (data?.accessAll) {
+        colTmp.push({
+          name: t("customer"),
+          selector: (row: any) => row.customer_full_name,
           sortable: true,
-        },
+        })
+      }
+
+      colTmp.push({
+        name: t("forWhat"),
+        selector: (row: any) =>
+          <Tooltip title={`${t("forOrderNumber")} ${row.order_group_id}`}>
+            <Typography className="!text-[13px]">
+              {t("forOrderNumber")} {row.order_group_id}
+            </Typography>
+          </Tooltip>,
+        sortable: true,
+      },
         {
           name: t("createdAt"),
           selector: (row: any) =>
-            transform.renderChatTime(transform.dateToTimestamp(row.created_at), true),
+            transform.renderChatTime(transform.dateToTimestamp(row.created_at), false),
           sortable: true,
         },
         {
@@ -81,7 +89,7 @@ const Factors = () => {
             </Tooltip>,
           sortable: true,
         },
-      ];
+      );
 
       colTmp.push({
         allowOverflow: true,
@@ -92,7 +100,7 @@ const Factors = () => {
             items={[
               {
                 icon: <Edit variant="Bold" />,
-                text: "ویرایش",
+                text: "ویرایش پیش فاکتور",
                 name: "edit",
               },
               {
@@ -116,18 +124,26 @@ const Factors = () => {
       case "delete":
         // setOpenDeletePopup(true);
         break;
+        case "edit":
+          Navigator('/finance/'+row.code)
+          // setOpenDeletePopup(true);
+          break;
       default:
         break;
     }
   };
 
+  const handleApplyFilter = (data: any) => {
+    Dispatch(invoicesList(1, data));
+
+  }
 
   return (
     <div className="w-full h-full">
       <FinancialFiltersDialog
         open={openFilter}
         handleClose={() => setOpenFilter(false)}
-        handleSubmit={() => { }}
+        handleSubmit={handleApplyFilter}
       />
       <Breadcrumb
         actions={
@@ -147,7 +163,7 @@ const Factors = () => {
       />
       <div>
 
-        {data ? (
+        {(data && !loading) ? (
           <>
             <Table columns={columns} data={data?.factors || []} />
 

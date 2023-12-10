@@ -13,10 +13,20 @@ async function getFactorStatuses() {
   let response = await Api()?.get(`/factor/status`);
   return response?.data?.statuses;
 }
+async function getFactorInfo(code:string) {
+  let response = await Api()?.get(`/factor/${code}`);
+  return response?.data?.data;
+}
+
+async function getFactorPaymentSteps(id:number) {
+  let response = await Api()?.get(`/factor/paymentStep?factor_id=${id}`);
+  return response?.data;
+}
 
 
 export default {
   invoicesList,
-  getFactorStatuses
-
+  getFactorStatuses,
+  getFactorInfo,
+  getFactorPaymentSteps
 };

@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialWalletState: walletSliceModel = {
   transactions: null,
   transactionsListLoading: false,
+  transactionStatuses:null
 };
 
 const walletSlice = createSlice({
@@ -16,6 +17,9 @@ const walletSlice = createSlice({
     },
     transactionsListLoading: (state, action: PayloadAction<boolean>) => {
       state.transactionsListLoading = action.payload;
+    },
+    getTransactionStatuses:(state, action: PayloadAction<any[]>) => {
+      state.transactionStatuses = action.payload;
     },
 
   },

@@ -20,3 +20,16 @@ export const transactionsList = (page: number, filters?: any): ThunkAction<
   };
 };
 
+
+export const getTransactionStatuses = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const response = await walletService.getTransactionStatuses();
+    dispatch(walletActions.getTransactionStatuses(response));
+  };
+};
+

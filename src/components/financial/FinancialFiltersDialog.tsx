@@ -13,6 +13,8 @@ import Datepicker from "../form/Datepicker";
 import DropDown from "../form/Dropdown";
 import RadioGroup from "../form/RadioGroup";
 import transform from "app/utils/transform";
+import { useAppDispatch, useAppSelector } from "app/redux/hooks";
+import { getFactorStatuses } from "app/redux/financial/actions";
 
 type FinancialFiltersDialogProps = {
   open: boolean;
@@ -43,6 +45,8 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
   const { t } = useTranslation("common");
   const [initialCustomers, setInitialCustomers] = useState<FormOption[]>([])
   const [transactionStatuses, setTransactionStatuses] = useState<FormOption[]>([])
+  const factorStatuses = useAppSelector(state => state.financial.factorStatuses);
+  const Dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues,
     // validationSchema,
@@ -51,16 +55,16 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
       //sorting datas
       const data = {
         user_id: values.user?.value ? values.user?.value === 'all' ? null : values.user?.value : null,
-        transaction_status_id: values.status ? values.status === "all" ? null : values.status : null,
-        is_valid: values.validity === 'all' ? null : values.validity === 'valid' ? true : false,
+        factor_status_id: values.status ? values.status === "all" ? null : values.status : null,
+        // is_valid: values.validity === 'all' ? null : values.validity === 'valid' ? true : false,
         date_from: values.fromDate//convert to laravel date
           ? transform.toISOLocal(values.fromDate)
           : null,
         date_to: values.toDate//convert to laravel date
           ? transform.toISOLocal(values.toDate)
           : null,
-        transaction_type: values.type === 'all' ? null : values.type === 'withdrawal' ? 'Withdrawal' : 'allDeposits',
-        payment_method: values.isOnline === 'all' ? null : values.isOnline === 'online' ? 'online' : 'offline',
+        // transaction_type: values.type === 'all' ? null : values.type === 'withdrawal' ? 'Withdrawal' : 'allDeposits',
+        // payment_method: values.isOnline === 'all' ? null : values.isOnline === 'online' ? 'online' : 'offline',
       }
       handleSubmit && handleSubmit(data)
       handleClose?.()
@@ -71,30 +75,40 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
     formik.handleSubmit()
   }
   useEffect(() => {
-    fetchCustomers("").then((res: FormOption[]) => {
-      setInitialCustomers(res)
-    })
-    financialService.getFactorStatuses().then((res: any) => {
-      // console.log("res", res);
-      if (!res) {
-        return []
-      }
+    if (open) {
+      // fetchCustomers("").then((res: FormOption[]) => {
+      //   setInitialCustomers(res)
+      // })
+      !factorStatuses && Dispatch(getFactorStatuses())
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!factorStatuses) {
       setTransactionStatuses([{
         value: "all",
         label: <p>همه</p>
-      }, ...res?.map((status: any) => {
+      }])
+    } else {
+      setTransactionStatuses([{
+        value: "all",
+        label: <p>همه</p>
+      }, ...factorStatuses?.map((status: any) => {
         return {
           value: status.id.toString(),
           label: <p>{status.name}</p>
         }
       })])
-    });
-  }, [])
+    }
+  }, [factorStatuses])
   const fetchCustomers = async (value: string) => {
     const res = await walletService.getWalletsUsers(value)
     // console.log("res", res);
     if (!res) {
-      return []
+      return [{
+        label: "همه",
+        value: null,
+      }]
     }
 
     return [{
@@ -121,7 +135,7 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
       payment_method: null,
     })
     handleClose?.()
-   }
+  }
   return (
     <SideDialog
       headerText={"فیلتر کیف پول و تراکنش ها"}
@@ -162,7 +176,7 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
                 formik={formik}
                 placeholder={"انتخاب تاریخ"}
               />
-              <RadioGroup
+              {/* <RadioGroup
                 className="group"
                 name={'type'}
                 label={'نوع تراکنش'}
@@ -224,7 +238,7 @@ const FinancialFiltersDialog = ({ open, handleClose, handleSubmit }: FinancialFi
 
                 ]}
                 formik={formik}
-              />
+              /> */}
 
             </div>
           </form>

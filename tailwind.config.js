@@ -83,7 +83,9 @@ module.exports = {
       },
       warning: {
         primary: "#ee9500",
-        secondary: "#ead7b8",
+        secondary: "rgba(254, 239, 213, 0.50)",
+        border:"#FBD696",
+        text:"#B57E0E"
       },
       info: {
         primary: "#0269de",

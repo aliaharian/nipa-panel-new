@@ -12,6 +12,8 @@ import Datepicker from "../form/Datepicker";
 import DropDown from "../form/Dropdown";
 import RadioGroup from "../form/RadioGroup";
 import transform from "app/utils/transform";
+import { useAppDispatch, useAppSelector } from "app/redux/hooks";
+import { getTransactionStatuses } from "app/redux/wallet/actions";
 
 type TransactionFiltersDialogProps = {
   open: boolean;
@@ -42,6 +44,8 @@ const TransactionFiltersDialog = ({ open, handleClose, handleSubmit }: Transacti
   const { t } = useTranslation("common");
   const [initialCustomers, setInitialCustomers] = useState<FormOption[]>([])
   const [transactionStatuses, setTransactionStatuses] = useState<FormOption[]>([])
+  const statuses = useAppSelector(state => state.wallet.transactionStatuses);
+  const Dispatch = useAppDispatch()
   const formik = useFormik({
     initialValues,
     // validationSchema,
@@ -70,25 +74,32 @@ const TransactionFiltersDialog = ({ open, handleClose, handleSubmit }: Transacti
     formik.handleSubmit()
   }
   useEffect(() => {
-    fetchCustomers("").then((res: FormOption[]) => {
-      setInitialCustomers(res)
-    })
-    walletService.getTransactionStatuses().then((res: any) => {
-      // console.log("res", res);
-      if (!res) {
-        return []
-      }
+    // fetchCustomers("").then((res: FormOption[]) => {
+    //   setInitialCustomers(res)
+    // })
+    if (open) {
+      !statuses && Dispatch(getTransactionStatuses())
+    }
+
+  }, [open])
+  useEffect(() => {
+    if (!statuses) {
       setTransactionStatuses([{
         value: "all",
         label: <p>همه</p>
-      }, ...res?.map((status: any) => {
+      }])
+    } else {
+      setTransactionStatuses([{
+        value: "all",
+        label: <p>همه</p>
+      }, ...statuses?.map((status: any) => {
         return {
           value: status.id.toString(),
           label: <p>{status.name}</p>
         }
       })])
-    });
-  }, [])
+    }
+  }, [statuses])
   const fetchCustomers = async (value: string) => {
     const res = await walletService.getWalletsUsers(value)
     // console.log("res", res);
@@ -120,7 +131,7 @@ const TransactionFiltersDialog = ({ open, handleClose, handleSubmit }: Transacti
       payment_method: null,
     })
     handleClose?.()
-   }
+  }
   return (
     <SideDialog
       headerText={"فیلتر کیف پول و تراکنش ها"}

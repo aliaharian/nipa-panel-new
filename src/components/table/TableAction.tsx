@@ -7,9 +7,10 @@ type TableActionProps = {
   row: any;
   handleAction?: (row: any, action: string) => void;
   items: any[];
+  simple?:boolean;
 };
 
-const TableAction = ({ row, handleAction, items }: TableActionProps) => {
+const TableAction = ({ row, handleAction, items,simple=false }: TableActionProps) => {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const _handleAction = (row: any, action: string) => {
@@ -41,11 +42,12 @@ const TableAction = ({ row, handleAction, items }: TableActionProps) => {
   // ]
   return (
     <>
-      <div className="w-[92px] pb-[5px]" ref={anchorRef}>
+      <div className={`${simple?"w-[20px]":"w-[92px] pb-[5px]"}`} ref={anchorRef}>
         <MenuButton
           after
           icon={<More className="rotate-90 pt-[5px]" />}
           text="عملیات"
+          simple={simple}
           onClick={() => {
             console.log(row);
             setOpen(true);

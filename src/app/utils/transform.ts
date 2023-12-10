@@ -3,14 +3,15 @@
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
 
-export const renderChatTime = (timestamp: number,percise?:boolean) => {
+export const renderChatTime = (timestamp: number, percise?: boolean, onlyDate?: boolean) => {
   let now = Math.floor(Date.now());
-  if(percise){
+  if (percise) {
+    if (onlyDate) {
+      return new Date(timestamp).toLocaleDateString("fa-IR")
+    }
     //format :: ddmmyy h:i no seconds
-      return new Date(timestamp).toLocaleDateString("fa-IR") + " , " + new Date(timestamp).toLocaleTimeString("fa-IR").slice(0,5);
-      //return new Date(timestamp).toLocaleDateString("fa-IR") + " " + new Date(timestamp).toLocaleTimeString("fa-IR");
-
-
+    return new Date(timestamp).toLocaleDateString("fa-IR") + " , " + new Date(timestamp).toLocaleTimeString("fa-IR").slice(0, 5);
+    //return new Date(timestamp).toLocaleDateString("fa-IR") + " " + new Date(timestamp).toLocaleTimeString("fa-IR");
   }
   let diff = Math.floor((now - timestamp) / 1000);
   if (diff < 60) {
@@ -120,22 +121,22 @@ const convetToEnglishDigitsRemoveCommas = (value: any) => {
   );
 }
 function toISOLocal(d: Date) {
-  var z  = (n:any) =>  ('0' + n).slice(-2);
-  var zz = (n:any) => ('00' + n).slice(-3);
+  var z = (n: any) => ('0' + n).slice(-2);
+  var zz = (n: any) => ('00' + n).slice(-3);
   var off = d.getTimezoneOffset();
-  var sign = off > 0? '-' : '+';
+  var sign = off > 0 ? '-' : '+';
   off = Math.abs(off);
 
   return d.getFullYear() + '-'
-         + z(d.getMonth()+1) + '-' +
-         z(d.getDate()) 
-         
-        //  + 'T' +
-        //  z(d.getHours()) + ':'  + 
-        //  z(d.getMinutes()) + ':' +
-        //  z(d.getSeconds()) + '.' +
-        //  zz(d.getMilliseconds()) +
-        //  sign + z(off/60|0) + ':' + z(off%60); 
+    + z(d.getMonth() + 1) + '-' +
+    z(d.getDate())
+
+  //  + 'T' +
+  //  z(d.getHours()) + ':'  + 
+  //  z(d.getMinutes()) + ':' +
+  //  z(d.getSeconds()) + '.' +
+  //  zz(d.getMilliseconds()) +
+  //  sign + z(off/60|0) + ':' + z(off%60); 
 }
 export default {
   toISOLocal,

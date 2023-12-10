@@ -12,6 +12,7 @@ type RadioGroupProps = {
   inputActions?: any;
   className?: string;
   options?: FormOption[];
+  labelClass?: string;
 };
 const RadioGroup = ({
   name,
@@ -23,6 +24,7 @@ const RadioGroup = ({
   mask,
   inputActions,
   options,
+  labelClass
 }: RadioGroupProps) => {
   const [selectedOption, setSelectedOption] = useState<string>(
     formik.values[name]
@@ -45,7 +47,7 @@ const RadioGroup = ({
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name} className="font-normal text-[12px]">{label}</label>
+        <label htmlFor={name} className={`font-normal text-[12px] ${labelClass}`}>{label}</label>
         {inputActions?.()}
       </div>
 

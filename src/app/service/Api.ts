@@ -3,6 +3,7 @@ import { setApiLoading } from "../redux/application/actions";
 import store from "../redux/store";
 import SnackbarUtils from "../utils/SnackbarUtils";
 // import SnackbarUtils from "../utils/SnackbarUtils";
+import { redirect } from "react-router-dom";
 
 const Api = () => {
   const instance = axios.create({
@@ -52,6 +53,12 @@ const Api = () => {
       if(error.response.status==401){
         // localStorage.removeItem("nipa_token")
         // document.location.href="/auth/login"
+      }
+      if(error.response.status==403){
+        // alert("oocmcs")
+        //  redirect("/403")
+        document.location.href="/errors/403"
+
       }
 
       if (error.response.data.errors) {
