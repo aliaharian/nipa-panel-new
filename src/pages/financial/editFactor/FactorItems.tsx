@@ -8,8 +8,9 @@ import Table from "components/table/Table";
 import { useEffect, useState } from "react";
 import TableAction from "components/table/TableAction";
 import { Tooltip, Typography } from "@mui/material";
+import AddFactorItemDialog from "components/financial/AddFactorItemDialog";
 
-const FactorItems = ({ factorStatus, factorInfo }: any) => {
+const FactorItems = ({ factorInfo }: any) => {
     const { t } = useTranslation("common");
     const [columns, setColumns] = useState<any[]>([]);
     const [dataTmp, setDataTmp] = useState<any[]>([]);
@@ -126,7 +127,7 @@ const FactorItems = ({ factorStatus, factorInfo }: any) => {
                     </Tooltip>,
 
                     sortable: false,
-                    width:"160px"
+                    width: "160px"
 
                 },
                 {
@@ -144,7 +145,7 @@ const FactorItems = ({ factorStatus, factorInfo }: any) => {
                     </Tooltip>,
 
                     sortable: false,
-                    width:"160px"
+                    width: "160px"
 
                 },
                 {
@@ -244,31 +245,40 @@ const FactorItems = ({ factorStatus, factorInfo }: any) => {
     };
 
     return (
-        <Section headerTitle={t("factorItems") || ""}
-            headerActions={
-                <div className="w-[111px]">
-                    <Button
-                        text={t("add")}
-                        onClick={() => { }}
-                        icon={<Add />}
-                    />
-                </div>
-            }
-        >
+        <>
 
-            {(factorInfo) ? (
+            <AddFactorItemDialog
+                open={true}
+                handleClose={() => { }}
+                handleSubmit={() => { }}
 
-                <>
-                    <Table columns={columns} data={dataTmp || []} />
+            />
+            <Section headerTitle={t("factorItems") || ""}
+                headerActions={
+                    <div className="w-[111px]">
+                        <Button
+                            text={t("add")}
+                            onClick={() => { }}
+                            icon={<Add />}
+                        />
+                    </div>
+                }
+            >
+
+                {(factorInfo) ? (
+
+                    <>
+                        <Table columns={columns} data={dataTmp || []} />
 
 
-                </>
+                    </>
 
-            ) : (
-                <TableSkeleton />
-            )}
+                ) : (
+                    <TableSkeleton />
+                )}
 
-        </Section>
+            </Section>
+        </>
     )
 }
 

@@ -8,7 +8,7 @@ const FactorInfo = ({ factorStatus, factorInfo }: any) => {
         <Section headerTitle={t("factorInfo") || ""}
             headerActions={
                 <div className={`px-3 py-2 h-9 
-        ${factorStatus?.bgStyle} ${factorStatus?.textStyle}
+        ${factorStatus?.style}
         rounded-[20px] flex items-center justify-center text-[13px]`}>
                     {factorInfo.last_status?.factor_status_enum.name}
                 </div>

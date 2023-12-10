@@ -12,7 +12,7 @@ const MainLayout = () => {
       <div className={`h-full sticky top-0`}>
         <Sidebar />
       </div>
-      <div className={`w-full min-h-screen h-max ${collapseMenu?"max-w-[calc(100vw-84px)]":"max-w-[calc(100vw-300px)]"}`}>
+      <div className={`w-full min-h-screen h-max ${collapseMenu?"max-w-[calc(100vw-104px)]":"max-w-[calc(100vw-300px)]"}`}>
         <Header />
         <div className="p-[31px]">
           <Outlet />

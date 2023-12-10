@@ -144,5 +144,8 @@
   "enterDescription":"توضیحات را وارد کنید",
   "paymentsInfo":"اطلاعات پرداخت",
   "additional":"اضافات",
-  "selectPaymentSteps":"انتخاب مراحل پرداخت"
+  "selectPaymentSteps":"انتخاب مراحل پرداخت",
+  "online":"آنلاین",
+  "offline":"آفلاین",
+  "submitFactor":"ثبت فاکتور"
 }

@@ -138,12 +138,36 @@ function toISOLocal(d: Date) {
   //  zz(d.getMilliseconds()) +
   //  sign + z(off/60|0) + ':' + z(off%60); 
 }
+
+const renderStatusStyle = (type:string)=>{
+  let style;
+  switch (type) {
+      case "success":
+          style = "bg-success-secondary text-success-primary "
+          break;
+      case "warning":
+          style = "bg-warning-secondary text-warning-text "
+          break;
+      case "error":
+          style = "bg-error-secondary text-error-primary "
+          break;
+      case "info":
+          style = "bg-info-secondary text-info-primary "
+          break;
+      default:
+          style = "bg-text-300 text-text-600 "
+          break;
+  }
+
+  return style;
+}
 export default {
   toISOLocal,
   pluralize,
   fileToUrl,
   imageValidExtensions,
   base64ToBlob,
+  renderStatusStyle,
   toPersianDigitsPutCommas,
   fileToBlob,
   toPersianDigits,

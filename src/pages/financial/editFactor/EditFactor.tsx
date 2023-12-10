@@ -10,13 +10,18 @@ import transform from "app/utils/transform";
 import FactorInfo from "./FactorInfo";
 import FactorItems from "./FactorItems";
 import FactorPayments from "./FactorPayments";
+import { setCollapseMenu } from "app/redux/application/actions";
+import { useAppDispatch } from "app/redux/hooks";
+import Datepicker from "components/form/Datepicker";
 const EditFactor = () => {
     const Navigate = useNavigate()
     const { t } = useTranslation()
     const { code } = useParams();
+    const Dispatch = useAppDispatch()
     const [factorInfo, setFactorInfo] = useState<any>()
     const [factorStatus, setFactorStatus] = useState<any>()
     const [factorPayments, setFactorPayments] = useState<any>()
+    const [expireDate , setExpireDate] = useState<any>(null)
     const getFactor = async () => {
         try {
             if (code) {
@@ -25,31 +30,10 @@ const EditFactor = () => {
                 console.log("response", response)
                 setFactorInfo(response)
                 const status = response.last_status?.factor_status_enum;
-                let bgStyle;
-                let textStyle;
-                switch (status?.description) {
-                    case "success":
-                        bgStyle = "bg-success-secondary";
-                        textStyle = "text-success-primary";
-                        break;
-                    case "warning":
-                        bgStyle = "bg-warning-secondary";
-                        textStyle = "text-warning-primary";
-                        break;
-                    case "error":
-                        bgStyle = "bg-error-secondary";
-                        textStyle = "text-error-primary";
-                        break;
-                    default:
-                        bgStyle = "bg-info-secondary";
-                        textStyle = "text-info-primary";
-                        break;
-                }
-
+                const style = transform.renderStatusStyle(status?.description)
                 setFactorStatus({
                     name: response.last_status?.factor_status_enum.name,
-                    bgStyle,
-                    textStyle
+                    style
                 })
                 await getFactorPayments(response.id);
 
@@ -67,14 +51,20 @@ const EditFactor = () => {
         } catch (error) {
 
         }
-
-
-
     }
 
     useEffect(() => {
+        Dispatch(setCollapseMenu(true))
         getFactor()
     }, [])
+
+    useEffect(()=>{
+        if(factorInfo){
+            setExpireDate(
+                new Date(factorInfo.expire_date)
+            )
+        }
+    },[factorInfo])
 
 
     return (
@@ -108,7 +98,7 @@ const EditFactor = () => {
                     </div>
                     <div className="mb-8">
 
-                        <FactorItems factorInfo={factorInfo} factorStatus={factorStatus} />
+                        <FactorItems factorInfo={factorInfo} />
 
                     </div>
                     <div className="mb-8">
@@ -130,9 +120,40 @@ const EditFactor = () => {
 
                         </Section>
                     </div>
-                    {factorPayments && <div className="mb-8">
-                        <FactorPayments paymentsInfo={factorPayments} factorInfo={factorInfo} factorStatus={factorStatus} />
-                    </div>}
+                    {factorPayments &&
+                        <div className="mb-8">
+                            <FactorPayments paymentsInfo={factorPayments} factorInfo={factorInfo} factorStatus={factorStatus} />
+                        </div>}
+
+                    <div className="mb-8">
+                        <Section>
+                            <div className="w-full flex items-center justify-between">
+                                <div className="w-[340px]">
+                                    <Datepicker
+                                        label="تاریخ سررسید فاکتور"
+                                        name="expireDate"
+                                        formik={{
+                                            values: {
+                                                expireDate: expireDate,
+                                            },
+                                            setFieldValue: (name:string , value:any) => {
+                                                console.log(value)
+                                                setExpireDate(value)
+                                             },
+                                        }}
+                                        placeholder={"تاریخ سررسید فاکتور را وارد کنید"}
+                                    />
+                                </div>
+                                <div className="w-[190px] ml-3">
+                                    <Button
+                                        text={t("submitFactor")}
+                                        onClick={() => { }}
+                                    />
+                                </div>
+
+                            </div>
+                        </Section>
+                    </div>
                 </>
             }
         </div>

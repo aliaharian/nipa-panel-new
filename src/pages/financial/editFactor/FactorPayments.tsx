@@ -44,8 +44,8 @@ const FactorPayments = ({ factorStatus, factorInfo, paymentsInfo }: any) => {
                     </p>
                 </div> */}
                 <div className="flex items-center px-6 border-l border-l-text-400">
-                    <p>
-                        {t("discount")}: <span className="font-bold text-[18px] text-text-900">
+                    <p className="text-success-primary">
+                        {t("discount")}: <span className="font-bold text-[18px] text-success-primary">
                             {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} تومان
                         </span>
                     </p>

@@ -83,7 +83,7 @@ const Factors = () => {
           name: t("status"),
           selector: (row: any) =>
             <Tooltip title={row.last_status?.factor_status_enum?.name}>
-              <Typography noWrap className="!text-[13px] bg-primary-main p-2 text-white rounded-[6px]">
+              <Typography noWrap className={`!text-[13px] p-2 rounded-[6px] ${transform.renderStatusStyle(row.last_status?.factor_status_enum?.description)}`}>
                 {row.last_status?.factor_status_enum?.name}
               </Typography>
             </Tooltip>,

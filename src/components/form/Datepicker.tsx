@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { LocalizationProvider, MobileDatePicker, PickersDay } from "@mui/x-date-pickers";
 import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali';
-import { ArrowDown2, ArrowLeft, ArrowLeft2, ArrowRight2 } from "iconsax-react";
+import { ArrowDown2, ArrowLeft, ArrowLeft2, ArrowRight2, Calendar } from "iconsax-react";
 import React from "react";
 import Button from "../button/Button";
 
@@ -72,7 +72,7 @@ const Datepicker = ({
                                     year: "numeric",
                                     month: "long",
                                     day: "numeric",
-                                }) || "انتخاب تاریخ"}
+                                }) || ""}
                             />
                         },
                         leftArrowIcon:()=><ArrowRight2 style={{width:20,height:20}} />,
@@ -106,19 +106,19 @@ const Datepicker = ({
                             label: "",
                             placeholder: placeholder || "",
                             classes: {
-                                root: "!border-solid !border !hover:border-primary-main !border-text-400 rounded-[6px] h-12 !outline-none !shadow-none",
+                                root: "!cursor-pointer !border-solid !border !hover:border-primary-main !border-text-400 rounded-[6px] h-12 !outline-none !shadow-none",
                             },
                             InputProps: {
                                 classes: {
-                                    root: "h-12 pl-2 !pr-2",
-                                    input: "!text-xs !font-bold hover:!border-primary-main focus:!border-primary-main",
+                                    root: " h-12 pl-2 !pr-2",
+                                    input: "!cursor-pointer !text-xs !font-bold hover:!border-primary-main focus:!border-primary-main",
                                     //change fieldset hove
                                     notchedOutline: "!border-none !outline-none !shadow-none",
 
                                 },
                                 endAdornment: (
                                     <div className="w-[20px] h-[20px]">
-                                        <ArrowDown2 style={{ width: 20, height: 20, color: "#757575" }} />
+                                        <Calendar style={{ width: 20, height: 20, color: "#757575" }} />
                                     </div>
                                 ),
                             },

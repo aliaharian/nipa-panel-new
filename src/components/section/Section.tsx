@@ -16,24 +16,25 @@ const Section = ({ headerTitle, children, headerActions }: SectionProps) => {
 
   return (
     <div className="w-full rounded-[6px] bg-white border border-text-300">
-      <div className={`border-b border-text-300 ${headerActions?"py-4":"py-7"} pr-5 pl-6 w-full flex items-center justify-between`}>
-        {
-          headerTitle &&
-          <div className=" flex">
-            <p className="text-[18px] font-bold text-text-800">
-              {headerTitle}
-            </p>
-          </div>
-        }
-        {
-          headerActions &&
-          <div>
-            {
-              headerActions
-            }
-          </div>
-        }
-      </div>
+      {headerTitle &&
+        <div className={`border-b border-text-300 ${headerActions ? "py-4" : "py-7"} pr-5 pl-6 w-full flex items-center justify-between`}>
+          {
+            headerTitle &&
+            <div className=" flex">
+              <p className="text-[18px] font-bold text-text-800">
+                {headerTitle}
+              </p>
+            </div>
+          }
+          {
+            headerActions &&
+            <div>
+              {
+                headerActions
+              }
+            </div>
+          }
+        </div>}
 
       <div className="py-8 px-5">
         {children}
