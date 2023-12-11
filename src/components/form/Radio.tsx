@@ -19,7 +19,7 @@ const Radio = ({
 }: RadioProps) => {
   return (
     <div
-      className={`min-w-[170px] flex-1 ${checked?"border-2 border-primary-o50":"border border-text-400"} p-4 rounded-[6px] flex ml-4 mb-4 items-start justify-start relative cursor-pointer ${className}`}
+      className={`min-w-[170px] flex-1 ${checked?"border-2 border-primary-o50":"border border-text-400"} p-[13px] rounded-[8px] flex ml-4 mb-4 items-start justify-start relative cursor-pointer ${className}`}
       onClick={handleCheck}
     >
       <input

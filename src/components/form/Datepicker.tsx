@@ -39,7 +39,7 @@ const Datepicker = ({
                 </div>
                 <MobileDatePicker
                     value={formik.values[name]}
-                    onChange={(newValue) => {
+                    onAccept={(newValue) => {
                         console.log("newValue",newValue);
                         formik.setFieldValue(name, newValue);
                     }}

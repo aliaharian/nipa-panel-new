@@ -1,6 +1,7 @@
 import { InfoCircle } from "iconsax-react"
+import { ReactNode } from "react";
 
-const Alert = ({ title, text, type }: { title: string, text: string, type: string }) => {
+const Alert = ({ title, text, type, actions }: { title: string, actions?: ReactNode, text: string | ReactNode, type: string }) => {
     let style;
     switch (type) {
         case "success":
@@ -18,19 +19,31 @@ const Alert = ({ title, text, type }: { title: string, text: string, type: strin
     }
     return (
         <div className={`
-            w-full rounded-[6px] border  p-4 ${style} flex flex-col items-start justify-start
+            w-full rounded-[6px] border  p-4 ${style} flex  items-center justify-between
         `}>
-            <div className="mb-2 flex items-center">
-                <InfoCircle />
-                <p className="mr-1 text-[16px] font-bold">
-                    {title}
-                </p>
+            <div className="flex flex-col justify-center">
+                <div className="flex items-center">
+                    <InfoCircle />
+                    <p className="mr-1 text-[16px] font-bold">
+                        {title}
+                    </p>
+                </div>
+                {text &&
+                    <div className="mt-2">
+
+                        {typeof text == "string" ? <p className="text-[14px]">
+                            {text}
+                        </p> : text}
+
+                    </div>
+                }
             </div>
-            <div>
-                <p className="text-[16px]">
-                    {text}
-                </p>
-            </div>
+            {
+                actions &&
+                <div className="flex items-center">
+                    {actions}
+                </div>
+            }
 
         </div>
     )

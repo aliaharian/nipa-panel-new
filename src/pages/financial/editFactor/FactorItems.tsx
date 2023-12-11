@@ -9,11 +9,24 @@ import { useEffect, useState } from "react";
 import TableAction from "components/table/TableAction";
 import { Tooltip, Typography } from "@mui/material";
 import AddFactorItemDialog from "components/financial/AddFactorItemDialog";
+import { factorItem } from "app/models/financial";
+import DeletePopup from "components/popup/DeletePopup";
 
-const FactorItems = ({ factorInfo }: any) => {
+type FactorItemsProps = {
+    factorInfo: {
+        factor_items: factorItem[];
+    };
+    handleAddFactorItem: (values: factorItem) => void;
+    handleEditFactorItem: (values: factorItem) => void;
+    handleDeleteFactorItem: (id: number) => void;
+}
+const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, handleDeleteFactorItem }: FactorItemsProps) => {
     const { t } = useTranslation("common");
     const [columns, setColumns] = useState<any[]>([]);
     const [dataTmp, setDataTmp] = useState<any[]>([]);
+    const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [openAddItemDialog, setOpenAddItemDialog] = useState<boolean>(false)
+    const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false)
     useEffect(() => {
         factorInfo && setDataTmp(factorInfo?.factor_items || [])
     }, [factorInfo])
@@ -195,29 +208,31 @@ const FactorItems = ({ factorInfo }: any) => {
 
 
             ];
-            colTmp.push({
-                allowOverflow: true,
-                button: true,
-                width: "120px",
-                cell: (row: any) => (
-                    <TableAction
-                        items={[
-                            {
-                                icon: <Edit variant="Bold" />,
-                                text: "ویرایش پیش فاکتور",
-                                name: "edit",
-                            },
-                            {
-                                icon: <Trash variant={"Bold"} />,
-                                text: "حذف",
-                                name: "delete",
-                            },
-                        ].filter(Boolean)}
-                        handleAction={handleTableAction}
-                        row={row}
-                    />
-                ),
-            });
+            (transform.checkPermission("can-delete-invoice-item") || transform.checkPermission("can-update-invoice-item")) &&
+                colTmp.push({
+                    allowOverflow: true,
+                    button: true,
+                    width: "120px",
+                    cell: (row: any) => (
+                        <TableAction
+                            items={
+                                [
+                                    transform.checkPermission("can-update-invoice-item") && {
+                                        icon: <Edit variant="Bold" />,
+                                        text: "ویرایش",
+                                        name: "edit",
+                                    },
+                                    (!row.order_id && !row.product_id && transform.checkPermission("can-delete-invoice-item")) && {
+                                        icon: <Trash variant={"Bold"} />,
+                                        text: "حذف",
+                                        name: "delete",
+                                    },
+                                ].filter(Boolean)}
+                            handleAction={handleTableAction}
+                            row={row}
+                        />
+                    ),
+                });
 
             // if (data.accessAll) {
             //     colTmp.push({
@@ -237,7 +252,12 @@ const FactorItems = ({ factorInfo }: any) => {
         // setSelectedRow(row);
         switch (action) {
             case "delete":
-                // setOpenDeletePopup(true);
+                setSelectedItem(row);
+                setOpenDeletePopup(true);
+                break;
+            case "edit":
+                setSelectedItem(row);
+                setOpenAddItemDialog(true);
                 break;
             default:
                 break;
@@ -247,18 +267,26 @@ const FactorItems = ({ factorInfo }: any) => {
     return (
         <>
 
-            <AddFactorItemDialog
-                open={true}
-                handleClose={() => { }}
-                handleSubmit={() => { }}
-
-            />
+            {transform.checkPermission("can-create-invoice-item") &&
+                <AddFactorItemDialog
+                    open={openAddItemDialog}
+                    handleClose={() => { setOpenAddItemDialog(false); setSelectedItem(null) }}
+                    handleSubmit={(values) => { values.id ? handleEditFactorItem(values) : handleAddFactorItem(values) }}
+                    data={selectedItem}
+                />}
+            {transform.checkPermission("can-delete-invoice-item") &&
+                <DeletePopup
+                    title={t("deleteFactorItemConfirmation")}
+                    open={openDeletePopup}
+                    onClose={() => { setOpenDeletePopup(false); setSelectedItem(null) }}
+                    handleConfirm={() => { handleDeleteFactorItem(selectedItem.id); setOpenDeletePopup(false) }}
+                />}
             <Section headerTitle={t("factorItems") || ""}
-                headerActions={
+                headerActions={transform.checkPermission("can-create-invoice-item") &&
                     <div className="w-[111px]">
                         <Button
                             text={t("add")}
-                            onClick={() => { }}
+                            onClick={() => { setSelectedItem(null); setOpenAddItemDialog(true); }}
                             icon={<Add />}
                         />
                     </div>

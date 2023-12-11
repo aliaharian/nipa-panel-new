@@ -1,11 +1,29 @@
 import transform from "app/utils/transform";
-import { Edit, Menu, More, Trash } from "iconsax-react";
+import { Edit, Eye, Menu, More, Trash } from "iconsax-react";
 import TableAction from "../table/TableAction";
 import { useTranslation } from "react-i18next";
 
-const PaymentStep = ({ stepInfo }: { stepInfo: any }) => {
+type PaymentStepProps = {
+    stepInfo: any;
+    editPaymentStep: (stepInfo: any) => void;
+};
+const PaymentStep = ({ stepInfo,editPaymentStep }: PaymentStepProps) => {
     const style = transform.renderStatusStyle(stepInfo.status.description)
     const { t } = useTranslation("common")
+    const tableActions = (row: any, name: string) => {
+        console.log("row", row)
+        console.log("name", name)
+
+        switch (name) {
+            case "viewDetails":
+                break;
+            case "edit":
+                editPaymentStep(stepInfo)
+                break;
+            default:
+                break;
+        }
+    }
     return (
         <div className="px-8 w-full border border-text-300 rounded-[10px] h-[108px] flex items-center justify-between">
             <div className="flex items-center">
@@ -61,18 +79,19 @@ const PaymentStep = ({ stepInfo }: { stepInfo: any }) => {
                 <TableAction
                     items={[
                         {
-                            icon: <Edit variant="Bold" />,
-                            text: "ویرایش پیش فاکتور",
-                            name: "edit",
+                            icon: <Eye variant={"Bold"} />,
+                            text: "مشاهده جزئیات",
+                            name: "viewDetails",
                         },
                         {
-                            icon: <Trash variant={"Bold"} />,
-                            text: "حذف",
-                            name: "delete",
+                            icon: <Edit variant="Bold" />,
+                            text: "ویرایش",
+                            name: "edit",
                         },
+                   
                     ].filter(Boolean)}
-                    handleAction={() => { }}
-                    row={""}
+                    handleAction={tableActions}
+                    row={stepInfo}
                     simple
                 />
             </div>

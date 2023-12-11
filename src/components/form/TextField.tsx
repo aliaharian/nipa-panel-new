@@ -15,6 +15,8 @@ type TextFieldProps = {
   className?: string;
   normal?: boolean;
   endEndorement?: any;
+  multiline?: boolean;
+  readonly?: boolean;
 };
 const TextField = ({
   name,
@@ -27,16 +29,17 @@ const TextField = ({
   mask,
   inputActions,
   normal,
-  endEndorement
+  endEndorement,
+  multiline,
+  readonly
 }: TextFieldProps) => {
-  // console.log("formik.errors?.[name]", formik.values[name]);
 
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       {label && <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name} className="font-normal">{label}</label>
+        <label htmlFor={name} className="font-normal !text-xs">{label}</label>
         {inputActions?.()}
       </div>}
 
@@ -46,7 +49,7 @@ const TextField = ({
         value={formik?.values?.[name]}
         type={type}
         dir="rtl"
-        className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
+        className={`w-full h-12 border border-text-400 rounded-[8px] p-2 text-sm focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
           ? "!border-error-primary"
           : ""
           }`}
@@ -54,6 +57,7 @@ const TextField = ({
         name={name}
         style={{ direction: type == "tel" ? "ltr" : "rtl" }}
         placeholder={placeholder || ""}
+        readOnly={readonly}
         onChange={(e) => {
           //formik handlechange without mask
           formik?.handleChange({
@@ -73,9 +77,11 @@ const TextField = ({
             : formik?.values?.[name]
           }
           type={"text"}
+          readOnly={readonly}
           id={name}
           name={name}
-          
+          multiline={multiline}
+          rows={multiline ? 4 : 1}
           placeholder={placeholder || ""}
           onChange={(e) => {
             const value = transform.convetToEnglishDigitsRemoveCommas(e.target.value);
@@ -93,7 +99,9 @@ const TextField = ({
           
           disableUnderline
           endAdornment={<InputAdornment position="end" >{endEndorement}</InputAdornment>}
-          className={`text-text-400 w-full h-12 border border-text-400 rounded-[8px] p-2 text-xs focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
+          className={`!text-sm text-text-400 w-full ${
+            multiline ? "h-[100px] resize-none !p-2" : "h-12"
+          } border border-text-400 rounded-[8px] p-2 focus:border-primary-main !outline-none invalid:border-error-primary ${formik?.errors?.[name] && formik?.touched?.[name]
             ? "!border-error-primary"
             : ""
             }`}

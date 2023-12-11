@@ -14,6 +14,7 @@ type TextFieldProps = {
   className?: string;
   options?: FormOption[];
   disabled?: boolean;
+  readonly?: boolean;
 };
 const DropDown = ({
   name,
@@ -27,6 +28,7 @@ const DropDown = ({
   inputActions,
   options,
   disabled,
+  readonly
 }: TextFieldProps) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
@@ -65,14 +67,14 @@ const DropDown = ({
         options={options}
         className="w-full h-12 !outline-none"
         isSearchable={false}
-  
+        menuIsOpen={readonly ? false : undefined}
         classNames={{
           control: (state) =>
             `h-12 !rounded-[6px] !outline-none !shadow-none ${state.isFocused ? "!border-primary-main" : "border-text-300"
             }`,
-          placeholder: (state) => `text-right text-xs`,
-          singleValue: (state) => `text-right text-xs`,
-          input: (state) => `text-right text-xs`,
+          placeholder: (state) => `text-right text-sm`,
+          singleValue: (state) => `text-right text-sm`,
+          input: (state) => `text-right text-sm`,
           valueContainer: (state) => `!outline-none`,
           indicatorSeparator: (state) => `!hidden`,
           menu: (state) =>

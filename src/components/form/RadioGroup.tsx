@@ -26,11 +26,11 @@ const RadioGroup = ({
   options,
   labelClass
 }: RadioGroupProps) => {
-  const [selectedOption, setSelectedOption] = useState<string>(
-    formik.values[name]
-  );
+  // const [selectedOption, setSelectedOption] = useState<string>(
+  //   formik.values[name]
+  // );
   const handleChange = (item: any) => {
-    setSelectedOption(item.value);
+    // setSelectedOption(item.value);
     formik.handleChange({
       target: {
         name,
@@ -39,7 +39,7 @@ const RadioGroup = ({
     });
   };
   useEffect(() => {
-    setSelectedOption(formik.values[name]);
+    // setSelectedOption(formik.values[name]);
   }
     , [formik.values[name]])
   return (
@@ -47,7 +47,7 @@ const RadioGroup = ({
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
       <div className="text-sm mb-2 flex justify-between w-full">
-        <label htmlFor={name} className={`font-normal text-[12px] ${labelClass}`}>{label}</label>
+        <label htmlFor={name} className={`font-normal text-xs ${labelClass}`}>{label}</label>
         {inputActions?.()}
       </div>
 
@@ -59,7 +59,7 @@ const RadioGroup = ({
             name={name}
             value={item.value}
             label={item.label}
-            checked={selectedOption === item.value}
+            checked={formik.values[name] === item.value}
             handleCheck={() => handleChange(item)}
           />
         ))}
