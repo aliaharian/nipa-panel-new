@@ -97,7 +97,10 @@ const AddFactorItemDialog = ({ open, handleClose, handleSubmit, data }: AddFacto
       headerText={data?.id ? t("edit_factor_item") : t("add_factor_item")}
       headerIcon={<Add />}
       open={open}
-      handleClose={handleClose}
+      handleClose={()=>{
+        formik.resetForm()
+        handleClose?.()
+      }}
     >
       <SideDialog.Content>
         <div className="p-7 text-[18px]">

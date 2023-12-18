@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import PaymentStep from "components/financial/PaymentStep";
 import EditPaymentStepDialog from "components/financial/EditPaymentStepDialog";
 import DeletePopup from "components/popup/DeletePopup";
+import PayStepDialog from "components/financial/PayStepDialog";
 
 const FactorPayments = ({
     factorInfo,
@@ -21,6 +22,7 @@ const FactorPayments = ({
     const [openEditPaymentDialog, setOpenEditPaymentDialog] = useState<boolean>(false)
     const [selectedPaymentStep, setSelectedPaymentStep] = useState<any>()
     const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false)
+    const [openPayDialog, setOpenPayDialog] = useState<boolean>(false)
     useEffect(() => {
         if (paymentsInfo) {
             if (paymentsInfo.data.length > 0) {
@@ -40,6 +42,11 @@ const FactorPayments = ({
     const handleOpenEditPaymentStep = (step: any) => {
         setSelectedPaymentStep(step)
         setOpenEditPaymentDialog(true)
+        console.log("step", step)
+    }
+    const handleOpenPayDialog = (step: any) => {
+        setSelectedPaymentStep(step)
+        setOpenPayDialog(true)
         console.log("step", step)
     }
     const canViewPaymentSteps = () => {
@@ -126,6 +133,20 @@ const FactorPayments = ({
                 onClose={() => { setOpenDeletePopup(false); setSelectedPaymentStep(null); }}
                 handleConfirm={() => { handleDeletePaymentStep(selectedPaymentStep.id); setOpenDeletePopup(false) }}
             />}
+            {
+                factorInfo?.owner &&
+                <PayStepDialog
+                    open={openPayDialog}
+                    handleClose={() => { setOpenPayDialog(false); setSelectedPaymentStep(null); }}
+                    handleSubmit={(values) => {
+                        // handleUpdatePaymentStep(values).then(() => {
+                        //     setOpenPayDialog(false);
+                        //     setSelectedPaymentStep(null);
+                        // })
+                    }}
+                    data={selectedPaymentStep}
+                />
+            }
             <Section headerTitle={t("paymentsInfo") || ""}>
                 {canViewPaymentSteps().result &&
                     <div className="w-full flex items-center justify-start bg-text-200 rounded-[6px] px-6 py-7">
@@ -227,7 +248,11 @@ const FactorPayments = ({
                             paymentSteps.map((item: any, index: number) => {
                                 return (
                                     <div key={index} className="mb-4">
-                                        <PaymentStep stepInfo={item} editPaymentStep={handleOpenEditPaymentStep} />
+                                        <PaymentStep
+                                            stepInfo={item}
+                                            editPaymentStep={handleOpenEditPaymentStep}
+                                            handlePayStep={handleOpenPayDialog}
+                                        />
                                     </div>
                                 )
                             })}

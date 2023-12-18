@@ -5,26 +5,22 @@ import Radio from "./Radio";
 type RadioGroupProps = {
   name: string;
   label: string;
-  placeholder?: string;
   formik: any;
-  mask?: string;
-  maskChar?: string;
   inputActions?: any;
   className?: string;
   options?: FormOption[];
   labelClass?: string;
+  lg?: boolean;
 };
 const RadioGroup = ({
   name,
   label,
   formik,
-  placeholder,
-  maskChar,
   className,
-  mask,
   inputActions,
   options,
-  labelClass
+  labelClass,
+  lg
 }: RadioGroupProps) => {
   // const [selectedOption, setSelectedOption] = useState<string>(
   //   formik.values[name]
@@ -51,9 +47,10 @@ const RadioGroup = ({
         {inputActions?.()}
       </div>
 
-      <div className="flex items-center justify-items-stretch w-full max-w-full flex-wrap">
+      <div className="flex gap-4 items-center justify-items-stretch w-full max-w-full flex-wrap">
         {options?.map((item, index) => (
           <Radio
+            lg={lg}
             key={index}
             className="group"
             name={name}

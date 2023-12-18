@@ -12,6 +12,8 @@ import { Skeleton } from "@mui/material";
 import Accordion from "components/accordion/Accordion";
 import transform from "app/utils/transform";
 import { useNavigate } from "react-router-dom";
+import EmptyListPlaceholder from "components/emptyListPlaceholder/EmptyListPlaceholder";
+import { useTranslation } from "react-i18next";
 
 const Orders = () => {
   const data = useAppSelector((state) => state.orders.orders);
@@ -19,6 +21,7 @@ const Orders = () => {
   const [columns, setColumns] = useState<any[]>([]);
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const Navigate = useNavigate();
+  const { t } = useTranslation();
   // let columns: any = [
   //   {
   //     name: "کد سفارش",
@@ -183,6 +186,7 @@ const Orders = () => {
       />
       <Breadcrumb
         actions={
+          orderGroups?.length > 0 &&
           <>
             {" "}
             <div className="w-[186px]">
@@ -202,43 +206,55 @@ const Orders = () => {
       />
       <div>
         <div className="w-full">
-          {orderGroups ? (
-            orderGroups.map((item: any, index: number) => (
-              <Accordion
-                key={item.id}
-                title={` سفارش کد ${transform.toPersianDigits(
-                  item.id
-                )} ثبت شده در ${transform.toPersianDigits(
-                  transform.renderChatTime(
-                    transform.dateToTimestamp(item.created_at)
-                  )
-                )} توسط ${
-                  item.user.name
+          {orderGroups ?
+            orderGroups.length > 0 ?
+              orderGroups.map((item: any, index: number) => (
+                <Accordion
+                  key={item.id}
+                  title={` سفارش کد ${transform.toPersianDigits(
+                    item.id
+                  )} ثبت شده در ${transform.toPersianDigits(
+                    transform.renderChatTime(
+                      transform.dateToTimestamp(item.created_at)
+                    )
+                  )} توسط ${item.user.name
                     ? item.user.name + " " + item.user.last_name
                     : item.user.mobile
-                }`}
-              >
-                <Table
-                  columns={columns}
-                  data={data?.orders.filter(
-                    (x: any) => x.order_group?.[0]?.id === item.id
-                  )}
-                />
-              </Accordion>
-            ))
-          ) : (
-            <div className="grid grid-cols-1 gap-[40px]">
-              {Array.from(Array(3).keys()).map((item, index) => (
-                <Skeleton
-                  key={index}
-                  variant="rounded"
-                  width={"100%"}
-                  height={72}
-                  animation="wave"
-                />
-              ))}
-            </div>
-          )}
+                    }`}
+                >
+                  <Table
+                    columns={columns}
+                    data={data?.orders.filter(
+                      (x: any) => x.order_group?.[0]?.id === item.id
+                    )}
+                  />
+                </Accordion>
+              )) :
+              <EmptyListPlaceholder
+                title={t("noOrdersFound")}
+                subTitle={t("orderFirstOrder") || ""}
+                action={
+                  <Button
+                    icon={<Add />}
+                    text={t("submitOrder")}
+                    href="create"
+                    sm
+                  />
+                }
+              />
+            : (
+              <div className="grid grid-cols-1 gap-[40px]">
+                {Array.from(Array(3).keys()).map((item, index) => (
+                  <Skeleton
+                    key={index}
+                    variant="rounded"
+                    width={"100%"}
+                    height={72}
+                    animation="wave"
+                  />
+                ))}
+              </div>
+            )}
         </div>
       </div>
     </div>

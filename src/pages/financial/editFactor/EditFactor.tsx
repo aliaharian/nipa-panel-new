@@ -192,18 +192,18 @@ const EditFactor = () => {
     }
 
     const handleAcceptCustomer = async () => {
-        // try {
-        //     setLoading(true)
-        //     const response = await financialService.acceptFactorByCustomer(factorInfo.id);
-        //     if (response) {
-        //         await getFactor()
-        //     }
-        //     //snackbar
-        //     SnackbarUtils.success("فاکتور با موفقیت تایید شد")
-        // } catch (e) {
+        try {
+            setLoading(true)
+            const response = await financialService.acceptFactorByCustomer(factorInfo.id);
+            if (response) {
+                await getFactor()
+            }
+            //snackbar
+            SnackbarUtils.success("فاکتور با موفقیت تایید شد")
+        } catch (e) {
 
-        // }
-        // setLoading(false);
+        }
+        setLoading(false);
     }
     const handleCancelCustomer = async () => {
         // try {
@@ -334,7 +334,9 @@ const EditFactor = () => {
 
                         </Section>
                     </div>
-                    {factorPayments &&
+                    {(factorPayments && (
+                        transform.checkPermission("can-view-all-payment-steps") || factorPayments?.data?.length > 0
+                    )) &&
                         <div className="mb-8">
                             <FactorPayments
                                 paymentsInfo={factorPayments}

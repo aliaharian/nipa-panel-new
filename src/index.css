@@ -12,6 +12,13 @@
 
 @font-face {
   font-family: IRANSansX;
+  font-style: medium;
+  font-weight: 500;
+  src: url("../public/fonts/IranSansMedium.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: IRANSansX;
   font-style: normal;
   font-weight: 400;
   src: url("../public/fonts/woff/IRANSansX-Regular.woff") format("woff"),

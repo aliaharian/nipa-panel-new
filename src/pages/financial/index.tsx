@@ -1,4 +1,5 @@
 import {
+  Add,
   Edit,
   Setting4,
   Trash,
@@ -17,6 +18,7 @@ import { Tooltip, Typography } from "@mui/material";
 import transform from "app/utils/transform";
 import Pagination from "components/pagination/Pagination";
 import FinancialFiltersDialog from "components/financial/FinancialFiltersDialog";
+import EmptyListPlaceholder from "components/emptyListPlaceholder/EmptyListPlaceholder";
 
 const Factors = () => {
   const data = useAppSelector((state) => state.financial.invoices);
@@ -30,7 +32,7 @@ const Factors = () => {
   console.log(data?.factors)
   const Dispatch = useAppDispatch();
   useEffect(() => {
-    !data && Dispatch(invoicesList(page));
+    Dispatch(invoicesList(page));
   }, []);
 
   useEffect(() => {
@@ -100,14 +102,14 @@ const Factors = () => {
             items={[
               {
                 icon: <Edit variant="Bold" />,
-                text: "ویرایش پیش فاکتور",
+                text: data.canEdit ? t("editPreFactor") : t("viewFactor"),
                 name: "edit",
               },
-              {
-                icon: <Trash variant={"Bold"} />,
-                text: "حذف",
-                name: "delete",
-              },
+              // {
+              //   icon: <Trash variant={"Bold"} />,
+              //   text: "حذف",
+              //   name: "delete",
+              // },
             ].filter(Boolean)}
             handleAction={handleTableAction}
             row={row}
@@ -124,10 +126,10 @@ const Factors = () => {
       case "delete":
         // setOpenDeletePopup(true);
         break;
-        case "edit":
-          Navigator('/finance/'+row.code)
-          // setOpenDeletePopup(true);
-          break;
+      case "edit":
+        Navigator('/finance/' + row.code)
+        // setOpenDeletePopup(true);
+        break;
       default:
         break;
     }
@@ -147,6 +149,7 @@ const Factors = () => {
       />
       <Breadcrumb
         actions={
+          data?.factors?.length > 0 &&
           <>
             <div className="w-[153px] mr-[16px]">
               <Button
@@ -163,7 +166,7 @@ const Factors = () => {
       />
       <div>
 
-        {(data && !loading) ? (
+        {(data && !loading) ? data?.factors?.length > 0 ?
           <>
             <Table columns={columns} data={data?.factors || []} />
 
@@ -175,9 +178,22 @@ const Factors = () => {
               />
             </div>
           </>
-        ) : (
-          <TableSkeleton />
-        )}
+          :
+          <EmptyListPlaceholder
+            title={t("noFactorsFound")}
+            subTitle={t("orderFirstOrder") || ""}
+            action={
+              <Button
+                icon={<Add />}
+                text={t("submitOrder")}
+                href="/orders/create"
+                sm
+              />
+            }
+          />
+          : (
+            <TableSkeleton />
+          )}
       </div>
     </div>
   );

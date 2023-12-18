@@ -99,6 +99,10 @@ async function acceptFactor (factorId: number) {
   let response = await Api()?.post(`/factor/${factorId}/accept`);
   return response?.data;
 }
+async function acceptFactorByCustomer (factorId: number) {
+  let response = await Api()?.post(`/factor/${factorId}/acceptByCustomer`);
+  return response?.data;
+}
 
 
 export default {
@@ -113,5 +117,6 @@ export default {
   updatePaymentStep,
   deletePaymentStep,
   updateFactor,
-  acceptFactor
+  acceptFactor,
+  acceptFactorByCustomer
 };

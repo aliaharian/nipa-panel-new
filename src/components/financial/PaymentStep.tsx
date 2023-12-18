@@ -2,12 +2,14 @@ import transform from "app/utils/transform";
 import { Edit, Eye, Menu, More, Trash } from "iconsax-react";
 import TableAction from "../table/TableAction";
 import { useTranslation } from "react-i18next";
+import Button from "../button/Button";
 
 type PaymentStepProps = {
     stepInfo: any;
     editPaymentStep: (stepInfo: any) => void;
+    handlePayStep: (stepInfo: any) => void;
 };
-const PaymentStep = ({ stepInfo,editPaymentStep }: PaymentStepProps) => {
+const PaymentStep = ({ stepInfo, editPaymentStep, handlePayStep }: PaymentStepProps) => {
     const style = transform.renderStatusStyle(stepInfo.status.description)
     const { t } = useTranslation("common")
     const tableActions = (row: any, name: string) => {
@@ -24,6 +26,7 @@ const PaymentStep = ({ stepInfo,editPaymentStep }: PaymentStepProps) => {
                 break;
         }
     }
+  
     return (
         <div className="px-8 w-full border border-text-300 rounded-[10px] h-[108px] flex items-center justify-between">
             <div className="flex items-center">
@@ -75,6 +78,16 @@ const PaymentStep = ({ stepInfo,editPaymentStep }: PaymentStepProps) => {
 
 
             </div>
+            {
+                stepInfo.canPay &&
+                <div className="w-[150px]">
+                    <Button
+                        text={t("pay")}
+                        onClick={() => handlePayStep(stepInfo)}
+                        sm
+                    />
+
+                </div>}
             <div>
                 <TableAction
                     items={[
@@ -83,12 +96,12 @@ const PaymentStep = ({ stepInfo,editPaymentStep }: PaymentStepProps) => {
                             text: "مشاهده جزئیات",
                             name: "viewDetails",
                         },
-                        {
+                        transform.checkPermission("can-update-payment-step") && {
                             icon: <Edit variant="Bold" />,
                             text: "ویرایش",
                             name: "edit",
                         },
-                   
+
                     ].filter(Boolean)}
                     handleAction={tableActions}
                     row={stepInfo}
