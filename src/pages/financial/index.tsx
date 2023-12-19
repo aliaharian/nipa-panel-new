@@ -78,7 +78,7 @@ const Factors = () => {
         },
         {
           name: t("sumPrice"),
-          selector: (row: any) => row.total_price ? transform.toPersianDigitsPutCommas(row.total_price.toString()) + " تومان " : "تعیین نشده",
+          selector: (row: any) => row.total_price ? transform.toPersianDigitsPutCommas(row.total_price.toString()) + " " + t("toman") + " " : t("notDetermined"),
           sortable: true,
         },
         {
@@ -98,6 +98,7 @@ const Factors = () => {
         button: true,
         width: "120px",
         cell: (row: any) => (
+          (transform.checkPermission("can-view-all-invoices") || row.validity?.validity) &&
           <TableAction
             items={[
               {
@@ -105,11 +106,6 @@ const Factors = () => {
                 text: data.canEdit ? t("editPreFactor") : t("viewFactor"),
                 name: "edit",
               },
-              // {
-              //   icon: <Trash variant={"Bold"} />,
-              //   text: "حذف",
-              //   name: "delete",
-              // },
             ].filter(Boolean)}
             handleAction={handleTableAction}
             row={row}
@@ -151,7 +147,7 @@ const Factors = () => {
         actions={
           data?.factors?.length > 0 &&
           <>
-            <div className="w-[153px] mr-[16px]">
+            <div className="w-[153px] ms-4">
               <Button
                 icon={<Setting4 />}
                 text={t("advancedFilter")}

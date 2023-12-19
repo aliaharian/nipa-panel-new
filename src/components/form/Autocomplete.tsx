@@ -77,7 +77,7 @@ const Autocomplete = ({
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
-      <div className="text-sm mb-2 flex justify-between w-full">
+      <div className="text-xs mb-2 flex justify-between w-full">
         <label className="font-normal" htmlFor={name}>
           {label}
         </label>
@@ -158,8 +158,8 @@ const Autocomplete = ({
             InputProps={{
               ...params.InputProps,
               classes: {
-                root: " h-12 !pr-2",
-                input: "!text-sm !font-bold hover:!border-primary-main focus:!border-primary-main",
+                root: " h-12 !ps-2",
+                input: "!text-xs !font-bold hover:!border-primary-main focus:!border-primary-main",
                 //change fieldset hove
                 notchedOutline: "!border-none !outline-none !shadow-none",
 

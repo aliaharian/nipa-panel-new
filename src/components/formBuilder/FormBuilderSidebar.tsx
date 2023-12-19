@@ -86,7 +86,7 @@ const FormBuilderSidebar = ({
     }
   };
   return (
-    <div className="min-h-[800px] basis-1/4 bg-white pt-[20px] ml-[10px] border border-text-300">
+    <div className="min-h-[800px] basis-1/4 bg-white pt-[20px] me-3 border border-text-300">
       <Tabs
         handleChange={handleChangeTab}
         items={[

@@ -22,26 +22,7 @@ const Orders = () => {
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const Navigate = useNavigate();
   const { t } = useTranslation();
-  // let columns: any = [
-  //   {
-  //     name: "کد سفارش",
-  //     selector: (row: any) => row.id,
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "تاریخ ثبت",
-  //     selector: (row: any) => row.jalali_date,
-  //   },
-  //   {
-  //     name: "نام مشتری",
-  //     selector: (row: any) => row.user.name + " " + row.user.last_name,
-  //   },
-  //   {
-  //     name: "نام دریافت کننده",
-  //     selector: (row: any) => row.customer_name,
-  //   },
-  // ];
-  // const data:any = [];
+
 
   const Dispatch = useAppDispatch();
   useEffect(() => {
@@ -53,26 +34,26 @@ const Orders = () => {
     if (data) {
       let colTmp: any[] = [
         {
-          name: "کد سفارش",
+          name: t("orderCode"),
           selector: (row: any) => row.id,
           sortable: true,
         },
         {
-          name: "نام محصول",
+          name: t("productName"),
           selector: (row: any) => row.product.name,
         },
         {
-          name: "تاریخ ثبت",
+          name: t("submitDate"),
           selector: (row: any) => row.jalali_date,
         },
         {
-          name: "نام مشتری",
+          name: t("customerName"),
           selector: (
             row: any //find order group from row.order_group[0].id in orderGroups and get customer name
           ) => row.customer
         },
         {
-          name: "تعداد",
+          name: t("count"),
           selector: (row: any) => transform.toPersianDigits(row.count || 1),
         },
       ];
@@ -86,11 +67,11 @@ const Orders = () => {
             )?.field_value?.label ||
             row.additional_data?.find(
               (item: any) => item.fild_name === col.fild_name
-            )?.field_value || <div className="bg-error-secondary">ندارد</div>,
+            )?.field_value || <div className="bg-error-secondary">{t('dontHave')}</div>,
         });
       });
       colTmp.push({
-        name: "وضعیت",
+        name: t("status"),
         selector: (row: any) => row?.step?.step_name,
       });
       colTmp.push({
@@ -103,7 +84,7 @@ const Orders = () => {
 
           actions.push({
             icon: <Eye variant="Bold" />,
-            text: "مشاهده جزئیات",
+            text: t("viewDetails"),
             name: "view",
           });
           //my roles
@@ -131,14 +112,14 @@ const Orders = () => {
           if (data.permissions.canEdit) {
             actions.push({
               icon: <Edit variant="Bold" />,
-              text: "ویرایش",
+              text: t('edit'),
               name: "edit",
             });
           }
           if (data.permissions.canDelete) {
             actions.push({
               icon: <Trash variant={"Bold"} />,
-              text: "حذف",
+              text: t('delete'),
               name: "delete",
             });
           }
@@ -192,17 +173,17 @@ const Orders = () => {
             <div className="w-[186px]">
               <Button
                 icon={<Setting4 />}
-                text="فیلتر پیشرفته"
+                text={t('advancedFilter')}
                 onClick={() => setOpenFilter(true)}
                 simple
               />
             </div>
-            <div className="w-[186px] mr-[16px]">
-              <Button icon={<Add />} text="ثبت سفارش جدید" href="create" />
+            <div className="w-[186px] ms-4">
+              <Button icon={<Add />} text={t("addNewOrder")} href="create" />
             </div>
           </>
         }
-        title="سفارشات"
+        title={t('orders')}
       />
       <div>
         <div className="w-full">
@@ -211,16 +192,16 @@ const Orders = () => {
               orderGroups.map((item: any, index: number) => (
                 <Accordion
                   key={item.id}
-                  title={` سفارش کد ${transform.toPersianDigits(
-                    item.id
-                  )} ثبت شده در ${transform.toPersianDigits(
-                    transform.renderChatTime(
-                      transform.dateToTimestamp(item.created_at)
-                    )
-                  )} توسط ${item.user.name
-                    ? item.user.name + " " + item.user.last_name
-                    : item.user.mobile
-                    }`}
+                  title={t("orderInfoTitle", {
+                    code: transform.toPersianDigits(item.id), date: transform.toPersianDigits(
+                      transform.renderChatTime(
+                        transform.dateToTimestamp(item.created_at)
+                      )
+                    ), user: item.user.name
+                      ? item.user.name + " " + item.user.last_name
+                      : item.user.mobile
+
+                  })}
                 >
                   <Table
                     columns={columns}

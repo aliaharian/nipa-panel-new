@@ -154,7 +154,7 @@ const AddProductDialog = ({
       <SideDialog.Content>
         {selectedProductId && !selectedProduct && <FullscreenLoading />}
         <div className="p-7 font-bold text-[18px]">
-          <p className="text-right">{t("enterProductDetail")}</p>
+          <p className="text-start">{t("enterProductDetail")}</p>
           <form onSubmit={formik.handleSubmit} className="w-full">
             <div className="mt-7 w-full grid grid-cols-2 gap-x-5 gap-y-7">
               <TextField

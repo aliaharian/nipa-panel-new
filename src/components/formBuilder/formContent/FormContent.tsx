@@ -131,7 +131,7 @@ const FormContent = ({
             <div
               onClick={() => handleDeleteItem(element)}
               id="deleteItem"
-              className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
+              className="cursor-pointer ms-2 w-[30px] h-[30px] rounded-full border border-error-primary flex items-center justify-center"
             >
               <Close className="w-[16px] h-[16px] text-error-primary pointer-events-none" />
             </div>
@@ -139,14 +139,14 @@ const FormContent = ({
           {!element.fromRelatedFields && (
             <div
               onClick={() => handleCopyItem(element)}
-              className="cursor-pointer mr-2 w-[30px] h-[30px] rounded-full border border-success-primary flex items-center justify-center"
+              className="cursor-pointer ms-2 w-[30px] h-[30px] rounded-full border border-success-primary flex items-center justify-center"
             >
               <Copy className="w-[16px] h-[16px] text-success-primary" />
             </div>
           )}
         </div>
         {element.fromRelatedFields && (
-          <div className="mr-3 bg-secondary-main flex items-center justify-center px-2 py-0.5 rounded-full text-[11px]">
+          <div className="ms-3 bg-secondary-main flex items-center justify-center px-2 py-0.5 rounded-full text-[11px]">
             {t("fromStep")} {element.form?.step?.step_name}
           </div>
         )}
@@ -226,7 +226,7 @@ const FormContent = ({
             className="flex"
           >
             <div
-              className={`ml-3 cursor-move ${
+              className={`me-3 cursor-move ${
                 selectedField?.id === element.id ? "text-primary-main" : ""
               }`}
             >

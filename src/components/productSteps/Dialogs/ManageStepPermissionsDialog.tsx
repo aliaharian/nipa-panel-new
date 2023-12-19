@@ -115,7 +115,7 @@ const ManageStepPermissionsDialog = ({
     >
       <SideDialog.Content>
         <div className="p-7">
-          <p className="w-full text-right text-[16px] font-bold">
+          <p className="w-full text-start text-[16px] font-bold">
             نقش های انتخاب شده زیر دسترسی به این فرم را خواهند داشت:
           </p>
           <form onSubmit={formik.handleSubmit} className="w-full">
@@ -144,7 +144,7 @@ const ManageStepPermissionsDialog = ({
                     return (
                       <div
                         key={index}
-                        className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pl-[10px] pr-[16px] ml-[8px]"
+                        className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pe-2 ps-4 me-2"
                       >
                         <p className="text-[14px]">{item.name}</p>
                         <div

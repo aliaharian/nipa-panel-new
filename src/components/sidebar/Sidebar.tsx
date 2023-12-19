@@ -4,6 +4,7 @@ import {
   BoxAdd,
   Category2,
   ElementPlus,
+  Global,
   Grid1,
   ReceiptItem,
   RulerPen,
@@ -94,6 +95,14 @@ const Sidebar = () => {
     },
     {
       icon: (
+        <Global variant={pathname.includes("translations") ? "Bold" : "Linear"} />
+      ),
+      title: t("translations"),
+      route: "/translations",
+      permission: "manage-translation",
+    },
+    {
+      icon: (
         <WalletMinus variant={pathname.includes("wallet") ? "Bold" : "Linear"} />
       ),
       title: t("walletAndTransactions"),
@@ -122,7 +131,7 @@ const Sidebar = () => {
         <div className="flex items-center justify-center h-[80px] px-4 bg-gray-800">
           <Logo />
         </div>
-        <nav className="flex-1 pl-[20px] py-[13px] pr-0 bg-gray-800">
+        <nav className="flex-1 pe-5 py-[13px] ps-0 bg-gray-800">
           {menus.map(
             (menu, index) =>
               ((menu.permission &&

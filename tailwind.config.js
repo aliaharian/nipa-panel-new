@@ -37,7 +37,7 @@ module.exports = {
         600: "#eef3fa",
         nav: "rgba(47, 98, 176, 0.1)",
         o50: "rgba(47, 98, 176, 0.4)",
-        dark:"#234a84"
+        dark: "#234a84"
       },
       secondary: {
         main: "#F9BE57",
@@ -70,7 +70,7 @@ module.exports = {
         600: "#4D4D4D",
         700: "#303030",
         800: "#070707",
-        900:"#1f1f1f",
+        900: "#1f1f1f",
         error: "#dc3545",
       },
       success: {
@@ -84,8 +84,8 @@ module.exports = {
       warning: {
         primary: "#ee9500",
         secondary: "rgba(254, 239, 213, 0.50)",
-        border:"#FBD696",
-        text:"#B57E0E"
+        border: "#FBD696",
+        text: "#B57E0E"
       },
       info: {
         primary: "#0269de",
@@ -94,6 +94,7 @@ module.exports = {
     },
   },
   plugins: [
+    require('tailwindcss-rtl'),
     function ({ addVariant }) {
       addVariant("svg", "& svg");
     },

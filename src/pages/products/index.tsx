@@ -86,17 +86,17 @@ const Products = () => {
             items={[
               {
                 icon: <Edit variant="Bold" />,
-                text: "ویرایش",
+                text: t('edit'),
                 name: "edit",
               },
               row.custom && {
                 icon: <ArrangeVertical variant="Bold" />,
-                text: "مدیریت مراحل",
+                text: t('manageSteps'),
                 name: "steps",
               },
               {
                 icon: <Trash variant={"Bold"} />,
-                text: "حذف",
+                text: t('delete'),
                 name: "delete",
               },
             ].filter(Boolean)}
@@ -171,7 +171,7 @@ const Products = () => {
       <Breadcrumb
         actions={
           <>
-            <div className="w-[186px] mr-[16px]">
+            <div className="w-[186px] ms-4">
               <Button
                 icon={<Add />}
                 text={t("addProduct")}

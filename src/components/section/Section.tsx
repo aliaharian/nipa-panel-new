@@ -17,7 +17,7 @@ const Section = ({ headerTitle, children, headerActions }: SectionProps) => {
   return (
     <div className="w-full rounded-[6px] bg-white border border-text-300">
       {headerTitle &&
-        <div className={`border-b border-text-300 ${headerActions ? "py-4" : "py-7"} pr-5 pl-6 w-full flex items-center justify-between`}>
+        <div className={`border-b border-text-300 ${headerActions ? "py-4" : "py-7"} ps-5 pe-6 w-full flex items-center justify-between`}>
           {
             headerTitle &&
             <div className=" flex">

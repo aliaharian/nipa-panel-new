@@ -145,7 +145,7 @@ const VerifyText = ({ name, formik }: TextFieldProps) => {
         />
       </div>
       {formik.errors?.[name] && formik.touched?.[name] && (
-        <p className="text-error-primary text-[10px] mt-1 text-right pr-2">
+        <p className="text-error-primary text-[10px] mt-1 text-start ps-2">
           {formik.errors?.[name]}
         </p>
       )}

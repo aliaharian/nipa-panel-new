@@ -2,6 +2,7 @@ import { ArrowLeft, Trash } from "iconsax-react";
 import { MouseEventHandler, useRef, useState } from "react";
 import IconMenu from "../menu/IconMenu";
 import { ClickAwayListener } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 type CardProps = {
   arrow?: boolean;
@@ -12,6 +13,7 @@ type CardProps = {
 const Card = ({ arrow = true, children, onClick, handleDelete }: CardProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = useRef(null);
+  const {t}  = useTranslation();
 
   return (
     <div
@@ -27,7 +29,7 @@ const Card = ({ arrow = true, children, onClick, handleDelete }: CardProps) => {
     >
       <div>{children}</div>
       {arrow && (
-        <div>
+        <div className="ltr:rotate-180">
           <ArrowLeft />
         </div>
       )}
@@ -46,7 +48,7 @@ const Card = ({ arrow = true, children, onClick, handleDelete }: CardProps) => {
           items={[
             {
               icon: <Trash variant={"Bold"} />,
-              text: "حذف",
+              text: t("delete"),
               onClick: () => {
                 setOpenMenu(false);
                 handleDelete?.();

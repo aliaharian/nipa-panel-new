@@ -156,7 +156,7 @@ const Permissions = () => {
       <Breadcrumb
         actions={
           <>
-            <div className="w-[186px] mr-[16px]">
+            <div className="w-[186px] ms-4">
               <Button
                 icon={<Add />}
                 text={t("addRole")}

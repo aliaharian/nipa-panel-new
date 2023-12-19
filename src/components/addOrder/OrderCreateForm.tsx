@@ -242,7 +242,7 @@ const OrderCreateForm = ({
         <div className="w-full flex items-center justify-between">
           <div className="w-[227px]">
             <Button
-              icon={<ArrowRight className="ml-[7px]" />}
+              icon={<ArrowRight className="me-2" />}
               onClick={handleClearOrder}
               gray
               text={t("backToPrevStep")}
@@ -250,7 +250,7 @@ const OrderCreateForm = ({
           </div>
           <div className="w-[202px]">
             <Button
-              icon={<ArrowLeft className="mr-[7px]" />}
+              icon={<ArrowLeft className="ms-2" />}
               after
               onClick={() => handleSubmitForm(false)}
               text={t("saveAndContinue")}

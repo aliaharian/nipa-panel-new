@@ -57,7 +57,7 @@ const BasicDataList = () => {
       <div className="flex items-center justify-center">
         <div
           style={{ backgroundColor: row.code }}
-          className="border border-text-300 w-6 h-6 rounded-full ml-2"
+          className="border border-text-300 w-6 h-6 rounded-full me-2"
         ></div>
         <p>{row.name}</p>
       </div>
@@ -203,7 +203,7 @@ const BasicDataList = () => {
       <Breadcrumb
         actions={
           <>
-            <div className="w-[186px] mr-[16px]">
+            <div className="w-[186px] ms-4">
               {data ? (
                 <Button
                   icon={<Add />}

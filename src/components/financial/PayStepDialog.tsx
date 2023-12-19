@@ -108,11 +108,24 @@ const PayStepDialog = ({ open, handleClose, handleSubmit, data }: PayStepDialogP
                 />
               </div>
               <div className="mt-7 w-full flex flex-col bg-text-200 mb-4 items-center py-8 rounded-[6px]">
-                <p className="text-text-500">
-                  {t("payablePrice")}: <span className="text-text-900 font-bold">
-                    {transform.toPersianDigitsPutCommas(data.payable_price.toString())} تومان
-                  </span>
-                </p>
+                <div className="flex items-center justify-between w-full px-4">
+                  <p className="text-text-500 text-[14px]">
+                    {t("thisStepPrice")}: <span className="text-text-900 ">
+                      {transform.toPersianDigitsPutCommas(data.payable_price.toString())} {t("toman")}
+                    </span>
+                  </p>
+                  <p className="text-text-500 text-[14px]">
+                    {t("walletPay")}: <span className="text-text-900 ">
+                      {transform.toPersianDigitsPutCommas((data.payable_price - data.remaining_payable_price).toString())} {t("toman")}
+                    </span>
+                  </p>
+                  <p className="text-text-500 text-[16px]">
+                    {t("payablePrice")}: <span className="text-success-primary font-bold">
+                      {transform.toPersianDigitsPutCommas(data.remaining_payable_price.toString())} {t("toman")}
+                    </span>
+                  </p>
+                </div>
+
 
                 {formik.values.payMethod == "offline" &&
                   <div className="w-[490px] flex flex-col gap-y-3 mt-6">
@@ -159,7 +172,7 @@ const PayStepDialog = ({ open, handleClose, handleSubmit, data }: PayStepDialogP
                       {/* delete */}
                       <div className="mt-6 w-[120px] flex items-center justify-center">
                         <Button
-                          text="حذف فایل"
+                          text={t('deleteFile')}
                           onClick={() => {
                             formik.setFieldValue("file", null)
                             fileRef.current?.click()
@@ -190,7 +203,7 @@ const PayStepDialog = ({ open, handleClose, handleSubmit, data }: PayStepDialogP
                     name={'gateway'}
                     label={"با هریک از کارت های عضو شبکه شتاب می توانید پرداخت کنید"}
                     options={[
-                      data.allow_online && {
+                      {
                         label:
                           <div className={`${formik.values.gateway == "saman" ? "" : "grayscale"
                             }`}>
@@ -198,7 +211,7 @@ const PayStepDialog = ({ open, handleClose, handleSubmit, data }: PayStepDialogP
                           </div>,
                         value: "saman"
                       },
-                      data.allow_offline && {
+                      {
                         label:
                           <div className={`${formik.values.gateway == "shaparak" ? "" : "grayscale"
                             }`}>

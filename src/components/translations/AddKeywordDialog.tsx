@@ -4,79 +4,84 @@ import TextField from "../form/TextField";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import Button from "../button/Button";
-import DropDown from "../form/Dropdown";
 import * as Yup from "yup";
 import { setSaveSuccess } from "app/redux/products/actions";
 import { useAppDispatch, useAppSelector } from "app/redux/hooks";
 import { useEffect, useState } from "react";
 import SnackbarUtils from "app/utils/SnackbarUtils";
-import { BasicData, BasicDataItem } from "app/models/basicData";
-import basicDataService from "app/redux/basicData/service";
+import { addKeyword, editKeyword } from "app/redux/translations/actions";
 
-type OrderFiltersDialogProps = {
+type AddKeywordDialogProps = {
   open: boolean;
   handleClose?: () => void;
-  getBasicData: () => void;
+  langs: any[];
+  keyword?: any;
 };
 
-const AddBasicDataDialog = ({
+const AddKeywordDialog = ({
   open,
   handleClose,
-  getBasicData,
-}: OrderFiltersDialogProps) => {
+  keyword,
+  langs
+}: AddKeywordDialogProps) => {
   const { t } = useTranslation(["common", "validations"]);
   const Dispatch = useAppDispatch();
   const saveSuccess = useAppSelector(
-    (state: any) => state.products.saveSuccess
+    (state: any) => state.translations.saveSuccess
   );
 
-  const [submitdisabled, setSubmitDisabled] = useState<boolean>(false);
   const validationSchema = Yup.object().shape({
-    type: Yup.string().required(
-      t("code.required", { ns: "validations" }) || ""
-    ),
-    name: Yup.string().required(
-      t("name.required", { ns: "validations" }) || ""
+    keyword: Yup.string().required(
+      t("keyword.required", { ns: "validations" }) || ""
     ),
   });
 
-  const initialValues: BasicData = {
+  let initialValues: any = {
     id: 0,
-    name: "",
-    type: "",
-    items: [],
+    keyword: "",
+
   };
+  //append langs
+  langs.map((lang: any) => {
+    initialValues[lang.language] = "";
+  })
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log("valuekkkks", values);
-
-      let res = await basicDataService.addBasicData(values);
-      if (res.id) {
-        getBasicData();
-        handleClose?.();
-      }
+      values.id ? Dispatch(editKeyword(values)) : Dispatch(addKeyword(values));
     },
   });
 
   const handleSubmitForm = () => {
-    console.log('ok',formik)
     formik.handleSubmit();
   };
   const _handleClose = () => {
     handleClose && handleClose();
     formik.resetForm();
+    formik.setValues(initialValues);
   };
+
   useEffect(() => {
-    if (saveSuccess) {
-      _handleClose();
-      Dispatch(setSaveSuccess(false));
-      SnackbarUtils.success(t("addProductSuccess"));
+    if (keyword) {
+      formik.setFieldValue("id", keyword.id);
+      formik.setFieldValue("keyword", keyword.keyword);
+      keyword.translations.map((t: any) => {
+        formik.setFieldValue(`${t.lang}`, t.translation);
+      })
     }
-  }, [saveSuccess]);
+  }, [keyword])
+
+  useEffect(() => {
+    handleClose && handleClose();
+    formik.resetForm();
+    formik.setValues(initialValues);
+  }, [saveSuccess])
+
   // console.log("edit", editData);
-  // console.log("formik.values", formik.values);
+  // console.log("keyord", keyword);
+  console.log("formik.values", formik.values);
   return (
     <SideDialog
       headerText={t("addBasicData")}
@@ -90,23 +95,25 @@ const AddBasicDataDialog = ({
           <form onSubmit={formik.handleSubmit} className="w-full">
             <div className="mt-7 w-full grid grid-cols-2 gap-x-5 gap-y-7">
               <TextField
-                name="type"
-                label={t("typeEn")}
+                name="keyword"
+                label={t("keyword")}
                 type={"text"}
-                placeholder={t("type.placeholder", {
-                  ns: "validations",
-                })}
+                placeholder={t("keyword")}
                 formik={formik}
               />
-              <TextField
-                name="name"
-                label={t("name")}
-                type="text"
-                placeholder={t("name.placeholder", {
-                  ns: "validations",
-                })}
-                formik={formik}
-              />
+
+              {
+                langs?.map((lang: any, index) => (
+                  <TextField
+                    key={lang.id}
+                    name={lang.language}
+                    label={t("translateIn") + " " + t(lang.language)}
+                    type={"text"}
+                    placeholder={t(lang.language)}
+                    formik={formik}
+                  />
+                ))
+              }
             </div>
           </form>
         </div>
@@ -115,19 +122,19 @@ const AddBasicDataDialog = ({
         <div className="py-[24px] border-t border-text-300 px-7 flex justify-between">
           <div className="w-[126px]">
             <Button
-              disabled={submitdisabled}
-              text="انصراف"
+              disabled={!saveSuccess}
+              text={t("cancel")}
               onClick={_handleClose}
               gray
             />
           </div>
           <div className="w-[207px]">
             <Button
-              disabled={submitdisabled}
-              icon={<Add />}
-              text={t("addBasicData")}
+              disabled={!saveSuccess}
+              icon={saveSuccess ? <Add /> : null}
+              text={t("submit")}
               onClick={handleSubmitForm}
-              
+              loading={!saveSuccess}
             />
           </div>
         </div>
@@ -136,4 +143,4 @@ const AddBasicDataDialog = ({
   );
 };
 
-export default AddBasicDataDialog;
+export default AddKeywordDialog;

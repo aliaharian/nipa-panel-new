@@ -14,6 +14,11 @@ export interface ordersSliceModel {
   orders?: any;
   orderGroups?: any;
 }
+export interface translationsSliceModel {
+  keywords?: any[] | null;
+  saveSuccess?: boolean;
+  languages?: any[] | null;
+}
 export interface productsSliceModel {
   products?: any;
   saveSuccess?: boolean;
@@ -25,14 +30,14 @@ export interface productsSliceModel {
 export interface walletSliceModel {
   transactions?: any;
   transactionsListLoading?: boolean;
-  transactionStatuses?:any[]|null;
- 
+  transactionStatuses?: any[] | null;
+
 }
 export interface financialSliceModel {
   invoices?: any;
   invoicesListLoading?: boolean;
-  factorStatuses?:any[] | null
- 
+  factorStatuses?: any[] | null
+
 }
 export interface rolePermissionSliceModel {
   roles?: any[] | null;
@@ -111,7 +116,7 @@ export interface userModel {
   roles?: role[] | null;
   permissions: permission[];
   updated_at: string;
-  wallet:{
+  wallet: {
     balance: number;
     credit: number;
     blocked: number;

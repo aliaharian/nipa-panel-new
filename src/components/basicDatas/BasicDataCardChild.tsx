@@ -11,11 +11,11 @@ const BasicDataCardChild = ({ title, count }: BasicDataCardChildProps) => {
   const { t } = useTranslation("common");
   return (
     <div
-     
-      
+
+
       className="flex items-center justify-between"
     >
-      <div className="w-12 h-12 rounded-full bg-primary-600 text-primary-main flex items-center justify-center ml-4">
+      <div className="w-12 h-12 rounded-full bg-primary-600 text-primary-main flex items-center justify-center me-4">
         <Book variant="Bold" />
       </div>
       <div className="flex flex-col items-start justify-center">
@@ -23,7 +23,7 @@ const BasicDataCardChild = ({ title, count }: BasicDataCardChildProps) => {
           {title}
         </h3>
         <p className="text-[16px] leading-[16px] text-text-500">
-          {transform.toPersianDigits(count)} {t("items")}
+          {transform.toPersianDigits(count)} {count > 1 ? t("items") : t("item")}
         </p>
       </div>
     </div>

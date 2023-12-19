@@ -48,7 +48,7 @@ const DropDown = ({
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
-      <div className="text-sm mb-2 flex justify-between w-full">
+      <div className="text-xs mb-2 flex justify-between w-full">
         <label className="font-normal" htmlFor={name}>
           {label}
         </label>
@@ -72,9 +72,9 @@ const DropDown = ({
           control: (state) =>
             `h-12 !rounded-[6px] !outline-none !shadow-none ${state.isFocused ? "!border-primary-main" : "border-text-300"
             }`,
-          placeholder: (state) => `text-right text-sm`,
-          singleValue: (state) => `text-right text-sm`,
-          input: (state) => `text-right text-sm`,
+          placeholder: (state) => `rtl:text-right ltr:text-left text-xs`,
+          singleValue: (state) => `rtl:text-right ltr:text-left text-xs`,
+          input: (state) => `rtl:text-right ltr:text-left text-xs`,
           valueContainer: (state) => `!outline-none`,
           indicatorSeparator: (state) => `!hidden`,
           menu: (state) =>

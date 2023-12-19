@@ -18,7 +18,7 @@ const Checkbox = ({
 }: TextFieldProps) => {
   return (
     <div
-      className={`flex ml-4 mb-4 items-start justify-start relative cursor-pointer ${className}`}
+      className={`flex me-4 mb-4 items-start justify-start relative cursor-pointer ${className}`}
       onClick={handleCheck}
     >
       <input
@@ -30,7 +30,7 @@ const Checkbox = ({
         className="absolute top-0 left-0 opacity-0"
       />
       <div
-        className={`w-6 h-6  rounded-[4px] ml-2
+        className={`w-6 h-6  rounded-[4px] me-2
       ${checked ? "border-none bg-primary-main" : "border border-text-400"}
       `}
       >

@@ -88,12 +88,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                     name: t("unit_price"),
                     selector: (row: any) => {
                         return <Tooltip title={<Typography className="!text-[13px]">{
-                            row.unit_price ? transform.toPersianDigitsPutCommas((row.unit_price).toString()) + " تومان" : "تعیین نشده"
+                            row.unit_price ? transform.toPersianDigitsPutCommas((row.unit_price).toString()) + " " + t("toman") : t("notDetermined")
                         }
                         </Typography>}>
                             <Typography noWrap className="!text-[13px]">
                                 {
-                                    row.unit_price ? transform.toPersianDigitsPutCommas((row.unit_price).toString()) + " تومان" : "تعیین نشده"
+                                    row.unit_price ? transform.toPersianDigitsPutCommas((row.unit_price).toString()) + " " + t("toman") : t("notDetermined")
                                 }
                             </Typography>
                         </Tooltip>
@@ -111,12 +111,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                         const payable = (area * count * unit_price);
                         return (
                             <Tooltip title={<Typography className="!text-[13px]">
-                                {payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " تومان" : "مبلغ نهایی تعیین نشده"
+                                {payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " "+t("toman") : t("finalRriceNotDetermined")
                                 }
                             </Typography>}>
                                 <Typography noWrap className="!text-[13px]">
                                     {
-                                        payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " تومان" : "تعیین نشده"
+                                        payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " "+t("toman") : t("notDetermined")
                                     }
                                 </Typography>
                             </Tooltip>
@@ -129,12 +129,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                     name: t("discount"),
                     selector: (row: any) => <Tooltip title={<Typography className="!text-[13px]">
                         {
-                            row.off_price ? transform.toPersianDigitsPutCommas(row.off_price.toString()) + "تومان" : "---"
+                            row.off_price ? transform.toPersianDigitsPutCommas(row.off_price.toString()) + t("toman") : "---"
                         }
                     </Typography>}>
                         <Typography noWrap className="!text-[13px]">
                             {
-                                row.off_price ? transform.toPersianDigitsPutCommas(row.off_price.toString()) + "تومان" : "---"
+                                row.off_price ? transform.toPersianDigitsPutCommas(row.off_price.toString()) + t("toman") : "---"
                             }
                         </Typography>
                     </Tooltip>,
@@ -147,12 +147,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                     name: t("additional"),
                     selector: (row: any) => <Tooltip title={<Typography className="!text-[13px]">
                         {
-                            row.additional_price ? transform.toPersianDigitsPutCommas(row.additional_price.toString()) + "تومان" : "---"
+                            row.additional_price ? transform.toPersianDigitsPutCommas(row.additional_price.toString()) + t("toman") : "---"
                         }
                     </Typography>}>
                         <Typography noWrap className="!text-[13px]">
                             {
-                                row.additional_price ? transform.toPersianDigitsPutCommas(row.additional_price.toString()) + "تومان" : "---"
+                                row.additional_price ? transform.toPersianDigitsPutCommas(row.additional_price.toString()) + t("toman") : "---"
                             }
                         </Typography>
                     </Tooltip>,
@@ -190,12 +190,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                         const payable = (area * count * unit_price) - discount + additional;
                         return (
                             <Tooltip title={<Typography className="!text-[13px]">
-                                {payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " تومان" : "مبلغ قابل پرداخت تعیین نشده"
+                                {payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " "+t("toman") : t("payablePriceNotDetermined")
                                 }
                             </Typography>}>
                                 <Typography noWrap className="!text-[13px]">
                                     {
-                                        payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " تومان" : "تعیین نشده"
+                                        payable ? transform.toPersianDigitsPutCommas(payable.toString()) + " "+t("toman") : t("notDetermined")
                                     }
                                 </Typography>
                             </Tooltip>
@@ -219,12 +219,12 @@ const FactorItems = ({ factorInfo, handleAddFactorItem, handleEditFactorItem, ha
                                 [
                                     transform.checkPermission("can-update-invoice-item") && {
                                         icon: <Edit variant="Bold" />,
-                                        text: "ویرایش",
+                                        text: t('edit'),
                                         name: "edit",
                                     },
                                     (!row.order_id && !row.product_id && transform.checkPermission("can-delete-invoice-item")) && {
                                         icon: <Trash variant={"Bold"} />,
-                                        text: "حذف",
+                                        text: t("delete"),
                                         name: "delete",
                                     },
                                 ].filter(Boolean)}

@@ -4,6 +4,7 @@ import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali';
 import { ArrowDown2, ArrowLeft, ArrowLeft2, ArrowRight2, Calendar } from "iconsax-react";
 import React from "react";
 import Button from "../button/Button";
+import { useTranslation } from "react-i18next";
 
 type DatePickerProps = {
     name: string;
@@ -26,6 +27,7 @@ const Datepicker = ({
     formik,
 }: DatePickerProps) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const { t } = useTranslation("common");
     return (
         <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
             <div
@@ -40,7 +42,7 @@ const Datepicker = ({
                 <MobileDatePicker
                     value={formik.values[name]}
                     onAccept={(newValue) => {
-                        console.log("newValue",newValue);
+                        console.log("newValue", newValue);
                         formik.setFieldValue(name, newValue);
                     }}
                     className="w-full"
@@ -67,38 +69,38 @@ const Datepicker = ({
                         textField: (data: any) => {
                             return <TextField
                                 {...data}
-                                
-                                value={ data.ownerState.value?.toLocaleDateString("fa-IR", {
+
+                                value={data.ownerState.value?.toLocaleDateString("fa-IR", {
                                     year: "numeric",
                                     month: "long",
                                     day: "numeric",
                                 }) || ""}
                             />
                         },
-                        leftArrowIcon:()=><ArrowRight2 style={{width:20,height:20}} />,
-                        rightArrowIcon: () => <ArrowLeft2 style={{width:20,height:20}} />,
+                        leftArrowIcon: () => <ArrowRight2 style={{ width: 20, height: 20 }} />,
+                        rightArrowIcon: () => <ArrowLeft2 style={{ width: 20, height: 20 }} />,
                         actionBar: (data) => <div className="[grid-column:1/4] [grid-row:3] py-4 border-t border-text-300 px-4 flex justify-between">
-                        <div className="w-[80px]">
-                            <Button
-                                // disabled={submitdisabled}
-                                text={"حذف تاریخ"}
-                                onClick={() => { data.onClear()}}
-                                simple
-                                sm
-                                className="!text-error-primary !text-sm"
-                            />
-                        </div>
-                        <div className="w-[100px]">
-                            <Button
-                                // disabled={submitdisabled}
-                                // icon={<Add />}
-                                sm
-                                text={"تایید"}
-                                onClick={() => { data.onAccept()}}
+                            <div className="w-[80px]">
+                                <Button
+                                    // disabled={submitdisabled}
+                                    text={t("deleteDate")}
+                                    onClick={() => { data.onClear() }}
+                                    simple
+                                    sm
+                                    className="!text-error-primary !text-sm"
+                                />
+                            </div>
+                            <div className="w-[100px]">
+                                <Button
+                                    // disabled={submitdisabled}
+                                    // icon={<Add />}
+                                    sm
+                                    text={"تایید"}
+                                    onClick={() => { data.onAccept() }}
 
-                            />
-                        </div>
-                    </div>,
+                                />
+                            </div>
+                        </div>,
                     }}
                     slotProps={{
                         textField: {
@@ -110,7 +112,7 @@ const Datepicker = ({
                             },
                             InputProps: {
                                 classes: {
-                                    root: " h-12 pl-2 !pr-2",
+                                    root: " h-12 pe-2 !ps-2",
                                     input: "!cursor-pointer !text-xs !font-bold hover:!border-primary-main focus:!border-primary-main",
                                     //change fieldset hove
                                     notchedOutline: "!border-none !outline-none !shadow-none",
@@ -130,7 +132,7 @@ const Datepicker = ({
                             className: "bg-primary-main text-white",
                         },
                         calendarHeader: {
-                            className: "[&>*:nth-child(1)]:mr-0 w-full flex justify-between items-center",
+                            className: "[&>*:nth-child(1)]:ms-0 w-full flex justify-between items-center",
 
                         },
                     }}

@@ -24,7 +24,7 @@ const Alert = ({ title, text, type, actions }: { title: string, actions?: ReactN
             <div className="flex flex-col justify-center">
                 <div className="flex items-center">
                     <InfoCircle />
-                    <p className="mr-1 text-[16px] font-bold">
+                    <p className="ms-1 text-[16px] font-bold">
                         {title}
                     </p>
                 </div>

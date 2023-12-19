@@ -187,7 +187,7 @@ const ManageStepConditionsDialog = ({
                   return (
                     <div
                       key={Math.random() * 10000}
-                      className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pl-[10px] pr-[16px] ml-[8px]"
+                      className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pe-2 ps-4 me-2"
                     >
                       <p className="text-[14px]">{item.label}</p>
                       <div

@@ -1,13 +1,11 @@
 // src/i18n.ts
 import i18n from "i18next";
-// import LanguageDetector from "i18next-browser-languagedetector";
 import XHR from "i18next-xhr-backend";
 
 i18n
   .use(XHR)
-  // .use(LanguageDetector)
   .init({
-    fallbackLng: "fa",
+    fallbackLng: "en",
     debug: false,
     interpolation: {
       escapeValue: false,
@@ -18,5 +16,8 @@ i18n
     ns: ["nav", "common", "validations"],
     defaultNS: "common",
   });
+
+// Dynamically set the document direction based on the language
+// document.documentElement.setAttribute("dir", i18n.dir());
 
 export default i18n;

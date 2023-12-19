@@ -36,7 +36,7 @@ const SideDialog = ({
     <div
       id={`dialog${rand}`}
       onClick={_handleClose}
-      className={`w-full h-full fixed bg-black-60 left-0 top-0 transition-all ${
+      className={`w-full h-full fixed bg-black-60 rtl:left-0 ltr:right-0 top-0 transition-all ${
         !open
           ? "pointer-events-none opacity-0 z-0 delay-300"
           : "opacity-1 z-[999] delay-200"
@@ -44,13 +44,13 @@ const SideDialog = ({
     >
       <div
         className={`h-full w-[60%] min-w-[900px] bg-white transition-all	${
-          open ? "translate-x-0 delay-300" : "translate-x-[100%] delay-200"
+          open ? "translate-x-0 delay-300" : "ltr:-translate-x-[100%] rtl:translate-x-[100%] delay-200"
         }`}
       >
         {headerText && (
           <div className="flex w-full px-8 py-6 items-center justify-between border-b border-text-300">
             <div className="flex items-center">
-              <div className="ml-3 w-9 h-9 rounded-[12px] bg-primary-main flex items-center justify-center text-white">
+              <div className="me-3 w-9 h-9 rounded-[12px] bg-primary-main flex items-center justify-center text-white">
                 {headerIcon}
               </div>
               <p className="text-[20px] leading-[20px] font-bold">

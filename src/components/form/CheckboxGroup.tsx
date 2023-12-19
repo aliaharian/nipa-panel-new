@@ -77,8 +77,8 @@ const CheckboxGroup = ({
             `h-12 !rounded-[6px] !outline-none !shadow-none ${
               state.isFocused ? "!border-primary-main" : "border-text-300"
             }`,
-          placeholder: (state) => `text-right text-xs`,
-          singleValue: (state) => `text-right text-xs`,
+          placeholder: (state) => `text-start text-xs`,
+          singleValue: (state) => `text-start text-xs`,
           valueContainer: (state) => `!outline-none`,
           indicatorSeparator: (state) => `!hidden`,
           menu: (state) =>

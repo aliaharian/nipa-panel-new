@@ -10,16 +10,17 @@ const Api = () => {
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: localStorage.getItem("nipa_token")
       ? {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          // site: process.env.REACT_APP_SITE_CODE || "",
-          authorization: "Bearer " + localStorage.getItem("nipa_token"),
-        }
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        language: localStorage.getItem(process.env.REACT_APP_LANG_STORAGE_KEY||"") || "fa",
+        // site: process.env.REACT_APP_SITE_CODE || "",
+        authorization: "Bearer " + localStorage.getItem("nipa_token"),
+      }
       : {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          // site: process.env.REACT_APP_SITE_CODE || "",
-        },
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        // site: process.env.REACT_APP_SITE_CODE || "",
+      },
   });
 
   instance.interceptors.request.use(
@@ -50,14 +51,14 @@ const Api = () => {
       //   error.response.data.message || error.response.data.msg
       // );
       // console.log("error.response", error.response);
-      if(error.response.status==401){
+      if (error.response.status == 401) {
         // localStorage.removeItem("nipa_token")
         // document.location.href="/auth/login"
       }
-      if(error.response.status==403){
+      if (error.response.status == 403) {
         // alert("oocmcs")
         //  redirect("/403")
-        document.location.href="/errors/403"
+        document.location.href = "/errors/403"
 
       }
 
@@ -71,7 +72,7 @@ const Api = () => {
           SnackbarUtils.error(error);
         });
       } else {
-        console.log('err',error.response)
+        console.log('err', error.response)
         SnackbarUtils.error(
           error.response.data.message || error.response.data.msg || error.response.data.error
         );

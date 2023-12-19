@@ -18,7 +18,7 @@ const NavItem = ({
   return (
     <div className="flex w-full">
       <div
-        className={`w-[4px] h-[46px] rounded-l-[8px] ml-[16px] ${
+        className={`w-[4px] h-[46px] rtl:rounded-l-[8px] ltr:rounded-r-[8px] me-4 ${
           active ? "bg-primary-main" : ""
         }`}
       ></div>
@@ -33,7 +33,7 @@ const NavItem = ({
       >
         <div className="nav-item flex">
           <div
-            className={`nav-item-icon ${collapseMenu ? "ml-0" : "ml-[16px]"}`}
+            className={`nav-item-icon ${collapseMenu ? "me-0" : "me-4"}`}
           >
             {icon}
           </div>

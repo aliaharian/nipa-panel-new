@@ -20,7 +20,7 @@ const MenuButton = ({ text, onClick, icon, after,ref,simple=false }: ButtonProps
   return (
     <button
       ref={ref}
-      className={`${!simple?"border border-text-400":""} bg-transparent rounded-full text-text-900 w-full h-[38px] flex items-center justify-center hover:bg-text-4`}
+      className={`${!simple?"border border-text-400":""} bg-transparent rounded-full text-text-900 w-full h-[38px] flex ltr:flex-row-reverse items-center justify-center hover:bg-text-4`}
       onClick={onClick}
     >
       {!after && handleIcon()}

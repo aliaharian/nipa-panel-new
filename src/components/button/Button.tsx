@@ -47,7 +47,7 @@ const Button = ({
   `;
   const handleIcon = () => {
     if (icon) {
-      return <div className="inline-block ml-[4px]">{icon}</div>;
+      return <div className="inline-block me-1">{icon}</div>;
     } else {
       return <></>;
     }

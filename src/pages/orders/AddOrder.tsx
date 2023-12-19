@@ -11,6 +11,7 @@ import AddOrderSidebar from "components/addOrder/AddOrderSidebar";
 import formService from "app/redux/forms/service";
 import orderService from "app/redux/orders/service";
 import FullscreenLoading from "components/loading/FullscreenLoading";
+import { useTranslation } from "react-i18next";
 
 export type selectedOrderType = {
   product_id: number;
@@ -18,6 +19,7 @@ export type selectedOrderType = {
 };
 const AddOrder = () => {
   const Navigate = useNavigate();
+  const {t} = useTranslation()
   const [pending, setPending] = useState(false);
   const user = JSON.parse(localStorage.getItem("nipa_user") || "");
   const [orders, setOrders] = useState<any[]>([]);
@@ -137,7 +139,7 @@ const AddOrder = () => {
       {pending && <FullscreenLoading />}
 
       <Breadcrumb
-        title="ایجاد سفارش جدید"
+        title={t("createNewOrder")}
         handleBack={() => Navigate("/orders")}
       />
       <div className={`w-full flex gap-x-[20px]`}>

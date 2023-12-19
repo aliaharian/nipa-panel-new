@@ -68,7 +68,7 @@ const AdminFilterActions = () => {
 
                 </div>
             </Badge>
-            <div className="mr-12">
+            <div className="ms-12">
                 <Button
                     text="خروجی اکسل"
                     onClick={() => { handleDownloadExcel() }}

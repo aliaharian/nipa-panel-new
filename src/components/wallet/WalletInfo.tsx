@@ -52,10 +52,10 @@ const WalletInfo = ({user,page}:WalletInfoProps)=>{
                   (user.user.wallet?.balance + user.user.wallet.credit)?.toString()
                   || "")
                 : "---"}
-            </span> تومان
+            </span> {t("toman")}
           </p>
         </div>
-        <div className="h-full w-1/2 flex flex-col items-start pr-10 justify-start">
+        <div className="h-full w-1/2 flex flex-col items-start ps-10 justify-start">
           <p className="text-text-800 text-[16px] mb-4 font-bold">
             {t("chargeWallet")}
           </p>
@@ -64,7 +64,7 @@ const WalletInfo = ({user,page}:WalletInfoProps)=>{
             <div className="min-w-[254px] w-[100%]">
               <TextField
                 name="amount"
-                endEndorement={<p className="text-text-400">تومان</p>}
+                endEndorement={<p className="text-text-400">{t("toman")}</p>}
                 normal
                 placeholder={t("wallet.addAmount", {
                   ns: "validations",
@@ -76,7 +76,7 @@ const WalletInfo = ({user,page}:WalletInfoProps)=>{
               />
             </div>
 
-            <div className="max-w-[170px] min-w-[120px] w-[calc(100%-300px)] mr-4">
+            <div className="max-w-[170px] min-w-[120px] w-[calc(100%-300px)] ms-4">
               <Button
                 text="تایید و پرداخت"
                 onClick={handlePay}

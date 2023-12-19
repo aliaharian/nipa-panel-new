@@ -221,7 +221,7 @@ const EditFactor = () => {
     }
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full max-w-[calc(100vw-165px)]">
             {loading && <FullscreenLoading />}
             {(factorStatus?.slug == "customerPending" ||
                 factorStatus?.slug == "customerResubmitPending"
@@ -242,11 +242,11 @@ const EditFactor = () => {
                     handleConfirm={() => { handleCancelCustomer(); setCancelFactorPopup(false) }}
                 />
             }
-            <Breadcrumb title="پیش فاکتور" handleBack={() => Navigate("/finance")}
+            <Breadcrumb title={t("preFactor")} handleBack={() => Navigate("/finance")}
                 actions={
                     <>
                         {transform.checkPermission("can-change-invoice-status") &&
-                            <div className="w-[150px] ml-3">
+                            <div className="w-[150px] me-3">
                                 <Button
                                     text={t("changeState")}
                                     onClick={() => { }}
@@ -308,7 +308,7 @@ const EditFactor = () => {
                         <Section headerTitle={t("description") || ""}>
 
                             <div className="flex flex-col items-start justify-start w-full h-full">
-                                <label className="text-[16px] mb-2 mr-1 text-text-600">
+                                <label className="text-[16px] mb-2 ms-1 text-text-600">
                                     {t("description")}
                                 </label>
                                 <div className="w-full h-full">
@@ -325,7 +325,7 @@ const EditFactor = () => {
                                         }}
                                     />
                                         :
-                                        <div className=" w-full text-right h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark">
+                                        <div className=" w-full text-start h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark">
                                             {factorInfo.description}
                                         </div>
                                     }
@@ -379,7 +379,7 @@ const EditFactor = () => {
                                             </Typography>
                                             :
                                             ""}>
-                                        <div className="w-[190px] ml-3">
+                                        <div className="w-[190px] me-3">
 
                                             {(factorStatus.slug == "salesPending" ||
                                                 factorStatus.slug == "salesResubmitPending" ||
@@ -399,7 +399,7 @@ const EditFactor = () => {
                                             factorStatus.slug == "customerResubmitPending"
                                         ) &&
                                             <>
-                                                {factorInfo.canCancel && <div className="w-[190px] ml-3">
+                                                {factorInfo.canCancel && <div className="w-[190px] me-3">
                                                     <Button
                                                         text={t("cancelFactor")}
                                                         simple
@@ -407,7 +407,7 @@ const EditFactor = () => {
                                                         disabled={factorPayments?.status !== "success"}
                                                     />
                                                 </div>}
-                                                <div className="w-[190px] ml-3">
+                                                <div className="w-[190px] me-3">
                                                     <Button
                                                         text={t("acceptFactor")}
                                                         onClick={() => { setAcceptFactorPopup(true) }}

@@ -150,10 +150,10 @@ const FactorPayments = ({
             <Section headerTitle={t("paymentsInfo") || ""}>
                 {canViewPaymentSteps().result &&
                     <div className="w-full flex items-center justify-start bg-text-200 rounded-[6px] px-6 py-7">
-                        <div className="flex items-center pl-6 border-l border-l-text-400">
+                        <div className="flex items-center pe-6 rtl:border-l rtl:border-l-text-400 ltr:border-r ltr:border-r-text-400">
                             <p>
                                 {t("sum")}: <span className="font-bold text-[18px] text-text-900">
-                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} تومان
+                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} {t("toman")}
                                 </span>
                             </p>
                         </div>
@@ -161,21 +161,21 @@ const FactorPayments = ({
                         {/* <div className="flex items-center px-3 border-l border-l-text-400">
                     <p>
                         {t("sum")}: <span>
-                            {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} تومان
+                            {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} {t("toman")}
                         </span>
                     </p>
                 </div> */}
-                        <div className="flex items-center px-6 border-l border-l-text-400">
+                        <div className="flex items-center px-6 rtl:border-l ltr:border-r border-text-400">
                             <p className="text-success-primary">
                                 {t("discount")}: <span className="font-bold text-[18px] text-success-primary">
-                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_off_price.toString())} تومان
+                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_off_price.toString())} {t("toman")}
                                 </span>
                             </p>
                         </div>
-                        <div className="flex items-center pr-6">
+                        <div className="flex items-center ps-6">
                             <p>
                                 {t("payable")}: <span className="font-bold text-[18px] text-text-900">
-                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_total_price.toString())} تومان
+                                    {transform.toPersianDigitsPutCommas(paymentsInfo.factor_total_price.toString())} {t("toman")}
                                 </span>
                             </p>
                         </div>
@@ -250,6 +250,7 @@ const FactorPayments = ({
                                     <div key={index} className="mb-4">
                                         <PaymentStep
                                             stepInfo={item}
+                                            canViewPaymentStepsType={canViewPaymentSteps().type}
                                             editPaymentStep={handleOpenEditPaymentStep}
                                             handlePayStep={handleOpenPayDialog}
                                         />

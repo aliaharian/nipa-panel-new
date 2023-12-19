@@ -8,6 +8,7 @@ import {
   selectedFieldType,
 } from "../../../app/models/form";
 import DropDown from "../../form/Dropdown";
+import { useTranslation } from "react-i18next";
 
 type ConditionItemProps = {
   conditionalfields: FormField[];
@@ -32,7 +33,7 @@ const ConditionItem = ({
   );
   const [operation, setOperation] = useState<FormOption>();
   const [relationField, setRelationField] = useState<selectedFieldType>();
-
+  const { t } = useTranslation();
   const handleDeleteItem = (item: any) => {
     let index = selectedFieldValue.findIndex((x) => x.value == item.value);
     if (index > -1) {
@@ -181,9 +182,8 @@ const ConditionItem = ({
         }}
       />
       <DropDown
-        className={`group ${
-          selectedFieldValue.length > 0 ? "mb-[15px]" : "mb-[30px]"
-        }`}
+        className={`group ${selectedFieldValue.length > 0 ? "mb-[15px]" : "mb-[30px]"
+          }`}
         name={"condFieldValue"}
         label={"برابر"}
         options={
@@ -211,7 +211,7 @@ const ConditionItem = ({
             return (
               <div
                 key={index}
-                className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pl-[10px] pr-[16px] ml-[8px]"
+                className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pe-2 ps-4 me-2"
               >
                 <p className="text-[14px]">{item.label}</p>
                 <div
@@ -271,20 +271,19 @@ const ConditionItem = ({
       <div className="flex items-center justify-between w-full">
         <Button
           onClick={handleDeleteCondition}
-          className={`h-[48px] ${
-            condition?.saved ? "w-full" : "w-[calc(50%-8px)] ml-[8px]"
-          } !rounded-[8px]  !border !border-solid !border-error-primary !text-error-primary `}
+          className={`h-[48px] ${condition?.saved ? "w-full" : "w-[calc(50%-8px)] me-2"
+            } !rounded-[8px]  !border !border-solid !border-error-primary !text-error-primary `}
         >
           <Trash />
-          <p className="text-[14px] font-bold mr-[4px]">حذف شرط</p>
+          <p className="text-[14px] font-bold ms-1">{t("deleteCondition")}</p>
         </Button>
         {!condition?.saved && (
           <Button
             onClick={handleSaveCondition}
-            className="h-[48px] w-[calc(50%-8px)] !rounded-[8px] mr-[8px] !border !border-solid !border-success-primary !text-success-primary"
+            className="h-[48px] w-[calc(50%-8px)] !rounded-[8px] ms-2 !border !border-solid !border-success-primary !text-success-primary"
           >
             <ArchiveTick />
-            <p className="text-[14px] font-bold mr-[4px]">ذخیره شرط</p>
+            <p className="text-[14px] font-bold ms-1">{t("saveCondition")}</p>
           </Button>
         )}
       </div>

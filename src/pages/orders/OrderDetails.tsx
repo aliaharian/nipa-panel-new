@@ -46,7 +46,7 @@ const OrderDetails = () => {
             <div className="flex items-center justify-between flex-wrap border-b border-text-400 pb-[20px]">
               <div className="flex items-center">
                 <p className="text-[14px] text-text-500">{t("userName")}</p>
-                <p className="text-[14px] text-text-700 mr-2">
+                <p className="text-[14px] text-text-700 ms-2">
                   {order.order.user.name
                     ? order.order.user.name + " " + order.order.user.last_name
                     : order.order.user.mobile}
@@ -54,13 +54,13 @@ const OrderDetails = () => {
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] text-text-500">{t("mobilePhone")}</p>
-                <p className="text-[14px] text-text-700 mr-2">
+                <p className="text-[14px] text-text-700 ms-2">
                   {order.order.user.mobile}
                 </p>
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] text-text-500">{t("submitDate")}</p>
-                <p className="text-[14px] text-text-700 mr-2">
+                <p className="text-[14px] text-text-700 ms-2">
                   {transform.renderChatTime(
                     transform.dateToTimestamp(order.order.created_at)
                   )}
@@ -68,7 +68,7 @@ const OrderDetails = () => {
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] text-text-500">{t("recieverName")}</p>
-                <p className="text-[14px] text-text-700 mr-2">{order.order.customer_name}</p>
+                <p className="text-[14px] text-text-700 ms-2">{order.order.customer_name}</p>
               </div>
             </div>
             <div className="flex items-center justify-start flex-wrap border-b border-text-400 py-[20px] gap-y-[25px] gap-x-[45px]">
@@ -79,7 +79,7 @@ const OrderDetails = () => {
                     <p className="text-[14px] text-text-500">
                       {data.form_field.label}:
                     </p>
-                    <p className="text-[14px] text-text-700 mr-2">
+                    <p className="text-[14px] text-text-700 ms-2">
                       {item.map((val: any, index: number) => {
                         if (val.form_field.type.type === "uploadFile") {
                           return (

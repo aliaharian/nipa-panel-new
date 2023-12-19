@@ -139,7 +139,7 @@ const AddRoleDialog = ({
     >
       <SideDialog.Content>
         <div className="p-7 font-bold text-[18px]">
-          <p className="text-right">{t("enterProductDetail")}</p>
+          <p className="text-start">{t("enterProductDetail")}</p>
           <form onSubmit={formik.handleSubmit} className="w-full">
             <div className="mt-7 w-full grid grid-cols-2 gap-x-5 gap-y-7">
               <TextField
@@ -162,7 +162,7 @@ const AddRoleDialog = ({
               />
             </div>
             <div className="mt-[35px]">
-              <p className="text-right text-[14px] text-text-900 font-normal mb-2">
+              <p className="text-start text-[14px] text-text-900 font-normal mb-2">
                 {t("permissions")}
               </p>
               <div className="border px-[20px] py-[27px] border-text-400 rounded-[6px]">
@@ -182,7 +182,7 @@ const AddRoleDialog = ({
                           handleCheck={() => handleCheck(item)}
                         />
                         {item.childs && (
-                          <div className="pr-[35px]">
+                          <div className="ps-9">
                             {item.childs.map((child, index) => (
                               <Checkbox
                                 key={index}

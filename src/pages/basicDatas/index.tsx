@@ -73,7 +73,7 @@ const BasicDatas = () => {
         title={t("basicDatas")}
         actions={
           <>
-            <div className="w-[186px] mr-[16px]">
+            <div className="w-[186px] ms-4">
               {basicDatas ? (
                 <Button
                   icon={<Add />}

@@ -5,6 +5,7 @@ import ConditionItem from "./ConditionItem";
 import Button from "../../../components/button/Button";
 import { Add } from "iconsax-react";
 import SnackbarUtils from "../../../app/utils/SnackbarUtils";
+import { useTranslation } from "react-i18next";
 
 type FormBuilderConditionsTabProps = {
   conditionalfields: FormField[];
@@ -22,6 +23,7 @@ const FormBuilderConditionsTab = ({
     ...savedConditions,
   ]);
   console.log("condiii", conditions);
+  const {t} = useTranslation()
   const handleAddCondition = () => {
     if (conditionalfields.length > 0 && formElements.length >= 2) {
       setConditions([
@@ -59,7 +61,7 @@ const FormBuilderConditionsTab = ({
       setConditions([...newConditions]);
     }
     saveConditions([...conditions]);
-    SnackbarUtils.success("شرط حذف شد");
+    SnackbarUtils.success(t('conditionDeleted'));
   };
 
   const handleSaveCondition = (condition: number) => {

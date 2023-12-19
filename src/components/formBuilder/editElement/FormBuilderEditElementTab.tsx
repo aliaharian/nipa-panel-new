@@ -263,13 +263,13 @@ const FormBuilderEditElementTab = ({
                     <div className="flex">
                       <div
                         onClick={() => _handleOpenAddOptionDialog(option)}
-                        className="w-[24px] h-[24px] ml-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                        className="w-[24px] h-[24px] me-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
                       >
                         <Edit2 className="w-[20px] h-[20px]" />
                       </div>
                       <div
                         onClick={() => _handleDeleteOption(option)}
-                        className="w-[24px] h-[24px] mr-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                        className="w-[24px] h-[24px] ms-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
                       >
                         <Trash className="w-[20px] h-[20px]" />
                       </div>

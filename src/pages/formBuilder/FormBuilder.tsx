@@ -591,7 +591,7 @@ const FormBuilder = () => {
                 gray
               />
             </div>
-            <div className="w-[138px] mr-[16px]">
+            <div className="w-[138px] ms-4">
               <Button
                 icon={<ArchiveTick />}
                 text={t("saveForm")}
@@ -622,7 +622,7 @@ const FormBuilder = () => {
           setFromBasicData={setFromBasicData}
           relatedFields={formRelatedElements}
         />
-        <div className="basis-3/4 bg-white mr-[10px]">
+        <div className="basis-3/4 bg-white ms-2">
           <FormContent
             lastId={lastId}
             setLastId={setLastId}

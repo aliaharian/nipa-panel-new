@@ -1,5 +1,6 @@
 //set timestamp to persian date
 
+import i18n from "i18n";
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
 
@@ -15,13 +16,13 @@ export const renderChatTime = (timestamp: number, percise?: boolean, onlyDate?: 
   }
   let diff = Math.floor((now - timestamp) / 1000);
   if (diff < 60) {
-    return "چند لحظه پیش";
+    return i18n.t("fewSecondsAgo");
   } else if (diff < 3600) {
-    return Math.floor(diff / 60) + " دقیقه پیش";
+    return Math.floor(diff / 60) + " " + i18n.t("minutesAgo")
   } else if (diff < 86400) {
-    return Math.floor(diff / 3600) + " ساعت پیش";
+    return Math.floor(diff / 3600) + " " + i18n.t("hoursAgo")
   } else if (diff < 604800) {
-    return Math.floor(diff / 86400) + " روز پیش";
+    return Math.floor(diff / 86400) + " " + i18n.t("daysAgo")
   } else {
     return new Date(timestamp).toLocaleDateString("fa-IR");
   }
@@ -81,11 +82,15 @@ function fileToBlob(file: File): Blob {
 }
 
 //to persian digits
-const toPersianDigits = (value: any) => {
-  const charCodeZero = "۰".charCodeAt(0);
-  return String(value).replace(/[0-9]/g, (w) =>
-    String.fromCharCode(w.charCodeAt(0) + charCodeZero - 48)
-  );
+const toPersianDigits = (value: any, force?: boolean) => {
+  if (force || i18n.language === "fa") {
+    const charCodeZero = "۰".charCodeAt(0);
+    return String(value).replace(/[0-9]/g, (w) =>
+      String.fromCharCode(w.charCodeAt(0) + charCodeZero - 48)
+    );
+  } else {
+    return value;
+  }
 };
 
 const checkPermission = (permission: any) => {
@@ -103,15 +108,23 @@ const checkPermission = (permission: any) => {
   }
 };
 
-const toPersianDigitsPutCommas = (value: any) => {
+const toPersianDigitsPutCommas = (value: any, force?: boolean) => {
   const charCodeZero = "۰".charCodeAt(0);
   !value && (value = "");
-  const val = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-  const result = String(val).replace(/[0-9]/g, (w) =>
-    String.fromCharCode(w.charCodeAt(0) + charCodeZero - 48)
-  );
-  return result;
+  let split = value.split(".");
+  if (split[0].length > 3) {
+    split[0] = split[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  const val = split.join(".");
+  // const val = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (force || i18n.language === "fa") {
+    const result = String(val).replace(/[0-9]/g, (w) =>
+      String.fromCharCode(w.charCodeAt(0) + charCodeZero - 48)
+    );
+    return result;
+  } else {
+    return val;
+  }
 }
 
 const convetToEnglishDigitsRemoveCommas = (value: any) => {
@@ -139,24 +152,24 @@ function toISOLocal(d: Date) {
   //  sign + z(off/60|0) + ':' + z(off%60); 
 }
 
-const renderStatusStyle = (type:string)=>{
+const renderStatusStyle = (type: string) => {
   let style;
   switch (type) {
-      case "success":
-          style = "bg-success-secondary text-success-primary "
-          break;
-      case "warning":
-          style = "bg-warning-secondary text-warning-text "
-          break;
-      case "error":
-          style = "bg-error-secondary text-error-primary "
-          break;
-      case "info":
-          style = "bg-info-secondary text-info-primary "
-          break;
-      default:
-          style = "bg-text-300 text-text-600 "
-          break;
+    case "success":
+      style = "bg-success-secondary text-success-primary "
+      break;
+    case "warning":
+      style = "bg-warning-secondary text-warning-text "
+      break;
+    case "error":
+      style = "bg-error-secondary text-error-primary "
+      break;
+    case "info":
+      style = "bg-info-secondary text-info-primary "
+      break;
+    default:
+      style = "bg-text-300 text-text-600 "
+      break;
   }
 
   return style;
