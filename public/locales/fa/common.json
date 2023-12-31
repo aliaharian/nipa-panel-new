@@ -216,5 +216,8 @@
   "preFactor": "پیش فاکتور",
   "walletPay": "پرداخت از کیف پول",
   "restPay": "پرداخت مابقی",
-  "thisStepPrice": "مبلغ این مرحله"
+  "thisStepPrice": "مبلغ این مرحله",
+  "gotoGateway": "رفتن به درگاه پرداخت",
+  "sendPaidPaper": "ارسال فیش واریزی",
+  "reduceFromWallet": "کسر از کیف پول"
 }

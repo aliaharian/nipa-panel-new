@@ -1,26 +1,31 @@
 import Button from "components/button/Button";
-import { Filter, ReceiveSquare, Setting4 } from "iconsax-react";
+import {ReceiveSquare, Setting4} from "iconsax-react";
 import TransactionFiltersDialog from "./TransactionFiltersDialog";
-import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "app/redux/hooks";
-import { transactionsList } from "app/redux/wallet/actions";
+import {useState} from "react";
+import {useAppDispatch} from "app/redux/hooks";
+import {transactionsList} from "app/redux/wallet/actions";
 import walletService from "app/redux/wallet/service";
-import { Badge } from "@mui/material";
+import {Badge} from "@mui/material";
 import transform from "app/utils/transform";
+import {useTransactionsList} from "app/queries/wallet/hooks";
 
-const AdminFilterActions = () => {
+const AdminFilterActions = ({setFilters, filters, setPage, page}: any) => {
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const Dispatch = useAppDispatch();
-    const params = useAppSelector((state) => state.wallet.transactions).filters;
+    // const params = useAppSelector((state) => state.wallet.transactions).filters;
+    const {data} = useTransactionsList(page, filters)
+    const params = data.filters || filters || {}
     console.log("params", params)
 
     const handleSubmitFilters = (values: any) => {
         Dispatch(transactionsList(1, values))
+        setPage(1)
+        setFilters(values)
 
     }
     const handleDownloadExcel = async () => {
         const response = await walletService.exportExcel(params);
-        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const blob = new Blob([response.data], {type: response.headers['content-type']});
 
         // Create a link element
         const link = document.createElement('a');
@@ -49,20 +54,23 @@ const AdminFilterActions = () => {
                 open={openFilter}
                 handleClose={() => setOpenFilter(false)}
                 handleSubmit={handleSubmitFilters}
+                params={params}
             />
             <Badge badgeContent={transform.toPersianDigits(Object.keys(params || {}).length || null)}
-                classes={{
-                    badge: "bg-secondary-main text-white"
+                   classes={{
+                       badge: "bg-secondary-main text-white"
 
-                }}
-                invisible={Object.keys(params || {}).length === 0}
+                   }}
+                   invisible={Object.keys(params || {}).length === 0}
 
             >
                 <div>
                     <Button
                         text="فیلتر"
-                        onClick={() => { setOpenFilter(true) }}
-                        icon={<Setting4 />}
+                        onClick={() => {
+                            setOpenFilter(true)
+                        }}
+                        icon={<Setting4/>}
                         simple
                     />
 
@@ -71,12 +79,13 @@ const AdminFilterActions = () => {
             <div className="ms-12">
                 <Button
                     text="خروجی اکسل"
-                    onClick={() => { handleDownloadExcel() }}
-                    icon={<ReceiveSquare />}
+                    onClick={() => {
+                        handleDownloadExcel()
+                    }}
+                    icon={<ReceiveSquare/>}
                     simple
                 />
             </div>
-
 
 
         </div>)

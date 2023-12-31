@@ -1,82 +1,81 @@
 import Button from "components/button/Button";
 import Breadcrumb from "components/breadcrumb/Breadcrumb";
-import { useNavigate, useParams } from "react-router-dom";
-import { ArchiveTick, Eye, Printer } from "iconsax-react";
-import { useTranslation } from "react-i18next";
+import {useNavigate, useParams} from "react-router-dom";
+import {Printer} from "iconsax-react";
+import {useTranslation} from "react-i18next";
 import Section from "components/section/Section";
-import financialService from "app/redux/financial/service";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import transform from "app/utils/transform";
 import FactorInfo from "./FactorInfo";
 import FactorItems from "./FactorItems";
 import FactorPayments from "./FactorPayments";
-import { setCollapseMenu } from "app/redux/application/actions";
-import { useAppDispatch } from "app/redux/hooks";
+import {setCollapseMenu} from "app/redux/application/actions";
+import {useAppDispatch} from "app/redux/hooks";
 import Datepicker from "components/form/Datepicker";
-import { factorItem } from "app/models/financial";
+import {factorItem} from "app/models/financial";
 import FullscreenLoading from "components/loading/FullscreenLoading";
-import { Tooltip, Typography } from "@mui/material";
-import { error } from "console";
+import {Tooltip, Typography} from "@mui/material";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import Alert from "components/alert/Alert";
 import ChangeLogDialog from "components/financial/ChangeLogDialog";
 import WarningPopup from "components/popup/WarningPopup";
+import {
+    useAcceptFactor,
+    useAcceptFactorByCustomer,
+    useAddFactorItem,
+    useAddPaymentStep,
+    useDeleteFactorItem,
+    useDeletePaymentStep,
+    useGetFactor,
+    useUpdateFactor,
+    useUpdateFactorItem,
+    useUpdatePaymentStep
+} from "app/queries/financial/hooks";
+import {useQueryClient} from "@tanstack/react-query";
 
 const EditFactor = () => {
     const Navigate = useNavigate()
-    const { t } = useTranslation()
-    const { code } = useParams();
+    const {t} = useTranslation()
+    const {code} = useParams();
     const Dispatch = useAppDispatch()
-    const [factorInfo, setFactorInfo] = useState<any>()
-    const [factorStatus, setFactorStatus] = useState<any>()
-    const [factorPayments, setFactorPayments] = useState<any>()
-    const [loading, setLoading] = useState<boolean>(false)
     const [expireDate, setExpireDate] = useState<any>(null)
+    const [description, setDescription] = useState<any>("")
     const [openLogDialog, setOpenLogDialog] = useState<boolean>(false)
     const [acceptFactorPopup, setAcceptFactorPopup] = useState<boolean>(false)
     const [cancelFactorPopup, setCancelFactorPopup] = useState<boolean>(false)
+    const queryClient = useQueryClient();
+    const {
+        isPending,
+        data: {factorInfo, factorPayments, factorStatus} = {factorInfo: null, factorPayments: null, factorStatus: null},
+    } = useGetFactor(code || "");
+
+    const {mutate: updateFactorMutation} = useUpdateFactor(code || "")
+    const {mutate: addFactorItemMutation} = useAddFactorItem(code || "")
+    const {mutate: updateFactorItemMutation} = useUpdateFactorItem(code || "")
+    const {mutate: deleteFactorItemMutation} = useDeleteFactorItem(code || "")
+    const {mutate: addPaymentStepMutation} = useAddPaymentStep(code || "")
+    const {mutate: updatePaymentStepMutation} = useUpdatePaymentStep(code || "")
+    const {mutate: deletePaymentStepMutation} = useDeletePaymentStep(code || "")
+    const {mutate: acceptFactorMutation} = useAcceptFactor(code || "")
+    const {mutate: acceptFactorByCustomerMutation} = useAcceptFactorByCustomer(code || "")
+
     //debaunced function for update factor
     useEffect(() => {
         const timeout = setTimeout(() => {
-            if (factorInfo) {
-                handleUpdateFactor(expireDate)
+            if (factorInfo && factorInfo.description !== description) {
+                handleUpdateFactor(undefined, description)
             }
         }, 3000);
         return () => clearTimeout(timeout);
-    }, [factorInfo?.description])
-    const getFactor = async () => {
-        try {
-            if (code) {
-                // const res = await axios.get(``)
-                const response = await financialService.getFactorInfo(code);
-                setFactorInfo(response)
-                const status = response.last_status?.factor_status_enum;
-                const style = transform.renderStatusStyle(status?.description)
-                setFactorStatus({
-                    name: response.last_status?.factor_status_enum.name,
-                    slug: response.last_status?.factor_status_enum.slug,
-                    style
-                })
-                await getFactorPayments(response.id);
+    }, [description])
 
-            }
-        } catch (error) {
+    console.log('factor', factorInfo)
+    console.log('pay', factorPayments)
+    console.log('stat', factorStatus)
 
-        }
-    }
-
-    const getFactorPayments = async (id: number) => {
-        try {
-            const response = await financialService.getFactorPaymentSteps(id);
-            setFactorPayments(response)
-        } catch (error) {
-
-        }
-    }
 
     useEffect(() => {
         Dispatch(setCollapseMenu(true))
-        getFactor()
     }, [])
 
     useEffect(() => {
@@ -84,130 +83,75 @@ const EditFactor = () => {
             setExpireDate(
                 new Date(factorInfo.expire_date)
             )
+            setDescription(
+                factorInfo.description
+            )
         }
     }, [factorInfo])
 
     const handleAddFactorItem = async (values: factorItem) => {
-        try {
-            setLoading(true)
-            const response = await financialService.addFactorItem(factorInfo.id, values);
-            if (response) {
-                await getFactor()
-            }
-        } catch (e) {
-
-        }
-        setLoading(false);
+        addFactorItemMutation({
+            id: factorInfo.id,
+            data: values
+        })
     }
     const handleEditFactorItem = async (values: factorItem) => {
-        try {
-            setLoading(true)
-            const response = await financialService.updateFactorItem(factorInfo.id, values);
-            if (response) {
-                await getFactor()
-            }
-        } catch (e) {
-        }
-        setLoading(false);
+        updateFactorItemMutation({
+            id: factorInfo.id,
+            data: values
+        })
     }
     const handleDeleteFactorItem = async (id: number) => {
-        try {
-            setLoading(true)
-            const response = await financialService.deleteFactorItem(factorInfo.id, id);
-            if (response) {
-                await getFactor()
-            }
-        } catch (e) {
-
-        }
-        setLoading(false);
+        deleteFactorItemMutation({
+            id: factorInfo.id,
+            data: id
+        })
     }
     const handleAddPaymentStep = async (values: any) => {
-        try {
-            setLoading(true)
-            const response = await financialService.addPaymentStep(factorInfo.id, values);
-            if (response) {
-                await getFactor()
-            }
-            setLoading(false);
-            return true;
-        } catch (e) {
-            setLoading(false);
-            throw new Error("error")
-        }
+        addPaymentStepMutation({
+            id: factorInfo.id,
+            data: values
+        })
     }
     const handleUpdatePaymentStep = async (values: any) => {
-        try {
-            setLoading(true)
-            const response = await financialService.updatePaymentStep(factorInfo.id, values);
-            if (response) {
-                await getFactor()
-            }
-            setLoading(false);
-            return true;
-        } catch (e) {
-            setLoading(false);
-            throw new Error("error")
-        }
+        updatePaymentStepMutation({
+            id: factorInfo.id,
+            data: values
+        })
     }
     const handleDeletePaymentStep = async (id: number) => {
-        try {
-            setLoading(true)
-            const response = await financialService.deletePaymentStep(id);
-            if (response) {
-                await getFactor()
-            }
-        } catch (e) {
-
-        }
-        setLoading(false);
+        deletePaymentStepMutation({
+            id: id,
+        })
     }
-    const handleUpdateFactor = async (expireDate: any) => {
-        try {
-            if (transform.checkPermission("can-create-invoice-item")) {
-                setLoading(true)
-                const response = await financialService.updateFactor(factorInfo.id, { expireDate: transform.toISOLocal(expireDate), description: factorInfo.description });
-                if (response) {
-                    await getFactor()
+    const handleUpdateFactor = async (expireDateInput: any = expireDate, description: string = factorInfo.description) => {
+        if (transform.checkPermission("can-create-invoice-item")) {
+            updateFactorMutation({
+                id: factorInfo.id,
+                data: {
+                    expireDate: transform.toISOLocal(expireDateInput),
+                    description: description
                 }
-            }
-        } catch (e) {
-
+            })
         }
-        setLoading(false);
     }
     const handleAcceptFactor = async () => {
-        try {
-            setLoading(true)
-            const response = await financialService.acceptFactor(factorInfo.id);
-            if (response) {
-                await getFactor()
+        acceptFactorMutation(factorInfo.id, {
+            onSuccess: () => {
+                SnackbarUtils.success("فاکتور با موفقیت تایید شد")
             }
-            //snackbar
-            SnackbarUtils.success("فاکتور با موفقیت تایید شد")
-        } catch (e) {
-
-        }
-        setLoading(false);
+        })
     }
 
     const handleAcceptCustomer = async () => {
-        try {
-            setLoading(true)
-            const response = await financialService.acceptFactorByCustomer(factorInfo.id);
-            if (response) {
-                await getFactor()
+        acceptFactorByCustomerMutation(factorInfo.id, {
+            onSuccess: () => {
+                SnackbarUtils.success("فاکتور با موفقیت تایید شد")
             }
-            //snackbar
-            SnackbarUtils.success("فاکتور با موفقیت تایید شد")
-        } catch (e) {
-
-        }
-        setLoading(false);
+        })
     }
     const handleCancelCustomer = async () => {
         // try {
-        //     setLoading(true)
         //     const response = await financialService.cancelFactorByCustomer(factorInfo.id);
         //     if (response) {
         //         await getFactor()
@@ -217,20 +161,24 @@ const EditFactor = () => {
         // } catch (e) {
 
         // }
-        // setLoading(false);
     }
 
     return (
         <div className="w-full h-full max-w-[calc(100vw-165px)]">
-            {loading && <FullscreenLoading />}
-            {(factorStatus?.slug == "customerPending" ||
-                factorStatus?.slug == "customerResubmitPending"
-            ) &&
+            {(isPending || queryClient.isMutating() > 0) && <FullscreenLoading/>}
+            {(factorStatus?.slug === "customerPending" ||
+                    factorStatus?.slug === "customerResubmitPending"
+                ) &&
                 <WarningPopup
                     title={t("acceptFactorWarning")}
                     open={acceptFactorPopup}
-                    onClose={() => { setAcceptFactorPopup(false); }}
-                    handleConfirm={() => { handleAcceptCustomer(); setAcceptFactorPopup(false) }}
+                    onClose={() => {
+                        setAcceptFactorPopup(false);
+                    }}
+                    handleConfirm={() => {
+                        handleAcceptCustomer();
+                        setAcceptFactorPopup(false)
+                    }}
                 />
             }
             {factorInfo?.canCancel
@@ -238,51 +186,60 @@ const EditFactor = () => {
                 <WarningPopup
                     title={t("cancelFactorWarning")}
                     open={cancelFactorPopup}
-                    onClose={() => { setCancelFactorPopup(false); }}
-                    handleConfirm={() => { handleCancelCustomer(); setCancelFactorPopup(false) }}
+                    onClose={() => {
+                        setCancelFactorPopup(false);
+                    }}
+                    handleConfirm={() => {
+                        handleCancelCustomer();
+                        setCancelFactorPopup(false)
+                    }}
                 />
             }
             <Breadcrumb title={t("preFactor")} handleBack={() => Navigate("/finance")}
-                actions={
-                    <>
-                        {transform.checkPermission("can-change-invoice-status") &&
-                            <div className="w-[150px] me-3">
-                                <Button
-                                    text={t("changeState")}
-                                    onClick={() => { }}
-                                />
-                            </div>
-                        }
-                        <div className="w-[150px]">
-                            <Button
-                                icon={<Printer />}
-                                text={t("printFactor")}
-                                onClick={() => { }}
-                                bordered
-                            />
-                        </div>
+                        actions={
+                            <>
+                                {transform.checkPermission("can-change-invoice-status") &&
+                                    <div className="w-[150px] me-3">
+                                        <Button
+                                            text={t("changeState")}
+                                            onClick={() => {
+                                            }}
+                                        />
+                                    </div>
+                                }
+                                <div className="w-[150px]">
+                                    <Button
+                                        icon={<Printer/>}
+                                        text={t("printFactor")}
+                                        onClick={() => {
+                                        }}
+                                        bordered
+                                    />
+                                </div>
 
-                    </>
-                }
+                            </>
+                        }
             />
             {(factorInfo && factorStatus) &&
                 <>
 
-                    {(factorStatus.slug == "salesResubmitPending" && transform.checkPermission("can-create-invoice-status")) &&
+                    {(factorStatus.slug === "salesResubmitPending" && transform.checkPermission("can-create-invoice-status")) &&
                         <>
                             <ChangeLogDialog
                                 open={openLogDialog}
-                                handleClose={() => { setOpenLogDialog(false) }}
+                                handleClose={() => {
+                                    setOpenLogDialog(false)
+                                }}
                                 data={factorInfo.statuses}
                             />
                             <div className="mb-8">
                                 <Alert title="تغییر در سفارش توسط مشتری" type="warning"
-                                    text=""
-                                    actions={
-                                        <div onClick={() => setOpenLogDialog(true)} className="cursor-pointer">
-                                            مشاهده تغییرات
-                                        </div>
-                                    }
+                                       text=""
+                                       actions={
+                                           <div onClick={() => setOpenLogDialog(true)} className="cursor-pointer">
+                                               مشاهده تغییرات
+                                           </div>
+                                       }
                                 />
 
                             </div>
@@ -290,7 +247,7 @@ const EditFactor = () => {
                     }
 
                     <div className="mb-8">
-                        <FactorInfo factorInfo={factorInfo} factorStatus={factorStatus} />
+                        <FactorInfo factorInfo={factorInfo} factorStatus={factorStatus}/>
 
                     </div>
                     <div className="mb-8">
@@ -313,19 +270,21 @@ const EditFactor = () => {
                                 </label>
                                 <div className="w-full h-full">
                                     {transform.checkPermission("can-create-invoice-item") ? <textarea
-                                        className="w-full h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark"
-                                        placeholder={t("enterDescription") || ""}
-                                        rows={4}
-                                        value={factorInfo.description}
-                                        readOnly={!transform.checkPermission("can-create-invoice-item")}
-                                        onChange={(e) => {
-                                            transform.checkPermission("can-create-invoice-item") &&
-                                                setFactorInfo({ ...factorInfo, description: e.target.value })
+                                            className="w-full h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark"
+                                            placeholder={t("enterDescription") || ""}
+                                            rows={4}
+                                            value={description}
+                                            readOnly={!transform.checkPermission("can-create-invoice-item")}
+                                            onChange={(e) => {
+                                                transform.checkPermission("can-create-invoice-item") &&
+                                                setDescription(e.target.value)
+                                                // setFactorInfo({...factorInfo, description: e.target.value})
 
-                                        }}
-                                    />
+                                            }}
+                                        />
                                         :
-                                        <div className=" w-full text-start h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark">
+                                        <div
+                                            className=" w-full text-start h-full p-4 text-base text-gray-700 border border-text-300 rounded outline-none resize-none focus:ring-1 focus:ring-primary-light focus:border-primary-dark">
                                             {factorInfo.description}
                                         </div>
                                     }
@@ -335,13 +294,11 @@ const EditFactor = () => {
                         </Section>
                     </div>
                     {(factorPayments && (
-                        transform.checkPermission("can-view-all-payment-steps") || factorPayments?.data?.length > 0
-                    )) &&
+                            transform.checkPermission("can-view-all-payment-steps") || factorPayments?.data?.length > 0
+                        )) &&
                         <div className="mb-8">
                             <FactorPayments
-                                paymentsInfo={factorPayments}
-                                factorInfo={factorInfo}
-                                factorStatus={factorStatus}
+                                code={code}
                                 handleUpdatePaymentStep={handleUpdatePaymentStep}
                                 handleAddPaymentStep={handleAddPaymentStep}
                                 handleDeletePaymentStep={handleDeletePaymentStep}
@@ -381,10 +338,10 @@ const EditFactor = () => {
                                             ""}>
                                         <div className="w-[190px] me-3">
 
-                                            {(factorStatus.slug == "salesPending" ||
-                                                factorStatus.slug == "salesResubmitPending" ||
-                                                factorStatus.slug == "completePending"
-                                            ) &&
+                                            {(factorStatus.slug === "salesPending" ||
+                                                    factorStatus.slug === "salesResubmitPending" ||
+                                                    factorStatus.slug === "completePending"
+                                                ) &&
                                                 <Button
                                                     text={t("acceptFactorForPayment")}
                                                     onClick={handleAcceptFactor}
@@ -396,21 +353,25 @@ const EditFactor = () => {
                                     :
                                     <div className="flex items-center">
                                         {(factorStatus.slug == "customerPending" ||
-                                            factorStatus.slug == "customerResubmitPending"
-                                        ) &&
+                                                factorStatus.slug == "customerResubmitPending"
+                                            ) &&
                                             <>
                                                 {factorInfo.canCancel && <div className="w-[190px] me-3">
                                                     <Button
                                                         text={t("cancelFactor")}
                                                         simple
-                                                        onClick={() => { setCancelFactorPopup(true) }}
+                                                        onClick={() => {
+                                                            setCancelFactorPopup(true)
+                                                        }}
                                                         disabled={factorPayments?.status !== "success"}
                                                     />
                                                 </div>}
                                                 <div className="w-[190px] me-3">
                                                     <Button
                                                         text={t("acceptFactor")}
-                                                        onClick={() => { setAcceptFactorPopup(true) }}
+                                                        onClick={() => {
+                                                            setAcceptFactorPopup(true)
+                                                        }}
                                                         disabled={factorPayments?.status !== "success"}
                                                     />
                                                 </div>

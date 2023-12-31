@@ -1,27 +1,16 @@
 import Breadcrumb from "components/breadcrumb/Breadcrumb";
 import { useNavigate, useParams } from "react-router-dom";
-import orderService from "app/redux/orders/service";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import transform from "app/utils/transform";
 import Button from "components/button/Button";
-import { FileDownload } from "@mui/icons-material";
 import { DocumentText } from "iconsax-react";
+import {useOrdersDetail} from "app/queries/orders/hooks";
 
 const OrderDetails = () => {
   const Navigate = useNavigate();
   let { orderId } = useParams();
   const { t } = useTranslation();
-  const [order, setOrder] = useState<any>();
-  useEffect(() => {
-    getOrderInfo();
-  }, []);
-  const getOrderInfo = async () => {
-    const response = await orderService.orderDetail(
-      parseInt(orderId || "") || 0
-    );
-    setOrder(response);
-  };
+  const {data:order} = useOrdersDetail(parseInt(orderId||""))
   return (
     <div className="w-full h-full">
       <Breadcrumb title="جزییات سفارش" handleBack={() => Navigate("/orders")} />
@@ -91,7 +80,7 @@ const OrderDetails = () => {
                               }
                               className="text-white font-bold text-[14px] text-text-700 mx-2 bg-primary-main rounded-[8px] px-3 py-2"
                               key={index}
-                              target="_blank"
+                              target="_blank" rel="noreferrer"
                             >
                               دانلود پیوست
                             </a>

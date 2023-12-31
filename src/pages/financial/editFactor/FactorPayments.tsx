@@ -1,28 +1,36 @@
 import Alert from "components/alert/Alert";
 import transform from "app/utils/transform"
 import Section from "components/section/Section"
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import RadioGroup from "components/form/RadioGroup";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import PaymentStep from "components/financial/PaymentStep";
 import EditPaymentStepDialog from "components/financial/EditPaymentStepDialog";
 import DeletePopup from "components/popup/DeletePopup";
 import PayStepDialog from "components/financial/PayStepDialog";
+import {useGetFactor, usePayFactor} from "app/queries/financial/hooks";
+import SnackbarUtils from "app/utils/SnackbarUtils";
 
 const FactorPayments = ({
-    factorInfo,
-    factorStatus,
-    paymentsInfo,
-    handleAddPaymentStep,
-    handleUpdatePaymentStep,
-    handleDeletePaymentStep
-}: any) => {
-    const { t } = useTranslation("common");
+                            handleAddPaymentStep,
+                            handleUpdatePaymentStep,
+                            handleDeletePaymentStep,
+                            code
+                        }: any) => {
+    const {t} = useTranslation("common");
     const [paymentSteps, setPaymentSteps] = useState<any>()
     const [openEditPaymentDialog, setOpenEditPaymentDialog] = useState<boolean>(false)
     const [selectedPaymentStep, setSelectedPaymentStep] = useState<any>()
     const [openDeletePopup, setOpenDeletePopup] = useState<boolean>(false)
     const [openPayDialog, setOpenPayDialog] = useState<boolean>(false)
+    const {mutate: payMutation} = usePayFactor(code||"")
+    const {
+        data: {factorInfo, factorPayments: paymentsInfo, factorStatus} = {
+            factorInfo: null,
+            paymentsInfo: null,
+            factorStatus: null
+        },
+    } = useGetFactor(code || "");
     useEffect(() => {
         if (paymentsInfo) {
             if (paymentsInfo.data.length > 0) {
@@ -31,7 +39,7 @@ const FactorPayments = ({
                 setPaymentSteps([
                     {
                         factor_id: factorInfo.id,
-                        status: { name: 'در انتظار تعریف', slug: 'define pending' },
+                        status: {name: 'در انتظار تعریف', slug: 'define pending'},
                         step_number: 1,
                     }
                 ])
@@ -57,7 +65,7 @@ const FactorPayments = ({
                 type: "success"
             }
         } else {
-            if (paymentsInfo.status == "success") {
+            if (paymentsInfo.status === "success") {
                 switch (factorStatus.slug) {
                     case "salesPending":
                     case "salesResubmitPending":
@@ -115,7 +123,10 @@ const FactorPayments = ({
         <>
             {transform.checkPermission("can-update-payment-step") && <EditPaymentStepDialog
                 open={openEditPaymentDialog}
-                handleClose={() => { setOpenEditPaymentDialog(false); setSelectedPaymentStep(null); }}
+                handleClose={() => {
+                    setOpenEditPaymentDialog(false);
+                    setSelectedPaymentStep(null);
+                }}
                 handleSubmit={(values) => {
                     values.id ? handleUpdatePaymentStep(values).then(() => {
                         setOpenEditPaymentDialog(false);
@@ -130,15 +141,33 @@ const FactorPayments = ({
             {transform.checkPermission("can-delete-payment-step") && <DeletePopup
                 title={t("deleteFactorItemConfirmation")}
                 open={openDeletePopup}
-                onClose={() => { setOpenDeletePopup(false); setSelectedPaymentStep(null); }}
-                handleConfirm={() => { handleDeletePaymentStep(selectedPaymentStep.id); setOpenDeletePopup(false) }}
+                onClose={() => {
+                    setOpenDeletePopup(false);
+                    setSelectedPaymentStep(null);
+                }}
+                handleConfirm={() => {
+                    handleDeletePaymentStep(selectedPaymentStep.id);
+                    setOpenDeletePopup(false)
+                }}
             />}
             {
                 factorInfo?.owner &&
                 <PayStepDialog
                     open={openPayDialog}
-                    handleClose={() => { setOpenPayDialog(false); setSelectedPaymentStep(null); }}
+                    handleClose={() => {
+                        setOpenPayDialog(false);
+                        setSelectedPaymentStep(null);
+                    }}
                     handleSubmit={(values) => {
+                        payMutation({stepId: selectedPaymentStep.id, method: values.payMethod,fileId:values.fileId},{
+                            onSuccess:(data)=>{
+                                SnackbarUtils.success(data.message)
+                                setOpenPayDialog(false);
+                                setSelectedPaymentStep(null);
+
+                            }
+                        })
+                        // usePayFactor
                         // handleUpdatePaymentStep(values).then(() => {
                         //     setOpenPayDialog(false);
                         //     setSelectedPaymentStep(null);
@@ -150,7 +179,8 @@ const FactorPayments = ({
             <Section headerTitle={t("paymentsInfo") || ""}>
                 {canViewPaymentSteps().result &&
                     <div className="w-full flex items-center justify-start bg-text-200 rounded-[6px] px-6 py-7">
-                        <div className="flex items-center pe-6 rtl:border-l rtl:border-l-text-400 ltr:border-r ltr:border-r-text-400">
+                        <div
+                            className="flex items-center pe-6 rtl:border-l rtl:border-l-text-400 ltr:border-r ltr:border-r-text-400">
                             <p>
                                 {t("sum")}: <span className="font-bold text-[18px] text-text-900">
                                     {transform.toPersianDigitsPutCommas(paymentsInfo.factor_sum_price.toString())} {t("toman")}
@@ -182,9 +212,10 @@ const FactorPayments = ({
 
                     </div>
                 }
-                {(paymentsInfo.status == "warning" && transform.checkPermission("can-view-all-payment-steps")) && <div className="mt-4">
-                    <Alert title="وضعیت مراحل پرداخت" text={paymentsInfo.warning} type="warning" />
-                </div>}
+                {(paymentsInfo.status == "warning" && transform.checkPermission("can-view-all-payment-steps")) &&
+                    <div className="mt-4">
+                        <Alert title="وضعیت مراحل پرداخت" text={paymentsInfo.warning} type="warning"/>
+                    </div>}
                 {(paymentsInfo.allHavePrice && paymentSteps) &&
                     <div className="mt-4">
                         {transform.checkPermission("can-view-all-payment-steps") &&
@@ -225,14 +256,15 @@ const FactorPayments = ({
                                                 if (paymentSteps.length < 2) {
                                                     setPaymentSteps([...paymentSteps, {
                                                         factor_id: factorInfo.id,
-                                                        status: { name: 'در انتظار تعریف', slug: 'define pending' },
+                                                        status: {name: 'در انتظار تعریف', slug: 'define pending'},
                                                         step_number: 2,
                                                     }])
                                                 }
                                             }
 
                                         },
-                                        handleBlur: () => { }
+                                        handleBlur: () => {
+                                        }
                                     }}
                                 />
                             </div>
@@ -241,7 +273,8 @@ const FactorPayments = ({
                         {
                             canViewPaymentSteps().message &&
                             <div className="my-4">
-                                <Alert title={"هشدار"} text={canViewPaymentSteps().message} type={canViewPaymentSteps().type} />
+                                <Alert title={"هشدار"} text={canViewPaymentSteps().message}
+                                       type={canViewPaymentSteps().type}/>
                             </div>
                         }
                         {canViewPaymentSteps().result &&

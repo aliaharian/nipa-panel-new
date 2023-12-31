@@ -1,7 +1,7 @@
 import transform from "app/utils/transform";
-import { Edit, Eye, Menu, More, Trash } from "iconsax-react";
+import {Edit, Eye} from "iconsax-react";
 import TableAction from "../table/TableAction";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import Button from "../button/Button";
 
 type PaymentStepProps = {
@@ -10,9 +10,9 @@ type PaymentStepProps = {
     handlePayStep: (stepInfo: any) => void;
     canViewPaymentStepsType?: String | null;
 };
-const PaymentStep = ({ stepInfo, editPaymentStep, handlePayStep, canViewPaymentStepsType }: PaymentStepProps) => {
+const PaymentStep = ({stepInfo, editPaymentStep, handlePayStep, canViewPaymentStepsType}: PaymentStepProps) => {
     const style = transform.renderStatusStyle(stepInfo.status.description)
-    const { t } = useTranslation("common")
+    const {t} = useTranslation("common")
     const tableActions = (row: any, name: string) => {
         console.log("row", row)
         console.log("name", name)
@@ -68,8 +68,8 @@ const PaymentStep = ({ stepInfo, editPaymentStep, handlePayStep, canViewPaymentS
                     <p className="font-bold text-text-900">
 
                         {
-                            stepInfo.pay_status == 'paid' ?
-                                t(stepInfo.last_payment.transaction.payment_method)
+                            stepInfo.pay_status === 'paid' ?
+                                t(stepInfo.last_payment?.demotransaction?.payment_method)
                                 :
                                 "پرداخت نشده"
 
@@ -80,7 +80,7 @@ const PaymentStep = ({ stepInfo, editPaymentStep, handlePayStep, canViewPaymentS
 
             </div>
             {
-                (stepInfo.canPay && canViewPaymentStepsType == 'success') &&
+                (stepInfo.canPay && canViewPaymentStepsType === 'success' && stepInfo.pay_status !== 'paid') &&
                 <div className="w-[150px]">
                     <Button
                         text={t("pay")}
@@ -93,12 +93,12 @@ const PaymentStep = ({ stepInfo, editPaymentStep, handlePayStep, canViewPaymentS
                 <TableAction
                     items={[
                         {
-                            icon: <Eye variant={"Bold"} />,
+                            icon: <Eye variant={"Bold"}/>,
                             text: t("viewDetails"),
                             name: "viewDetails",
                         },
                         transform.checkPermission("can-update-payment-step") && {
-                            icon: <Edit variant="Bold" />,
+                            icon: <Edit variant="Bold"/>,
                             text: t("edit"),
                             name: "edit",
                         },

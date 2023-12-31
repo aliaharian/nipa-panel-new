@@ -11,6 +11,7 @@ async function invoicesList(page: number, filters: any) {
   let response = await Api()?.get(`/factor?page=${page}&${params}`);
   return response?.data;
 }
+
 async function getFactorStatuses() {
   let response = await Api()?.get(`/factor/status`);
   return response?.data?.statuses;

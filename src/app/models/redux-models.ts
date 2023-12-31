@@ -1,5 +1,6 @@
 import { BasicData } from "./basicData";
 import { usersResponseModel } from "./user";
+import {userLoginType} from "@models/auth";
 
 export interface permissionsModel {
   id: number;
@@ -95,15 +96,12 @@ export interface condition {
 }
 export interface usersSliceModel {
   mobile?: string | null;
-  login?: loginModel | null;
+  login?: userLoginType | null;
   roles?: role[] | null;
   permissions?: permission[] | null;
   customers?: any[];
 }
-export interface loginModel {
-  token: string;
-  user: userModel;
-}
+
 export interface userModel {
   created_at: string;
   email: string | null;
