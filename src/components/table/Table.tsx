@@ -30,7 +30,6 @@ const Table = ({ columns, data }: TableProps) => {
       data={data}
       className="customTable"
       conditionalRowStyles={conditionalRowStyles}
-
     />
   );
 };

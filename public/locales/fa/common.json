@@ -219,5 +219,16 @@
   "thisStepPrice": "مبلغ این مرحله",
   "gotoGateway": "رفتن به درگاه پرداخت",
   "sendPaidPaper": "ارسال فیش واریزی",
-  "reduceFromWallet": "کسر از کیف پول"
+  "reduceFromWallet": "کسر از کیف پول",
+  "payDone":"تسویه و تایید نهایی",
+  "payDoneWarning":"آیا از تسویه و تایید نهایی فاکتور مطمئن هستید؟",
+  "paid_price":"پرداخت شده",
+  "pay_method":"شیوه پرداخت",
+  "wallet_payment_amount":"مبلغ بلوکه شده از کیف پول",
+  "tracking_code":"شماره پیگیری",
+  "payerFile":"فایل پرداخت کننده",
+  "financialUnitDescription":"توضیحات واحد مالی",
+  "view_payment_step_status":"مشاهده وضعیت پرداخت",
+  "first":"اول",
+  "second":"دوم"
 }

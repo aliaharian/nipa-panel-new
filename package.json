@@ -41,6 +41,7 @@
     "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
+    "react-use-print": "^0.0.1",
     "styled-components": "^5.3.6",
     "tailwindcss-rtl": "^0.9.0",
     "typescript": "^4.9.4",

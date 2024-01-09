@@ -14,7 +14,7 @@ const FactorInfo = ({ factorStatus, factorInfo }: any) => {
                 </div>
             }
         >
-            <div className="w-full flex items-center justify-between ">
+            <div className="w-full flex items-center justify-between print:flex-wrap print:gap-y-3">
                 <p className="inline-flex text-[14px] text-text-500">
                     {t("customerName")}
                     <span className="ms-3 text-text-900">{factorInfo.customer_full_name}</span>

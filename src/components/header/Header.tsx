@@ -36,7 +36,7 @@ const Header = () => {
     // theme.direction = i18n.dir();
   }
   return (
-    <div className="w-full h-[80px] bg-white flex items-center justify-between pe-9 sticky top-0 z-50">
+    <div className="print:hidden w-full h-[80px] bg-white flex items-center justify-between pe-9 sticky top-0 z-50">
       <div>
         <ArrowRight
           onClick={handleCollapseMenu}

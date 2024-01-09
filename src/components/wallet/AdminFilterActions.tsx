@@ -2,8 +2,6 @@ import Button from "components/button/Button";
 import {ReceiveSquare, Setting4} from "iconsax-react";
 import TransactionFiltersDialog from "./TransactionFiltersDialog";
 import {useState} from "react";
-import {useAppDispatch} from "app/redux/hooks";
-import {transactionsList} from "app/redux/wallet/actions";
 import walletService from "app/redux/wallet/service";
 import {Badge} from "@mui/material";
 import transform from "app/utils/transform";
@@ -11,17 +9,14 @@ import {useTransactionsList} from "app/queries/wallet/hooks";
 
 const AdminFilterActions = ({setFilters, filters, setPage, page}: any) => {
     const [openFilter, setOpenFilter] = useState<boolean>(false);
-    const Dispatch = useAppDispatch();
     // const params = useAppSelector((state) => state.wallet.transactions).filters;
     const {data} = useTransactionsList(page, filters)
     const params = data.filters || filters || {}
     console.log("params", params)
 
     const handleSubmitFilters = (values: any) => {
-        Dispatch(transactionsList(1, values))
         setPage(1)
         setFilters(values)
-
     }
     const handleDownloadExcel = async () => {
         const response = await walletService.exportExcel(params);

@@ -11,13 +11,6 @@ const walletSlice = createSlice({
   name: "wallet",
   initialState: initialWalletState,
   reducers: {
-    transactionsList: (state, action: PayloadAction<any | undefined>) => {
-      state.transactions = action.payload;
-      state.transactionsListLoading = false;
-    },
-    transactionsListLoading: (state, action: PayloadAction<boolean>) => {
-      state.transactionsListLoading = action.payload;
-    },
     getTransactionStatuses:(state, action: PayloadAction<any[]>) => {
       state.transactionStatuses = action.payload;
     },

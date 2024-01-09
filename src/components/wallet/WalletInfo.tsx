@@ -1,4 +1,3 @@
-import {userModel} from "app/models/redux-models";
 import transform from "app/utils/transform";
 import Button from "components/button/Button";
 import TextField from "components/form/TextField";
@@ -6,7 +5,6 @@ import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import walletService from "app/redux/wallet/service";
 import {useAppDispatch} from "app/redux/hooks";
-import {transactionsList} from "app/redux/wallet/actions";
 import {getUserInfo} from "app/redux/users/actions";
 import {userLoginType} from "@models/auth";
 
@@ -35,7 +33,6 @@ const WalletInfo = ({user, page}: WalletInfoProps) => {
     const handlePay = async () => {
         const response = await walletService.increaseWalletBalance(amountInput);
         alert('ok!')
-        Dispatch(transactionsList(page));
         Dispatch(getUserInfo())
     }
     return (

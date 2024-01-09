@@ -8,7 +8,7 @@ type breadcrumbProps = {
 };
 const Breadcrumb = ({ title, actions, handleBack }: breadcrumbProps) => {
   return (
-    <div className="w-full flex items-center justify-between mb-[20px]">
+    <div className="print:hidden w-full flex items-center justify-between mb-[20px]">
       <div className="flex items-center">
         {handleBack ? (
           <div className="cursor-pointer" onClick={handleBack}>

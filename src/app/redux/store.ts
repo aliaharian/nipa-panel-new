@@ -1,6 +1,5 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import appSlice from "./application/slice";
-import orderSlice from "./orders/slice";
 
 import userSlice from "./users/slice";
 import productSlice from "./products/slice";
@@ -17,7 +16,6 @@ const store = configureStore({
   reducer: {
     users: userSlice.reducer,
     app: appSlice.reducer,
-    orders: orderSlice.reducer,
     products: productSlice.reducer,
     forms: formSlice.reducer,
     basicData: basicDataSlice.reducer,
