@@ -15,6 +15,7 @@ type TextFieldProps = {
   options?: FormOption[];
   disabled?: boolean;
   readonly?: boolean;
+  lgText?: boolean;
 };
 const DropDown = ({
   name,
@@ -28,7 +29,8 @@ const DropDown = ({
   inputActions,
   options,
   disabled,
-  readonly
+  readonly,
+  lgText,
 }: TextFieldProps) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
@@ -48,7 +50,11 @@ const DropDown = ({
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
     >
-      <div className="text-xs mb-2 flex justify-between w-full">
+      <div
+        className={`${
+          lgText ? "text-md" : "text-xs"
+        } mb-2 flex justify-between w-full`}
+      >
         <label className="font-normal" htmlFor={name}>
           {label}
         </label>
@@ -70,18 +76,21 @@ const DropDown = ({
         menuIsOpen={readonly ? false : undefined}
         classNames={{
           control: (state) =>
-            `h-12 !rounded-[6px] !outline-none !shadow-none ${state.isFocused ? "!border-primary-main" : "border-text-300"
+            `h-12 !rounded-[6px] !outline-none !shadow-none ${
+              state.isFocused ? "!border-primary-main" : "border-text-300"
             }`,
-          placeholder: (state) => `rtl:text-right ltr:text-left text-xs`,
-          singleValue: (state) => `rtl:text-right ltr:text-left text-xs`,
-          input: (state) => `rtl:text-right ltr:text-left text-xs`,
+          placeholder: (state) =>
+            `rtl:text-right ltr:text-left ${lgText ? "text-md" : "text-xs"}`,
+          singleValue: (state) =>
+            `rtl:text-right ltr:text-left ${lgText ? "text-md" : "text-xs"}`,
+          input: (state) =>
+            `rtl:text-right ltr:text-left ${lgText ? "text-md" : "text-xs"}`,
           valueContainer: (state) => `!outline-none`,
           indicatorSeparator: (state) => `!hidden`,
           menu: (state) =>
             `!shadow-none border border-text-400 !rounded-[6px] py-[6px]`,
           option: (state) => `p-[6px] ${state.isFocused ? "" : ""}`,
         }}
-
         styles={{
           option: (baseStyles, state) => ({
             "&>p": {

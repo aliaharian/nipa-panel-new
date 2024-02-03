@@ -22,10 +22,10 @@ async function changeFactorStatuses(data: {
   description: string;
   name: string;
 }) {
-  let response = await Api()?.post(`/factor/${data.factorId}/factorStatus`,{
-    factor_status_enum:data.statusSlug,
-    description:data.description,
-    name:data.name
+  let response = await Api()?.post(`/factor/${data.factorId}/factorStatus`, {
+    factor_status_enum: data.statusSlug,
+    description: data.description,
+    name: data.name,
   });
   return response?.data;
 }
@@ -146,7 +146,31 @@ async function payFactor(stepId: number, method: string, fileId: number) {
   return response?.data;
 }
 
+async function getPaymentStatus() {
+  let response = await Api()?.get(`/factor/payment/status`);
+  return response?.data;
+}
+
+async function verifyOfflinePayment({
+  factor_payment_id,
+  verified,
+  adminDescription,
+}: {
+  factor_payment_id: number;
+  verified: boolean;
+  adminDescription: string;
+}) {
+  let response = await Api()?.post(`/factor/payment/verifyOffline`, {
+    factor_payment_id,
+    verified,
+    adminDescription,
+  });
+  return response?.data;
+}
+
 export {
+  verifyOfflinePayment,
+  getPaymentStatus,
   invoicesList,
   payFactor,
   getFactorStatuses,
@@ -162,5 +186,5 @@ export {
   updateFactor,
   acceptFactor,
   acceptFactorByCustomer,
-  changeFactorStatuses
+  changeFactorStatuses,
 };

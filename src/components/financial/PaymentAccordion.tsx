@@ -1,9 +1,13 @@
+import DropDown from "components/form/Dropdown";
 import transform from "app/utils/transform";
 import { ArrowDown2, ArrowDown3 } from "iconsax-react";
 import { LegacyRef, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useGetPaymentStatus } from "app/queries/financial/hooks";
+import TextField from "components/form/TextField";
 
 export interface IPaymentAccordion {
+  id:number;
   admin_description: string | null;
   paid_price: number;
   pay_method: string;
@@ -20,6 +24,8 @@ export interface IPaymentAccordion {
   tracking_code: string;
   wallet_payment_amount: number;
   created_at: string;
+  last?: boolean;
+  formik: any;
 }
 const PaymentInfoItem = ({
   label,
@@ -48,10 +54,14 @@ const PaymentAccordion = (props: IPaymentAccordion) => {
     wallet_payment_amount,
     file_hash_code,
     admin_description,
+    last,
+    formik,
   } = props;
   const [open, setOpen] = useState<boolean>(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { data: statuses } = useGetPaymentStatus();
+
   return (
     <div className="border border-text-400 rounded-[6px]">
       <div
@@ -117,6 +127,28 @@ const PaymentAccordion = (props: IPaymentAccordion) => {
               label={t("tracking_code")}
               value={tracking_code || t("dontHave")}
             />
+            <div></div>
+            {transform.checkPermission("can-update-payment-step") &&
+              payment_status.slug === "pendingVerify" && (
+                <DropDown
+                  className="group"
+                  name={"status"}
+                  label={t("status")}
+                  lgText
+                  options={[
+                    {
+                      value: 1,
+                      label: <p>{t("accept")}</p>,
+                    },
+                    {
+                      value: 0,
+                      label: <p>{t("not accept")}</p>,
+                    },
+                  ]}
+                  placeholder={t("select")}
+                  formik={formik}
+                />
+              )}
           </div>
           <div className="grid grid-cols-1 px-4 pt-6 pb-4 gap-y-6">
             {file_hash_code && (
@@ -136,8 +168,25 @@ const PaymentAccordion = (props: IPaymentAccordion) => {
             )}
             <div className="flex flex-col items-start justify-start w-full">
               <p>{t("financialUnitDescription")}</p>
-              <div className="w-full mt-2 border border-text-400 rounded-[6px] h-[120px] flex items-start justify-start p-4">
-                <p>{admin_description || t("dontHave")}</p>
+              <div
+                className={`w-full mt-2 border border-text-400 rounded-[6px] ${
+                  transform.checkPermission("can-update-payment-step") && last
+                    ? "h-auto"
+                    : "h-[120px]"
+                } flex items-start justify-start p-4 `}
+              >
+                {transform.checkPermission("can-update-payment-step") &&
+                last ? (
+                  <TextField
+                    formik={formik}
+                    label={""}
+                    name="adminDesc"
+                    multiline
+                    normal
+                  />
+                ) : (
+                  <p>{admin_description || t("dontHave")}</p>
+                )}
               </div>
             </div>
           </div>

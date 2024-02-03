@@ -10,11 +10,13 @@ import {
   getFactorInfo,
   getFactorPaymentSteps,
   getFactorPayments,
+  getPaymentStatus,
   invoicesList,
   payFactor,
   updateFactor,
   updateFactorItem,
   updatePaymentStep,
+  verifyOfflinePayment,
 } from "./services";
 import { useCallback } from "react";
 import transform from "app/utils/transform";
@@ -31,6 +33,13 @@ interface IPaymentStep {
   payable_price: number;
   step_number: number;
   payments: IPaymentAccordion[];
+}
+interface IPaymentStatus {
+  id: number;
+  name: string;
+  slug: string;
+  meta: string | null;
+  description: string;
 }
 
 const useInvoicesList = (page: number = 1, filters?: any) => {
@@ -90,6 +99,19 @@ const useGetFactorPayments = (paymentStepId: number) => {
       return await getFactorPayments(paymentStepId);
     },
     enabled: !!paymentStepId,
+  });
+  return {
+    data,
+    isPending,
+  };
+};
+
+const useGetPaymentStatus = () => {
+  const { data, isPending } = useQuery<IPaymentStatus[]>({
+    queryKey: ["paynemtStatuses"],
+    queryFn: async () => {
+      return await getPaymentStatus();
+    },
   });
   return {
     data,
@@ -303,7 +325,18 @@ const usePayFactor = (factorCode: string) => {
   };
 };
 
+const useVerifyOfflinePayment = () => {
+  const { mutate } = useMutation({
+    mutationKey: ["verifyOfflinePayment"],
+    mutationFn: verifyOfflinePayment,
+  });
+  return {
+    mutate,
+  };
+};
+
 export {
+  useVerifyOfflinePayment,
   useInvoicesList,
   useGetFactor,
   useUpdateFactor,
@@ -318,4 +351,5 @@ export {
   usePayFactor,
   useChangeFactorStatus,
   useGetFactorPayments,
+  useGetPaymentStatus,
 };

@@ -389,7 +389,7 @@ const EditFactor = () => {
                       label="تاریخ سررسید فاکتور"
                       name="expireDate"
                       disablePast
-                      disabled={!factorInfo.meta?.editable}
+                      // disabled={!factorInfo.meta?.editable}
                       formik={{
                         values: {
                           expireDate: expireDate,

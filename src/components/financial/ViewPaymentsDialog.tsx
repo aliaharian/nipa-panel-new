@@ -1,15 +1,16 @@
-import { Add, Task } from "iconsax-react";
+import { Task } from "iconsax-react";
 import SideDialog from "../sideDialog/SideDialog";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import Button from "../button/Button";
-import TextField from "../form/TextField";
 import * as Yup from "yup";
-import { useEffect } from "react";
-import RadioGroup from "../form/RadioGroup";
-import Datepicker from "../form/Datepicker";
-import { useGetFactorPayments } from "app/queries/financial/hooks";
+import { useEffect, useState } from "react";
+import {
+  useGetFactorPayments,
+  useVerifyOfflinePayment,
+} from "app/queries/financial/hooks";
 import PaymentAccordion, { IPaymentAccordion } from "./PaymentAccordion";
+import { useQueryClient } from "@tanstack/react-query";
 type EditPaymentStepDialogProps = {
   open: boolean;
   handleClose?: () => void;
@@ -17,13 +18,11 @@ type EditPaymentStepDialogProps = {
   data?: any;
 };
 
-type initialValues = {
-  id: number | null;
-  payTime: Date | null;
-  isOnline: string;
-  payablePrice: string;
-  stepNumber?: number;
-};
+interface IFormTypes {
+  adminDesc?: string;
+  status?: number;
+  paymentId?: number;
+}
 
 const ViewPaymentsDialog = ({
   open,
@@ -31,42 +30,51 @@ const ViewPaymentsDialog = ({
   handleSubmit,
   data,
 }: EditPaymentStepDialogProps) => {
-  const initialValues: initialValues = {
-    //from data mabe
-    id: data?.id || 0,
-    stepNumber: data?.step_number || 1,
-    payTime: data?.pay_time ? new Date(data?.pay_time) : null,
-    isOnline: data?.allow_online
-      ? data?.allow_offline
-        ? "all"
-        : "online"
-      : data?.allow_offline
-      ? "offline"
-      : "" || "",
-    payablePrice: data?.payable_price?.toString() || "",
-  };
   const { t } = useTranslation("common");
   const validationSchema = Yup.object({
-    payablePrice: Yup.string().required(t("required") || ""),
-    payTime: Yup.string().required(t("required") || ""),
-    isOnline: Yup.string().required(t("required") || ""),
+    status: Yup.number().required(t("required") || ""),
   });
   const { data: stepInfo } = useGetFactorPayments(data?.id);
-  const formik = useFormik({
-    initialValues,
+  const formik = useFormik<IFormTypes>({
+    initialValues: {},
     validationSchema,
-    onSubmit: (values) => {
-      handleSubmit && handleSubmit(values);
-      // handleClose?.()
-    },
+    onSubmit: () => {},
   });
+  const { mutate: verifyOffline } = useVerifyOfflinePayment();
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const handleSubmitForm = () => {
-    formik.handleSubmit();
+    console.log("ok!", formik.values);
+    setLoading(true);
+    verifyOffline(
+      {
+        adminDescription: formik.values.adminDesc || "",
+        verified: formik.values.status === 1 ? true : false,
+        factor_payment_id: formik.values?.paymentId || 0,
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          queryClient.invalidateQueries({
+            queryKey: [["paynemtStep", { paymentStepId: data?.id }]],
+          });
+          handleClose?.();
+        },
+        onError: () => {
+          setLoading(false);
+        },
+      }
+    );
   };
-
   useEffect(() => {
-    formik.setValues(initialValues);
-  }, [data]);
+    if (stepInfo && stepInfo?.payments.length > 0) {
+      const lastPay = stepInfo.payments[stepInfo.payments.length - 1];
+      formik.setValues({
+        adminDesc: lastPay.admin_description || "",
+        paymentId: lastPay.id,
+      });
+    }
+  }, [stepInfo]);
 
   const handleCancel = () => {
     formik.resetForm();
@@ -88,76 +96,33 @@ const ViewPaymentsDialog = ({
             {stepInfo ? (
               stepInfo.payments?.map(
                 (item: IPaymentAccordion, index: number) => {
-                  return <PaymentAccordion {...item} key={index} />;
+                  return (
+                    <PaymentAccordion
+                      {...item}
+                      key={index}
+                      formik={formik}
+                      last={index + 1 === stepInfo.payments.length}
+                    />
+                  );
                 }
               )
             ) : (
               <></>
             )}
           </div>
-          {/* <div className="p-7 text-[18px]">
-            <form onSubmit={formik.handleSubmit} className="w-full">
-              <div className="mt-7 w-full grid grid-cols-2 gap-x-5 gap-y-7">
-                <TextField
-                  className="group"
-                  name={"payablePrice"}
-                  label={t("payable_price")}
-                  type="number"
-                  placeholder={"قیمت واحد را وارد کنید"}
-                  formik={formik}
-                  normal
-                />
-                <RadioGroup
-                  className="group"
-                  name={"isOnline"}
-                  label={"شیوه مجاز به پرداخت"}
-                  options={[
-                    {
-                      label: "آنلاین",
-                      value: "online",
-                    },
-                    {
-                      label: "آفلاین",
-                      value: "offline",
-                    },
-                    {
-                      label: "همه",
-                      value: "all",
-                    },
-                  ]}
-                  formik={formik}
-                />
-                <Datepicker
-                  label="تاریخ سررسید پرداخت"
-                  name="payTime"
-                  formik={formik}
-                  placeholder={"انتخاب تاریخ"}
-                />
-              </div>
-            </form>
-          </div> */}
         </div>
       </SideDialog.Content>
       <SideDialog.Footer>
-        {/* <div className="py-[24px] border-t border-text-300 px-7 flex justify-between">
-          <div className="w-[126px]">
-            <Button
-              // disabled={submitdisabled}
-              text={t("cancel")}
-              onClick={handleCancel}
-              gray
-              className="!text-error-primary"
-            />
-          </div>
+        <div className="py-[24px] border-t border-text-300 px-7 flex flex-row-reverse justify-between">
           <div className="w-[207px]">
             <Button
-              // disabled={submitdisabled}
-              // icon={<Add />}
-              text={data?.id ? t("edit_payment_step") : t("add_payment_step")}
+              text={t("submit2")}
+              loading={loading}
+              disabled={loading || !formik.isValid}
               onClick={handleSubmitForm}
             />
           </div>
-        </div> */}
+        </div>
       </SideDialog.Footer>
     </SideDialog>
   );
