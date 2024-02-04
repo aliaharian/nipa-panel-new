@@ -12,6 +12,7 @@ const MainLayout = React.lazy(
 const AuthLayout = React.lazy(
   () => import("../components/templates/AuthLayout")
 );
+const Profile = React.lazy(() => import("../pages/profile"));
 const EnterPhone = React.lazy(() => import("../pages/auth/EnterPhone"));
 const VerifyPhone = React.lazy(() => import("../pages/auth/VerifyPhone"));
 
@@ -35,7 +36,9 @@ const BasicDataList = React.lazy(() => import("../pages/basicDataList/index"));
 const Permissions = React.lazy(() => import("../pages/permissions/index"));
 
 const Factors = React.lazy(() => import("../pages/financial/index"));
-const EditFactor = React.lazy(() => import("../pages/financial/editFactor/EditFactor"));
+const EditFactor = React.lazy(
+  () => import("../pages/financial/editFactor/EditFactor")
+);
 const Wallet = React.lazy(() => import("../pages/wallet/index"));
 const Translations = React.lazy(() => import("../pages/translations/index"));
 
@@ -112,9 +115,11 @@ const Router = (): JSX.Element => {
             >
               <Route path="" element={<Permissions />}></Route>
             </Route>
-            <Route
-              path="/errors"
-            >
+
+            <Route path="/profile">
+              <Route path="" element={<Profile />}></Route>
+            </Route>
+            <Route path="/errors">
               <Route path="403" element={<p>permission denied!</p>}></Route>
             </Route>
           </Route>

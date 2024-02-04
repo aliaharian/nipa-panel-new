@@ -234,5 +234,8 @@
   "submit2": "تایید",
   "select": "انتخاب کنید",
   "accept": "تایید",
-  "not accept": "عدم تایید"
+  "not accept": "عدم تایید",
+  "profile":{
+    "userInfo":"اطلاعات کاربری"
+  }
 }
