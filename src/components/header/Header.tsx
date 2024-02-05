@@ -93,8 +93,10 @@ const Header = () => {
               icon: <UserEdit />,
               text: "ویرایش پروفایل",
               onClick: () => {
-                navigate("/profile");
                 setOpen(false);
+                setTimeout(() => {
+                  navigate("/profile");
+                }, 10);
               },
             },
             {

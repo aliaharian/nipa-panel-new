@@ -17,8 +17,13 @@ async function confirmOtp(credentials: confirmCodeFormInitialValues) {
     });
     return response?.data;
 }
+async function getUserInfo() {
+    let response = await Api()?.get("/profile");
+    return response?.data;
+  }
 
 export {
     sendOtp,
-    confirmOtp
+    confirmOtp,
+    getUserInfo
 }

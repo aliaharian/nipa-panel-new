@@ -1,7 +1,7 @@
 import transform from "app/utils/transform";
 import SnackbarUtils from "app/utils/SnackbarUtils";
 import { DocumentText, GalleryAdd } from "iconsax-react";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 interface DropzoneProps {
@@ -13,6 +13,8 @@ interface DropzoneProps {
   placeholder?: string;
   fileRef: any;
   disabled?: boolean;
+  children?: ReactNode;
+  className?: string;
 }
 const Dropzone: React.FC<DropzoneProps> = ({
   onFileDrop,
@@ -23,6 +25,8 @@ const Dropzone: React.FC<DropzoneProps> = ({
   placeholder,
   fileRef,
   disabled,
+  children,
+  className,
 }) => {
   const dropzoneRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation(["common", "validations"]);
@@ -107,8 +111,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
         'input[type="file"]'
       ) as HTMLInputElement;
       fileInput.click();
-      console.log('ok')
-
+      console.log("ok");
     }
   };
   return (
@@ -118,7 +121,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleFilePickerClick}
-      className="w-full h-[144px] border border-dashed border-text-400 text-text-500 rounded-[6px] flex items-center justify-center cursor-pointer"
+      className={`w-full h-[144px] border border-dashed border-text-400 text-text-500 rounded-[6px] flex items-center justify-center cursor-pointer ${className}`}
     >
       <input
         type="file"
@@ -126,18 +129,22 @@ const Dropzone: React.FC<DropzoneProps> = ({
         style={{ display: "none" }}
         onChange={handleFileInputChange}
       />
-      <div className="flex items-center justify-center flex-col">
-        <div className="w-[30px] h-[30px]">
-          {imageOnly ? (
-            <GalleryAdd className="w-full h-full text-inherit" />
-          ) : (
-            <DocumentText className="w-full h-full text-inherit" />
-          )}
+      {children ? (
+        children
+      ) : (
+        <div className="flex items-center justify-center flex-col">
+          <div className="w-[30px] h-[30px]">
+            {imageOnly ? (
+              <GalleryAdd className="w-full h-full text-inherit" />
+            ) : (
+              <DocumentText className="w-full h-full text-inherit" />
+            )}
+          </div>
+          <p className="text-[14px] mt-[5px] font-medium text-inherit">
+            {file ? file.name : placeholder || "انتخاب کنید"}
+          </p>
         </div>
-        <p className="text-[14px] mt-[5px] font-medium text-inherit">
-          {file ? file.name : placeholder || "انتخاب کنید"}
-        </p>
-      </div>
+      )}
     </div>
   );
 };
