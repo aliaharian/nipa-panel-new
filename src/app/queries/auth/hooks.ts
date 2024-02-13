@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   confirmCodeFormInitialValues,
   sendCodeFormInitialValues,
 } from "app/models/auth";
-import { confirmOtp, getUserInfo, sendOtp } from "./services";
+import { completeProfile, confirmOtp, getUserInfo, sendOtp } from "./services";
 import { useAppDispatch } from "app/redux/hooks";
 import { setUserLogin, setUserMobile } from "app/redux/users/actions";
 import { useNavigate } from "react-router-dom";
@@ -54,5 +54,19 @@ const useGetUserInfo = () => {
     isPending,
   };
 };
+const useCompleteProfile = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["completeProfile"],
+    mutationFn: completeProfile,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["userInfo"], data);
+    },
+  });
+  return {
+    mutate,
+    loading: isPending,
+  };
+};
 
-export { useSendOtp, useGetUserInfo, useConfirmOtp };
+export { useSendOtp, useGetUserInfo, useConfirmOtp, useCompleteProfile };

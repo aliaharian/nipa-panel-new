@@ -27,6 +27,7 @@
   "type.placeholder": "نوع را وارد کنید",
   "status.required": "وضعیت اجباری است.",
   "name.required": "نام اجباری است.",
+  "lastName.required": "نام خانوادگی اجباری است.",
   "code.required": "کد اجباری است.",
   "roleCode.placeholder": "کد نقش را وارد کنید",
   "roleName.placeholder": "نام نقش را وارد کنید",
