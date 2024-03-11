@@ -52,6 +52,7 @@ const OrderCreateForm = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      console.log("ok",values)
       selectedProduct && handleSaveOrder(selectedProduct, values, addAnother);
     },
   });
@@ -62,9 +63,8 @@ const OrderCreateForm = ({
     );
   }, [fields, formik.values, conditions]);
 
-  const handleSubmitForm = (addAnother?: boolean) => {
-    setAddAnother(addAnother || false);
-
+  const handleSubmitForm = (addAnother: boolean) => {
+    setAddAnother(addAnother);
     formik.handleSubmit(formik.values);
     // if (Object.keys(formik.errors).length === 0) {
     // }
@@ -75,14 +75,12 @@ const OrderCreateForm = ({
 
   //   }
   // }, [formSaved]);
-
   const loadForm = async () => {
     if (selectedProduct?.initialFormId) {
       const response = await formService.getForm(
         selectedProduct?.initialFormId
       );
       setForm(response);
-      console.log("res", response);
 
       let fieldsTmp: any[] = [];
       response.fields?.map((item: any) => {

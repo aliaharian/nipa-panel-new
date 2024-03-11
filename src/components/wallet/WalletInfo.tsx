@@ -46,7 +46,7 @@ const WalletInfo = ({user, page}: WalletInfoProps) => {
             <span className="text-success-primary font-bold text-[20px]">
               {user ?
                   transform.toPersianDigitsPutCommas(
-                      (user.user.wallet?.balance + user.user.wallet.credit)?.toString()
+                      (user.user.wallet?.balance + user.user.wallet?.credit)?.toString()
                       || "")
                   : "---"}
             </span> {t("toman")}

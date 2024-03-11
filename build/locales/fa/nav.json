@@ -1,0 +1,14 @@
+{
+  "dashboard": "داشبورد",
+  "orders": "سفارشات",
+  "finance": "مالی",
+  "maps": "نقشه ها",
+  "production": "تولید",
+  "measurement_and_installation": "اندازه گیری و نصب",
+  "shipping": "ارسال",
+  "products": "محصولات",
+  "basicDatas": "داده های اولیه",
+  "permissions": "دسترسی ها",
+  "walletAndTransactions":"کیف پول و تراکنش ها",
+  "translations": "ترجمه ها"
+}

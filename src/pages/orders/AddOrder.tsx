@@ -71,10 +71,10 @@ const AddOrder = () => {
       count: 1,
       custom: 0,
     };
-    if (addAnother) {
+    // if (addAnother) {
       setOrders([...orders, { ...tmp }]);
       setSelectedOrder(null);
-    }
+    // }
   };
   const handleEditOrder = (item: any) => {
     console.log("order", item);
