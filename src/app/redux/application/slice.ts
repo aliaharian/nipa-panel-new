@@ -3,7 +3,8 @@ import { appSliceModel } from "../../models/redux-models";
 
 const initialAppState: appSliceModel = {
   apiLoading: false,
-  collapseMenu:false
+  collapseMenu: false,
+  openMenu: true,
 };
 
 const appSlice = createSlice({
@@ -15,6 +16,9 @@ const appSlice = createSlice({
     },
     setCollapseMenu: (state, action: PayloadAction<boolean>) => {
       state.collapseMenu = action.payload;
+    },
+    setOpenMenu: (state, action: PayloadAction<boolean>) => {
+      state.openMenu = action.payload;
     },
   },
 });

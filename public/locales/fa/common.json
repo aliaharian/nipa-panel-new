@@ -236,6 +236,7 @@
   "accept": "تایید",
   "not accept": "عدم تایید",
   "saveChanges":"ذخیره تغییرات",
+  "factorExpireDate":"تاریخ اعتبار فاکتور",
   "profile":{
     "userInfo":"اطلاعات کاربری",
     "updateAvatar":"عکس پروفایل خود را به روز کنید",

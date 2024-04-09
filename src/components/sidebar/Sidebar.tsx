@@ -95,7 +95,9 @@ const Sidebar = () => {
     },
     {
       icon: (
-        <Global variant={pathname.includes("translations") ? "Bold" : "Linear"} />
+        <Global
+          variant={pathname.includes("translations") ? "Bold" : "Linear"}
+        />
       ),
       title: t("translations"),
       route: "/translations",
@@ -103,7 +105,9 @@ const Sidebar = () => {
     },
     {
       icon: (
-        <WalletMinus variant={pathname.includes("wallet") ? "Bold" : "Linear"} />
+        <WalletMinus
+          variant={pathname.includes("wallet") ? "Bold" : "Linear"}
+        />
       ),
       title: t("walletAndTransactions"),
       route: "/wallet",
@@ -125,13 +129,14 @@ const Sidebar = () => {
     <div
       className={`flex flex-col ${
         collapseMenu ? "w-[84px]" : "w-[280px]"
-      } h-screen bg-white`}
+      } h-screen bg-white
+      `}
     >
       <div className="flex flex-col flex-1 h-0">
         <div className="flex items-center justify-center h-[80px] px-4 bg-gray-800">
           <Logo />
         </div>
-        <nav className="flex-1 pe-5 py-[13px] ps-0 bg-gray-800">
+        <nav className="flex-1 pe-5 py-[13px] ps-0 bg-gray-800 md:h-[calc(100%-80px)] md:overflow-auto">
           {menus.map(
             (menu, index) =>
               ((menu.permission &&

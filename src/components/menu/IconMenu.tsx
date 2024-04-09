@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { MenuItemProps } from "../../app/models/menu";
-import { Menu } from "@mui/material";
+import { Dialog, Menu, useMediaQuery } from "@mui/material";
 import transform from "app/utils/transform";
 
 type IconMenuProps = {
@@ -22,7 +22,17 @@ export default function IconMenu({
   profileInfo,
 }: IconMenuProps) {
   const user = JSON.parse(localStorage.getItem("nipa_user") || "");
-  return (
+  const isMobile = useMediaQuery("(max-width:767px)");
+  return isMobile ? (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      // className="bg-primary-main"
+      fullWidth
+    >
+      hello
+    </Dialog>
+  ) : (
     <Menu
       id="demo-positioned-menu"
       aria-labelledby="demo-positioned-button"

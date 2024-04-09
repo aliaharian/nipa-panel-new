@@ -224,7 +224,10 @@ const FactorPayments = ({
                 {t("sum")}:{" "}
                 <span className="font-bold text-[18px] text-text-900">
                   {transform.toPersianDigitsPutCommas(
-                    paymentsInfo.factor_sum_price.toString()
+                    (
+                      +paymentsInfo.factor_sum_price +
+                      +paymentsInfo.factor_sum_additional_price
+                    ).toString()
                   )}{" "}
                   {t("toman")}
                 </span>

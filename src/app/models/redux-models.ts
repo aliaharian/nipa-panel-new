@@ -149,6 +149,7 @@ export interface usersSliceModel {
 export interface appSliceModel {
   apiLoading: boolean;
   collapseMenu: boolean;
+  openMenu: boolean;
 }
 
 export interface basicDatasSliceModel {

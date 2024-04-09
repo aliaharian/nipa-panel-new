@@ -129,7 +129,9 @@ const EditFactor = () => {
 
   useEffect(() => {
     if (factorInfo) {
-      setExpireDate(new Date(factorInfo.expire_date));
+      setExpireDate(
+        factorInfo.expire_date ? new Date(factorInfo.expire_date) : null
+      );
       setDescription(factorInfo.description || "");
     }
   }, [factorInfo]);
@@ -384,22 +386,24 @@ const EditFactor = () => {
             <Section>
               <div className="w-full flex items-center justify-between">
                 <div className="w-[340px]">
-                  {transform.checkPermission("can-change-invoice-status") && (
+                  {expireDate && (
+                    // {transform.checkPermission("can-change-invoice-status") && (
+
                     <Datepicker
-                      label="تاریخ سررسید فاکتور"
+                      label={t("factorExpireDate")}
                       name="expireDate"
                       disablePast
-                      // disabled={!factorInfo.meta?.editable}
+                      disabled={true}
                       formik={{
                         values: {
                           expireDate: expireDate,
                         },
-                        setFieldValue: (name: string, value: any) => {
-                          setExpireDate(value);
-                          handleUpdateFactor(value);
-                        },
+                        // setFieldValue: (name: string, value: any) => {
+                        //   setExpireDate(value);
+                        //   handleUpdateFactor(value);
+                        // },
                       }}
-                      placeholder={"تاریخ سررسید فاکتور را وارد کنید"}
+                      // placeholder={"تاریخ اعتبار فاکتور را وارد کنید"}
                     />
                   )}
                 </div>

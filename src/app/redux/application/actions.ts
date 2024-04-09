@@ -1,5 +1,4 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { userModel } from "@models/redux-models";
 import { RootState } from "@redux/store";
 import appSlice from "./slice";
 
@@ -21,4 +20,10 @@ export const setCollapseMenu = (
   };
 };
 
-
+export const setOpenMenu = (
+  open: boolean
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch, getState) => {
+    dispatch(appActions.setOpenMenu(open));
+  };
+};
