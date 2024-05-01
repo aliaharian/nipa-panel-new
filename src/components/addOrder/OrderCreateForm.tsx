@@ -183,7 +183,7 @@ const OrderCreateForm = ({
                 if (mainField) {
                   if (mainField.basic_data_id) {
                     opt = mainField?.basicDataItems?.find(
-                      (x) => x.server_id == cond.form_field_option_id
+                      (x) => x.id == cond.basic_data_item_id
                     );
                   } else {
                     opt = mainField?.options?.find(
