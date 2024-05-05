@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import transform from "app/utils/transform";
 import Button from "components/button/Button";
 import { DocumentText } from "iconsax-react";
-import {useOrdersDetail} from "app/queries/orders/hooks";
+import { useOrdersDetail } from "app/queries/orders/hooks";
 
 const OrderDetails = () => {
   const Navigate = useNavigate();
   let { orderId } = useParams();
   const { t } = useTranslation();
-  const {data:order} = useOrdersDetail(parseInt(orderId||""))
+  const { data: order } = useOrdersDetail(parseInt(orderId || ""));
   return (
     <div className="w-full h-full">
       <Breadcrumb title="جزییات سفارش" handleBack={() => Navigate("/orders")} />
@@ -57,7 +57,9 @@ const OrderDetails = () => {
               </div>
               <div className="flex items-center">
                 <p className="text-[14px] text-text-500">{t("recieverName")}</p>
-                <p className="text-[14px] text-text-700 ms-2">{order.order.customer_name}</p>
+                <p className="text-[14px] text-text-700 ms-2">
+                  {order.order.customer_name}
+                </p>
               </div>
             </div>
             <div className="flex items-center justify-start flex-wrap border-b border-text-400 py-[20px] gap-y-[25px] gap-x-[45px]">
@@ -80,11 +82,14 @@ const OrderDetails = () => {
                               }
                               className="text-white font-bold text-[14px] text-text-700 mx-2 bg-primary-main rounded-[8px] px-3 py-2"
                               key={index}
-                              target="_blank" rel="noreferrer"
+                              target="_blank"
+                              rel="noreferrer"
                             >
                               دانلود پیوست
                             </a>
                           );
+                        } else if (val.form_field.type.type === "datePicker") {
+                          return transform.renderChatTime(transform.dateToTimestamp(val.answer),true,true);
                         } else {
                           let tmp = val.answerObject
                             ? val.answerObject.name || val.answerObject.label

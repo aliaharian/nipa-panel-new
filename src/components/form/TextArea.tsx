@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { useRef } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 type textAreaProps = {
   name: string;
   label: string;
@@ -16,13 +15,16 @@ const TextArea = ({
   inputActions,
 }: textAreaProps) => {
   // console.log("formik.errors?.[name]", formik.values[name]);
-
+  const handleChangeText = (text:string)=>{
+    formik.handleChange({
+      target: {
+        name,
+        value: text,
+        // value: e.target.value.replace(/ /g, ""),
+      },
+    });
+  }
   const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
   return (
     <div
       className={`flex flex-col w-full items-start justify-start ${className}`}
@@ -32,46 +34,12 @@ const TextArea = ({
         {inputActions?.()}
       </div>
 
-      <CKEditor
-        editor={ClassicEditor}
-        data=""
-        onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log("Editor is ready to use!", editor);
-        }}
-        onChange={(event,editor) => {
-          console.log(editor.getData());
-          formik.handleChange({
-            target: {
-              name,
-              value: editor.getData(),
-              // value: e.target.value.replace(/ /g, ""),
-            },
-          });
-        }}
-        onBlur={(event, editor) => {
-          console.log("Blur.", editor);
-        }}
-        onFocus={(event, editor) => {
-          console.log("Focus.", editor);
-        }}
-      />
-
-      {/* <Editor
+      <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue={formik.values?.[name] || ""}
+        // initialValue={formik.values?.[name] || ""}
         id={name}
         value={formik.values?.[name]}
-        onEditorChange={(newText) => {
-          //formik handlechange without mask
-          formik.handleChange({
-            target: {
-              name,
-              value: newText,
-              // value: e.target.value.replace(/ /g, ""),
-            },
-          });
-        }}
+        onEditorChange={handleChangeText}
         apiKey="ajj87dt2tkk9iay286x5uxdjdb685g4spq516y5lacgqlerz"
         init={{
           height: 150,
@@ -90,7 +58,7 @@ const TextArea = ({
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
-      /> */}
+      />
 
       {formik.errors?.[name] && formik.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">

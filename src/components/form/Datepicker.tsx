@@ -31,6 +31,7 @@ const Datepicker = ({
 }: DatePickerProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const { t } = useTranslation("common");
+  console.log(formik.values)
   return (
     <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
       <div
@@ -43,7 +44,7 @@ const Datepicker = ({
           {inputActions?.()}
         </div>
         <MobileDatePicker
-          value={formik.values[name]}
+          value={formik.values?.[name]}
           disablePast={disablePast}
           disabled={disabled}
           onAccept={(newValue) => {

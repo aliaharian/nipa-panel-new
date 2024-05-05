@@ -2,11 +2,11 @@ import { ReactElement } from "react";
 import { FormField } from "../models/form";
 import TextField from "components/form/TextField";
 import TextArea from "components/form/TextArea";
-import UploadFile from "components/form/UploadFile";
 import DropDown from "components/form/Dropdown";
 import CheckboxGroup from "components/form/CheckboxGroup";
 import * as Yup from "yup";
 import UploadGroup from "components/form/UploadGroup";
+import Datepicker from "components/form/Datepicker";
 
 export const renderElement = (
   element: FormField,
@@ -92,18 +92,29 @@ export const renderElement = (
           formik={formikProp}
         />
       );
-    case "checkbox":
-      return (
-        <CheckboxGroup
-          className="group"
-          name={element.name}
-          label={element.label}
-          options={element.basicDataItems || element.options}
-          placeholder={element.placeholder}
-          inputActions={() => fieldActions(element)}
-          formik={formikProp}
-        />
-      );
+      case "checkbox":
+        return (
+          <CheckboxGroup
+            className="group"
+            name={element.name}
+            label={element.label}
+            options={element.basicDataItems || element.options}
+            placeholder={element.placeholder}
+            inputActions={() => fieldActions(element)}
+            formik={formikProp}
+          />
+        );
+        case "datePicker":
+          return (
+            <Datepicker
+              className="group"
+              name={element.name}
+              label={element.label}
+              placeholder={element.placeholder}
+              inputActions={() => fieldActions(element)}
+              formik={formikProp}
+            />
+          );
     default:
       return <p>not defined</p>;
   }

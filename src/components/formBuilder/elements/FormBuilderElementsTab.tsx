@@ -10,6 +10,7 @@ import { Skeleton } from "@mui/material";
 import { FormField } from "app/models/form";
 import DropDown from "components/form/Dropdown";
 import { useTranslation } from "react-i18next";
+import { DateRange } from "@mui/icons-material";
 
 type FormBuilderElementsTabProps = {
   addElement(element: any, id: number, fromRelatedFields?: boolean): void;
@@ -42,6 +43,8 @@ const FormBuilderElementsTab = ({
         return <Dropdown />;
       case "TickSquare":
         return <TickSquare />;
+      case "DatePicker":
+        return <DateRange />;
       default:
         return <TextBlock />;
     }
