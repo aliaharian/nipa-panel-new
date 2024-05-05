@@ -1,7 +1,6 @@
-import { Editor } from "@tinymce/tinymce-react";
 import React, { useRef } from "react";
-import ReactInputMask from "react-input-mask";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 type textAreaProps = {
   name: string;
   label: string;
@@ -33,7 +32,32 @@ const TextArea = ({
         {inputActions?.()}
       </div>
 
-      <Editor
+      <CKEditor
+        editor={ClassicEditor}
+        data=""
+        onReady={(editor) => {
+          // You can store the "editor" and use when it is needed.
+          console.log("Editor is ready to use!", editor);
+        }}
+        onChange={(event,editor) => {
+          console.log(editor.getData());
+          formik.handleChange({
+            target: {
+              name,
+              value: editor.getData(),
+              // value: e.target.value.replace(/ /g, ""),
+            },
+          });
+        }}
+        onBlur={(event, editor) => {
+          console.log("Blur.", editor);
+        }}
+        onFocus={(event, editor) => {
+          console.log("Focus.", editor);
+        }}
+      />
+
+      {/* <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
         initialValue={formik.values?.[name] || ""}
         id={name}
@@ -66,7 +90,7 @@ const TextArea = ({
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
-      />
+      /> */}
 
       {formik.errors?.[name] && formik.touched?.[name] && (
         <p className="text-error-primary text-[10px] mt-1">

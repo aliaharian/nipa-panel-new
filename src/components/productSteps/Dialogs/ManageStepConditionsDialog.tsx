@@ -48,10 +48,8 @@ const ManageStepConditionsDialog = ({
 
     handleClose?.();
     SnackbarUtils.success(t("successSaveProductStepconds"));
-
   };
 
-  console.log("step", selectedField);
   useEffect(() => {
     if (step) {
       setSelectedField({
@@ -72,7 +70,11 @@ const ManageStepConditionsDialog = ({
       step.conditions?.map((condition) => {
         let option = conditionalfields
           .find((x: any) => x.id == condition.form_field_id)
-          ?.options.find((x: any) => x.id == condition.form_field_option_id);
+          ?.options.find(
+            (x: any) =>
+              x.id === condition.form_field_option_id ||
+              x.id === condition.basic_data_item_id
+          )
         if (option) optTmp.push(option);
       });
       setSelectedFieldValue([...optTmp]);
@@ -84,12 +86,9 @@ const ManageStepConditionsDialog = ({
   };
 
   const handleDeleteItem = (item: any) => {
-    console.log("item", item);
     let tmp = [...selectedFieldValue];
     let index = tmp.findIndex((x: any) => x.option == item.option);
     if (index > -1) {
-      console.log("index", index);
-      console.log("selectedFieldValue", tmp);
       let newSelectedFieldValue = selectedFieldValue;
       newSelectedFieldValue.splice(index, 1);
       setSelectedFieldValue([...newSelectedFieldValue]);
@@ -166,7 +165,7 @@ const ManageStepConditionsDialog = ({
                 selectedField &&
                 selectedField?.options?.map((option: any) => {
                   return {
-                    label: <p>{option.label}</p>,
+                    label: <p>{option.label || option.name}</p>,
                     value: option.id,
                   };
                 })
@@ -189,7 +188,7 @@ const ManageStepConditionsDialog = ({
                       key={Math.random() * 10000}
                       className="w-[97px] h-[48px] rounded-[24px] border border-text-400 flex items-center justify-between pe-2 ps-4 me-2"
                     >
-                      <p className="text-[14px]">{item.label}</p>
+                      <p className="text-[14px]">{item.label || item.name}</p>
                       <div
                         onClick={() => handleDeleteItem(item)}
                         className="cursor-pointer"

@@ -89,9 +89,10 @@ export interface productStep {
 }
 export interface condition {
   form_field_id: number;
-  form_field_option_id: number;
+  form_field_option_id?: number;
   id: number;
   next_product_step_id: number;
+  basic_data_item_id?:number;
   product_step_id: number;
 }
 export interface usersSliceModel {
