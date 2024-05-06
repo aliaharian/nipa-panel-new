@@ -9,6 +9,7 @@ export interface FormField {
   label: string;
   id: number;
   answer?:any;
+  width:number;
   setPending?: Dispatch<SetStateAction<boolean>>;
   options?: FormOption[];
   basicDataItems?: FormOption[];

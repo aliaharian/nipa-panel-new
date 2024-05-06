@@ -201,9 +201,9 @@ const FormContent = ({
 
   //   console.log('formElements', formElements)
   return (
-    <div className="px-4 py-6 draggable grid grid-cols-1 gap-9">
+    <div className="px-4 py-6 draggable grid grid-cols-4 gap-y-9 gap-x-4">
       {formElements.length === 0 && !saveFormLoading && (
-        <div className="flex flex-col items-center justify-center mt-8">
+        <div className="col-span-4 flex flex-col items-center justify-center mt-8">
           <div className="w-[50px] rounded-full h-[50px] bg-primary-main text-white flex items-center justify-center">
             <Information />
           </div>
@@ -223,7 +223,11 @@ const FormContent = ({
               e.target.id !== "deleteItem" && handleSelectField(element);
             }}
             draggable
-            className="flex"
+            className={`flex lg:col-span-4
+            ${element.width === 100 ? "col-span-4" : ""}
+            ${element.width === 75 ? "col-span-3" : ""}
+            ${element.width === 50 ? "col-span-2" : ""}
+            `}
           >
             <div
               className={`me-3 cursor-move ${

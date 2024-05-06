@@ -61,6 +61,7 @@ const FormBuilder = () => {
       name: "input" + element + (lastId + 1).toString(),
       placeholder: element + (lastId + 1).toString(),
       label: "عنوان فیلد",
+      width: 100,
       type: element,
       typeId: id,
       required: false,
@@ -293,10 +294,10 @@ const FormBuilder = () => {
   const handleSetFormConditions = (response: any) => {
     let { conditions, fields, id } = response;
     let tmp: Condition[] = [];
-    //group conditions by form_field_id
+    //group conditions by form_field_id and relational_form_field_id
     conditions?.map((item: any) => {
       //find field
-      let field = fields.find((x: any) => x.id == item.form_field_id);
+      let field = fields.find((x: any) => x.id === item.form_field_id);
 
       console.log("fff", field);
       //find field options
@@ -310,7 +311,11 @@ const FormBuilder = () => {
       });
       console.log("fff", options);
 
-      let foundIndex = tmp.findIndex((x: any) => x.field == item.form_field_id);
+      let foundIndex = tmp.findIndex(
+        (x: any) =>
+          x.field === item.form_field_id &&
+          x.relationField === item.relational_form_field_id
+      );
       if (foundIndex > -1) {
         //find specific option
         let option = options?.find(
@@ -364,11 +369,12 @@ const FormBuilder = () => {
     let parseableArray = relatedFields ? form.relatedFields : form.fields;
     console.log("formId", form.id);
     parseableArray?.forEach((item: any) => {
-      console.log("item", item);
+      // console.log("item", item);
       let tmpItem: FormField = {
         id: item.id,
         name: item.name,
         type: item.type?.type,
+        width: item.width || 100,
         typeId: item.form_field_type_id,
         label: item.label,
         placeholder: item.placeholder,
@@ -499,7 +505,7 @@ const FormBuilder = () => {
         if (item.readOnly) {
           validationTmp.readOnly = item.readOnly;
         }
-
+        console.log("condTmp", condTmp);
         return {
           server_id: item.server_id,
           name: item.name,
@@ -516,6 +522,7 @@ const FormBuilder = () => {
           hasOptions: item.options && item.options.length > 0,
           basic_data: item.basic_data,
           basic_data_id: item.basic_data_id || null,
+          width: +item.width || 100,
           // basic_data_id: item.basic_data?.id || null,
 
           basicDataItems:

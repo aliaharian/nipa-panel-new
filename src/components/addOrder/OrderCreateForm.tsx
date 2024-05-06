@@ -52,7 +52,7 @@ const OrderCreateForm = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log("ok",values)
+      console.log("ok", values);
       selectedProduct && handleSaveOrder(selectedProduct, values, addAnother);
     },
   });
@@ -92,6 +92,7 @@ const OrderCreateForm = ({
           type: item.type.type,
           typeId: item.type.id,
           required: item.required,
+          width: item.width,
           id: item.id,
           fromRelatedFields:
             item?.form?.id && item?.form?.id != response?.id ? true : false,
@@ -139,7 +140,7 @@ const OrderCreateForm = ({
       setFields([...fieldsTmp]);
     }
   };
-  console.log('formik',formik.errors)
+  console.log("formik", formik.errors);
   return (
     <form onSubmit={formik.handleSubmit}>
       {pending && <FullscreenLoading />}
@@ -164,7 +165,7 @@ const OrderCreateForm = ({
             },
           }}
         />
-        <div>
+        <div className="grid grid-cols-4 gap-y-9 gap-x-4 mt-[30px]">
           {fields &&
             formik &&
             formik?.values &&
@@ -218,7 +219,14 @@ const OrderCreateForm = ({
               }
 
               return showItem ? (
-                <div className="mt-[30px]" key={index}>
+                <div
+                  className={`flex lg:col-span-4
+                  ${element.width === 100 ? "col-span-4" : ""}
+                  ${element.width === 75 ? "col-span-3" : ""}
+                  ${element.width === 50 ? "col-span-2" : ""}
+                `}
+                  key={index}
+                >
                   {renderElement(element, () => {}, formik)}
                 </div>
               ) : (

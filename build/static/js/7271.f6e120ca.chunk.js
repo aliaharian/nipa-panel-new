@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunknipa_panel_new=self.webpackChunknipa_panel_new||[]).push([[7271],{5342:function(n,e,a){a.r(e);var i=a(184);e.default=function(){return(0,i.jsx)("div",{children:(0,i.jsx)("h1",{children:"Dashboard"})})}}}]);
-//# sourceMappingURL=7271.f6e120ca.chunk.js.map

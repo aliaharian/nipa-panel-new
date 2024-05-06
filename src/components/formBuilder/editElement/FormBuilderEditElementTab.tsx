@@ -30,6 +30,28 @@ type FormBuilderEditElementTabProps = {
   setFromBasicData: (required: boolean) => void;
 };
 
+const SelectWidth = ({ selectedField, _handleUpdateField }: any) => {
+  return (
+    <DropDown
+      className="group mb-[30px]"
+      name={"width"}
+      label={"عرض"}
+      options={["25", "50", "75", "100"].map((data) => {
+        return {
+          label: <p>{data}%</p>,
+          value: data.toString(),
+        };
+      })}
+      placeholder={"انتخاب کنید"}
+      formik={{
+        handleChange: (e: any) => _handleUpdateField(e),
+        values: {
+          width: selectedField.width.toString(),
+        },
+      }}
+    />
+  );
+};
 const FormBuilderEditElementTab = ({
   selectedField,
   handleUpdateField,
@@ -132,166 +154,178 @@ const FormBuilderEditElementTab = ({
   };
   return (
     <div>
-      {!selectedField ? (
-        <p>لطفا یک فیلد را برای ویرایش انتخاب کنید</p>
-      ) : selectedField.fromRelatedFields ? (
-        <p>این فیلد از طریق این فرم قابل ویرایش نمی باشد</p>
-      ) : selectedField.readOnly ? (
-        <p>این فیلد قابل ویرایش نمی باشد</p>
-      ) : (
-        <div className="w-full flex flex-col items-start justify-start px-4">
-          <p className="text-text-450 mb-[20px]">
-            نوع فیلد: {selectedField.type}
-          </p>
-          <TextField
-            className="mb-[30px]"
-            name={"label"}
-            label={"عنوان فیلد"}
-            type="text"
-            placeholder={"عنوان فیلد"}
-            formik={{
-              handleChange: (e: any) => _handleUpdateField(e),
-              values: {
-                label: selectedField.label,
-              },
-            }}
+      <div className="w-full flex flex-col items-start justify-start px-4">
+        {!selectedField ? (
+          <p>لطفا یک فیلد را برای ویرایش انتخاب کنید</p>
+        ) : selectedField.fromRelatedFields ? (
+          <SelectWidth
+            selectedField={selectedField}
+            _handleUpdateField={_handleUpdateField}
           />
-          <TextField
-            className="mb-[30px]"
-            name={"name"}
-            label={"نامک فیلد"}
-            type="text"
-            placeholder={"نامک فیلد"}
-            formik={{
-              handleChange: (e: any) => _handleUpdateField(e),
-              values: {
-                name: selectedField.name,
-              },
-            }}
+        ) : selectedField.readOnly ? (
+          <SelectWidth
+            selectedField={selectedField}
+            _handleUpdateField={_handleUpdateField}
           />
-          <TextField
-            className="group"
-            name={"placeholder"}
-            label={"متن جایگزین"}
-            type="text"
-            placeholder={"متن جایگزین"}
-            formik={{
-              handleChange: (e: any) => _handleUpdateField(e),
-              values: {
-                placeholder: selectedField.placeholder,
-              },
-            }}
-          />
-          <div className="w-full mt-[30px]">
-            <Switch
-              checked={required}
-              setChecked={setRequired}
-              label={"این فیلد اجباری می باشد"}
+        ) : (
+          <>
+            <p className="text-text-450 mb-[20px]">
+              نوع فیلد: {selectedField.type}
+            </p>
+            <SelectWidth
+              selectedField={selectedField}
+              _handleUpdateField={_handleUpdateField}
             />
-          </div>
-
-          {selectedField.options ? (
-            <div className="w-full mt-[30px]">
-              <Switch
-                checked={fromBasicData}
-                setChecked={setFromBasicData}
-                label={t("fromBasicDatas") || ""}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-
-          {selectedField.options && fromBasicData ? (
-            <DropDown
-              className="group mt-[30px]"
-              name={"basic_data"}
-              label={"داده اولیه"}
-              options={
-                basicDatas
-                  ? basicDatas.map((data) => {
-                      return {
-                        label: <p>{data.name}</p>,
-                        value: data.id.toString(),
-                      };
-                    })
-                  : []
-              }
-              placeholder={"انتخاب کنید"}
+            <TextField
+              className="mb-[30px]"
+              name={"label"}
+              label={"عنوان فیلد"}
+              type="text"
+              placeholder={"عنوان فیلد"}
               formik={{
                 handleChange: (e: any) => _handleUpdateField(e),
                 values: {
-                  basic_data: selectedField.basic_data?.id.toString(),
+                  label: selectedField.label,
                 },
               }}
             />
-          ) : (
-            ""
-          )}
-
-          {selectedField.type === "uploadFile" && (
+            <TextField
+              className="mb-[30px]"
+              name={"name"}
+              label={"نامک فیلد"}
+              type="text"
+              placeholder={"نامک فیلد"}
+              formik={{
+                handleChange: (e: any) => _handleUpdateField(e),
+                values: {
+                  name: selectedField.name,
+                },
+              }}
+            />
+            <TextField
+              className="group"
+              name={"placeholder"}
+              label={"متن جایگزین"}
+              type="text"
+              placeholder={"متن جایگزین"}
+              formik={{
+                handleChange: (e: any) => _handleUpdateField(e),
+                values: {
+                  placeholder: selectedField.placeholder,
+                },
+              }}
+            />
             <div className="w-full mt-[30px]">
               <Switch
-                checked={onlyImage}
-                setChecked={setOnlyImage}
-                label={t("onlyImage") || ""}
+                checked={required}
+                setChecked={setRequired}
+                label={"این فیلد اجباری می باشد"}
               />
             </div>
-          )}
 
-          {selectedField.options && !fromBasicData ? (
-            <AddDropdownItemDialog
-              open={openAddDropdownItemDialog}
-              handleClose={_handleCloseAddOptionDialog}
-              field={selectedField}
-              handleAddOption={_handleAddOption}
-              selectedOption={selectedOption}
-            />
-          ) : (
-            ""
-          )}
+            {selectedField.options ? (
+              <div className="w-full mt-[30px]">
+                <Switch
+                  checked={fromBasicData}
+                  setChecked={setFromBasicData}
+                  label={t("fromBasicDatas") || ""}
+                />
+              </div>
+            ) : (
+              ""
+            )}
 
-          {selectedField.options && !fromBasicData ? (
-            <div className="w-full mt-[25px]">
-              {selectedField.options.map(
-                (option: FormOption, index: number) => (
-                  <div
-                    key={index}
-                    className="mb-[10px] h-14 text-[14px] font-semibold flex items-center rounded-[8px] px-[18px] justify-between bg-text-250"
-                  >
-                    <p>{option.label}</p>
-                    <div className="flex">
-                      <div
-                        onClick={() => _handleOpenAddOptionDialog(option)}
-                        className="w-[24px] h-[24px] me-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
-                      >
-                        <Edit2 className="w-[20px] h-[20px]" />
-                      </div>
-                      <div
-                        onClick={() => _handleDeleteOption(option)}
-                        className="w-[24px] h-[24px] ms-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
-                      >
-                        <Trash className="w-[20px] h-[20px]" />
+            {selectedField.options && fromBasicData ? (
+              <DropDown
+                className="group mt-[30px]"
+                name={"basic_data"}
+                label={"داده اولیه"}
+                options={
+                  basicDatas
+                    ? basicDatas.map((data) => {
+                        return {
+                          label: <p>{data.name}</p>,
+                          value: data.id.toString(),
+                        };
+                      })
+                    : []
+                }
+                placeholder={"انتخاب کنید"}
+                formik={{
+                  handleChange: (e: any) => _handleUpdateField(e),
+                  values: {
+                    basic_data: selectedField.basic_data?.id.toString(),
+                  },
+                }}
+              />
+            ) : (
+              ""
+            )}
+
+            {selectedField.type === "uploadFile" && (
+              <div className="w-full mt-[30px]">
+                <Switch
+                  checked={onlyImage}
+                  setChecked={setOnlyImage}
+                  label={t("onlyImage") || ""}
+                />
+              </div>
+            )}
+
+            {selectedField.options && !fromBasicData ? (
+              <AddDropdownItemDialog
+                open={openAddDropdownItemDialog}
+                handleClose={_handleCloseAddOptionDialog}
+                field={selectedField}
+                handleAddOption={_handleAddOption}
+                selectedOption={selectedOption}
+              />
+            ) : (
+              ""
+            )}
+
+            {selectedField.options && !fromBasicData ? (
+              <div className="w-full mt-[25px]">
+                {selectedField.options.map(
+                  (option: FormOption, index: number) => (
+                    <div
+                      key={index}
+                      className="mb-[10px] h-14 text-[14px] font-semibold flex items-center rounded-[8px] px-[18px] justify-between bg-text-250"
+                    >
+                      <p>{option.label}</p>
+                      <div className="flex">
+                        <div
+                          onClick={() => _handleOpenAddOptionDialog(option)}
+                          className="w-[24px] h-[24px] me-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                        >
+                          <Edit2 className="w-[20px] h-[20px]" />
+                        </div>
+                        <div
+                          onClick={() => _handleDeleteOption(option)}
+                          className="w-[24px] h-[24px] ms-1 cursor-pointer hover:bg-text-300 flex items-center justify-center rounded-[4px]"
+                        >
+                          <Trash className="w-[20px] h-[20px]" />
+                        </div>
                       </div>
                     </div>
+                  )
+                )}
+                <div className="w-full flex items-center justify-end">
+                  <div className="w-[111px] mt-[30px] float-left">
+                    <Button
+                      icon={<Add />}
+                      text="افزودن"
+                      onClick={_handleOpenAddOptionDialog}
+                    />
                   </div>
-                )
-              )}
-              <div className="w-full flex items-center justify-end">
-                <div className="w-[111px] mt-[30px] float-left">
-                  <Button
-                    icon={<Add />}
-                    text="افزودن"
-                    onClick={_handleOpenAddOptionDialog}
-                  />
                 </div>
               </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      )}
+            ) : (
+              ""
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
