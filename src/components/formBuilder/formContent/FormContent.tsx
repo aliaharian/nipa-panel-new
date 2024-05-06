@@ -224,9 +224,9 @@ const FormContent = ({
             }}
             draggable
             className={`flex lg:col-span-4
-            ${element.width === 100 ? "col-span-4" : ""}
-            ${element.width === 75 ? "col-span-3" : ""}
-            ${element.width === 50 ? "col-span-2" : ""}
+            ${element.width == 100 ? "col-span-4" : ""}
+            ${element.width == 75 ? "col-span-3" : ""}
+            ${element.width == 50 ? "col-span-2" : ""}
             `}
           >
             <div
