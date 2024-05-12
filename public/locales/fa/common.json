@@ -30,6 +30,7 @@
   "deleteRoleConfirmation": "آیا از حذف فرم اطمینان دارید؟",
   "yes": "بله",
   "no": "خیر",
+  "editStep":"ویرایش مرحله",
   "editRole": "ویرایش نقش",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
   "handleProductSteps": "مدیریت مراحل محصول",

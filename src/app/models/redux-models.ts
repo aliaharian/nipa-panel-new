@@ -81,6 +81,7 @@ export interface productStep {
   product_id: number;
   step_name: string;
   parent_step_id: number;
+  next_step_id:number;
   meta: string;
   parent_id: number;
   forms: any[];

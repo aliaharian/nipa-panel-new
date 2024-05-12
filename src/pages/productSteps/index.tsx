@@ -10,21 +10,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "components/button/Button";
 import { getRolesList } from "app/redux/users/actions";
 import ManageStepPermissionsDialog from "components/productSteps/Dialogs/ManageStepPermissionsDialog";
-import SnackbarUtils from "app/utils/SnackbarUtils";
 import ManageStepConditionsDialog from "components/productSteps/Dialogs/ManageStepConditionsDialog";
 import { Skeleton } from "@mui/material";
+import { useGetAllProductSteps } from "app/queries/productSteps/hooks";
 
 const ProductSteps = () => {
   const { t } = useTranslation(["common", "validations"]);
-  const steps = useAppSelector((state: any) => state.products.productSteps);
+  // const steps = useAppSelector((state: any) => state.products.productSteps);
   const roles = useAppSelector((state: any) => state.users.roles);
   const Navigate = useNavigate();
   let { code } = useParams();
+  const { data: steps } = useGetAllProductSteps(code || "");
+
   const Dispatch = useAppDispatch();
   const [selectedStep, setSelectedStep] = useState<productStep | null>(null);
   const [selectedStepForCondition, setSelectedStepForCondition] =
     useState<productStep | null>(null);
-  // console.log("props", code);
   const columns: any[] = [
     {
       name: t("order"),
@@ -53,14 +54,14 @@ const ProductSteps = () => {
       sortable: false,
     },
     {
-      name: t("displayCondition"),
+      name: t("edit"),
       center: true,
       cell: (row: any) => (
         <div className="w-full px-2">
           <Button
             xs
             bordered
-            text={t("manageCondition")}
+            text={t("editStep")}
             onClick={() => handleManageCondition(row)}
           />
         </div>
@@ -107,7 +108,7 @@ const ProductSteps = () => {
   };
 
   useEffect(() => {
-    Dispatch(productStepsList(code || ""));
+    // Dispatch(productStepsList(code || ""));
     if (roles?.length < 1) {
       Dispatch(getRolesList());
     }
@@ -132,15 +133,15 @@ const ProductSteps = () => {
         flag = false;
       }
     });
-    if (!flag) {
-      SnackbarUtils.error(t("stepHasNoForm"));
-    } else {
-      if (row.forms[0].optionalFields.length == 0) {
-        SnackbarUtils.error(t("stepHasNoOptionalFields"));
-      } else {
-        setSelectedStepForCondition(row);
-      }
-    }
+    // if (!flag) {
+    // SnackbarUtils.error(t("stepHasNoForm"));
+    // } else {
+    // if (row.forms[0].optionalFields.length == 0) {
+    // SnackbarUtils.error(t("stepHasNoOptionalFields"));
+    // } else {
+    setSelectedStepForCondition(row);
+    // }
+    // }
   };
   return (
     <div className="w-full h-full">

@@ -35,7 +35,6 @@ const DropDown = ({
   const [selectedOption, setSelectedOption] = useState(null);
   const handleChange = (e: any) => {
     setSelectedOption(e);
-    console.log("nice car", e);
     // formik?.handleChange(e);
     formik.handleChange({
       target: {
