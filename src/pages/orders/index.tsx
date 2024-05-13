@@ -31,8 +31,8 @@ const Orders = () => {
             // case "completeOrder":
             // Navigate(`/orders/${row.id}/complete`);
             //   break;
-            case "nextStep":
-                Navigate(`/orders/${row.id}/${row.nextStep.id}/showForm`);
+            case "step":
+                Navigate(`/orders/${row.id}/${row.step.id}/showForm`);
                 break;
             case "delete":
                 break;
@@ -108,7 +108,7 @@ const Orders = () => {
 
                     let atLeastOneMatch = false;
                     if (myRoles) {
-                        atLeastOneMatch = row.nextStep?.roles?.some((role: any) =>
+                        atLeastOneMatch = row.step?.roles?.some((role: any) =>
                             myRoles.some((myRole: any) => myRole.slug === role.slug)
                         );
                     }
@@ -119,24 +119,24 @@ const Orders = () => {
                     ) {
                         actions.push({
                             icon: <Additem variant={"Bold"}/>,
-                            text: row.nextStep.step_name || "",
-                            name: "nextStep",
+                            text: row.step.step_name || "",
+                            name: "step",
                         });
                     }
-                    if (data.permissions.canEdit) {
-                        actions.push({
-                            icon: <Edit variant="Bold"/>,
-                            text: t('edit'),
-                            name: "edit",
-                        });
-                    }
-                    if (data.permissions.canDelete) {
-                        actions.push({
-                            icon: <Trash variant={"Bold"}/>,
-                            text: t('delete'),
-                            name: "delete",
-                        });
-                    }
+                    // if (data.permissions.canEdit) {
+                    //     actions.push({
+                    //         icon: <Edit variant="Bold"/>,
+                    //         text: t('edit'),
+                    //         name: "edit",
+                    //     });
+                    // }
+                    // if (data.permissions.canDelete) {
+                    //     actions.push({
+                    //         icon: <Trash variant={"Bold"}/>,
+                    //         text: t('delete'),
+                    //         name: "delete",
+                    //     });
+                    // }
 
                     /////////////////////
                     return (

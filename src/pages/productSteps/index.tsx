@@ -159,7 +159,7 @@ const ProductSteps = () => {
           selectedStepForCondition &&
           steps?.filter(
             (x: productStep) =>
-              x.parent_id != null && x.id > selectedStepForCondition?.id
+              x.parent_id != null
           )
         }
       />

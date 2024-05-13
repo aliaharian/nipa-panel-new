@@ -14,9 +14,15 @@ async function orderDetail(orderId: number) {
     return response?.data;
 }
 
+async function gotoNextStep(orderId: number) {
+    let response = await Api()?.post("/order/" + orderId+"/gotoNextStep");
+    return response?.data;
+}
+
 
 export {
     ordersList,
     orderGroupsList,
-    orderDetail
+    orderDetail,
+    gotoNextStep
 }

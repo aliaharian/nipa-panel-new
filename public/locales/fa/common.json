@@ -32,6 +32,8 @@
   "no": "خیر",
   "editStep":"ویرایش مرحله",
   "editRole": "ویرایش نقش",
+  "acceptForNextStep":"تایید برای مرحله بعد",
+  "rejectOrder":"رد سفارش",
   "deleteProductSuccess": "محصول با موفقیت حذف شد",
   "handleProductSteps": "مدیریت مراحل محصول",
   "order": "ترتیب",
