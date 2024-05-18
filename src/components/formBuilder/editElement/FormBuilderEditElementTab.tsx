@@ -215,13 +215,46 @@ const FormBuilderEditElementTab = ({
                 },
               }}
             />
-            <div className="w-full mt-[30px]">
-              <Switch
-                checked={required}
-                setChecked={setRequired}
-                label={"این فیلد اجباری می باشد"}
+            {selectedField.type === "alert" ? (
+              <DropDown
+                className="group mt-[30px]"
+                name={"alertType"}
+                label={"نوع"}
+                options={[
+                  {
+                    label: <p>اطلاعیه</p>,
+                    value: "info",
+                  },
+                  {
+                    label: <p>موفقیت آمیز</p>,
+                    value: "success",
+                  },
+                  {
+                    label: <p>هشدار</p>,
+                    value: "warning",
+                  },
+                  {
+                    label: <p>اخطار</p>,
+                    value: "error",
+                  },
+                ]}
+                placeholder={"انتخاب کنید"}
+                formik={{
+                  handleChange: (e: any) => _handleUpdateField(e),
+                  values: {
+                    alertType: selectedField.alertType,
+                  },
+                }}
               />
-            </div>
+            ) : (
+              <div className="w-full mt-[30px]">
+                <Switch
+                  checked={required}
+                  setChecked={setRequired}
+                  label={"این فیلد اجباری می باشد"}
+                />
+              </div>
+            )}
 
             {selectedField.options ? (
               <div className="w-full mt-[30px]">

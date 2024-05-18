@@ -120,6 +120,7 @@ const ShowOrderStepForm = () => {
         answer: item.userAnswer,
         id: item.id,
         width: item.width,
+        alertType:item.alert_type,
         fromRelatedFields:
           item?.form?.id && item?.form?.id != response?.id ? true : false,
       };
@@ -265,7 +266,7 @@ const ShowOrderStepForm = () => {
                   `}
                         key={index}
                       >
-                        {renderElement(element, () => {}, formik)}
+                        {renderElement(element, () => {return <></>}, formik)}
                       </div>
                     ) : (
                       <></>

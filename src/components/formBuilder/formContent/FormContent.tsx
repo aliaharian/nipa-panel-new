@@ -1,13 +1,7 @@
 import { Copy, HambergerMenu, Information } from "iconsax-react";
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { FormField } from "../../../app/models/form";
-import TextField from "../../form/TextField";
-import { Close, HourglassEmptyOutlined } from "@mui/icons-material";
-import DropDown from "../../form/Dropdown";
-import Checkbox from "../../form/Checkbox";
-import CheckboxGroup from "../../form/CheckboxGroup";
-import TextArea from "../../form/TextArea";
-import UploadFile from "../../form/UploadFile";
+import { Close } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { renderElement } from "app/utils/FormActions";
 
@@ -34,7 +28,7 @@ const FormContent = ({
 }: FormContentProps) => {
   const { t } = useTranslation(["common", "validations"]);
   console.log("el", formElements);
-  
+
   const fieldActions = (element: FormField) => {
     return (
       <div className="flex">

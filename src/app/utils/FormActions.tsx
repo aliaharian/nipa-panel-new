@@ -8,10 +8,13 @@ import * as Yup from "yup";
 import UploadGroup from "components/form/UploadGroup";
 import Datepicker from "components/form/Datepicker";
 import Timepicker from "components/form/Timepicker";
+import Alert from "components/alert/Alert";
 
 export const renderElement = (
   element: FormField,
-  fieldActions: (element: any) => void = (element: any) => {},
+  fieldActions: (element: any) => ReactElement = (element: any) => {
+    return <></>;
+  },
   formik?: any,
   mock?: boolean
 ): ReactElement => {
@@ -60,15 +63,6 @@ export const renderElement = (
       );
     case "uploadFile":
       return (
-        // <UploadFile
-        //   className="group"
-        //   name={element.name}
-        //   label={element.label}
-        //   imageOnly={element.onlyImage}
-        //   placeholder={element.placeholder}
-        //   inputActions={() => fieldActions(element)}
-        //   formik={formikProp}
-        // />
         <UploadGroup
           className="group"
           name={element.name}
@@ -126,6 +120,19 @@ export const renderElement = (
           inputActions={() => fieldActions(element)}
           formik={formikProp}
         />
+      );
+    case "alert":
+      return (
+        <div className={`flex flex-col w-full items-start justify-start group`}>
+          <div className="text-xs mb-2 flex justify-between w-full">
+            {fieldActions(element)}
+          </div>
+          <Alert
+            text={element.placeholder}
+            title={element.label}
+            type={element.alertType || "info"} //success-warning-error-info
+          />
+        </div>
       );
     default:
       return <p>not defined</p>;

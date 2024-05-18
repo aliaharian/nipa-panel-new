@@ -377,6 +377,7 @@ const FormBuilder = () => {
         width: item.width || 100,
         typeId: item.form_field_type_id,
         label: item.label,
+        alertType: item.alert_type,
         placeholder: item.placeholder,
         required: item.required,
         basic_data: item.basic_data,
@@ -522,6 +523,7 @@ const FormBuilder = () => {
           hasOptions: item.options && item.options.length > 0,
           basic_data: item.basic_data,
           basic_data_id: item.basic_data_id || null,
+          alert_type: item.alertType || null,
           width: +item.width || 100,
           // basic_data_id: item.basic_data?.id || null,
 

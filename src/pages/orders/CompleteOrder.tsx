@@ -82,6 +82,7 @@ const CompleteOrder = () => {
         label: item.label,
         type: item.type.type,
         typeId: item.type.id,
+        alertType:item.alert_type,
         required: item.required,
         answer: item.userAnswer,
         id: item.id,
@@ -207,7 +208,7 @@ const CompleteOrder = () => {
 
                   return showItem ? (
                     <div className="mt-[30px]" key={index}>
-                      {renderElement(element, () => {}, formik)}
+                      {renderElement(element, () => {return <></>}, formik)}
                     </div>
                   ) : (
                     <></>

@@ -93,6 +93,7 @@ const OrderCreateForm = ({
           typeId: item.type.id,
           required: item.required,
           width: item.width,
+          alertType:item.alert_type,
           id: item.id,
           fromRelatedFields:
             item?.form?.id && item?.form?.id != response?.id ? true : false,
@@ -227,7 +228,7 @@ const OrderCreateForm = ({
                 `}
                   key={index}
                 >
-                  {renderElement(element, () => {}, formik)}
+                  {renderElement(element, () => {return <></>}, formik)}
                 </div>
               ) : (
                 <></>

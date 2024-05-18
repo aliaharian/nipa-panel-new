@@ -21,6 +21,7 @@ export interface FormField {
   fromRelatedFields?: boolean;
   noBadge?: boolean;
   readOnly?: boolean;
+  alertType?:string;
 }
 
 export interface FormOption {
