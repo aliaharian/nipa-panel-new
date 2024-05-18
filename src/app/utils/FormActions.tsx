@@ -7,6 +7,7 @@ import CheckboxGroup from "components/form/CheckboxGroup";
 import * as Yup from "yup";
 import UploadGroup from "components/form/UploadGroup";
 import Datepicker from "components/form/Datepicker";
+import Timepicker from "components/form/Timepicker";
 
 export const renderElement = (
   element: FormField,
@@ -21,7 +22,7 @@ export const renderElement = (
         setFieldValue: () => {},
         values: null,
       };
-      // console.log("element",element)
+  // console.log("element",element)
   switch (element.type) {
     case "text":
       return (
@@ -92,29 +93,40 @@ export const renderElement = (
           formik={formikProp}
         />
       );
-      case "checkbox":
-        return (
-          <CheckboxGroup
-            className="group"
-            name={element.name}
-            label={element.label}
-            options={element.basicDataItems || element.options}
-            placeholder={element.placeholder}
-            inputActions={() => fieldActions(element)}
-            formik={formikProp}
-          />
-        );
-        case "datePicker":
-          return (
-            <Datepicker
-              className="group"
-              name={element.name}
-              label={element.label}
-              placeholder={element.placeholder}
-              inputActions={() => fieldActions(element)}
-              formik={formikProp}
-            />
-          );
+    case "checkbox":
+      return (
+        <CheckboxGroup
+          className="group"
+          name={element.name}
+          label={element.label}
+          options={element.basicDataItems || element.options}
+          placeholder={element.placeholder}
+          inputActions={() => fieldActions(element)}
+          formik={formikProp}
+        />
+      );
+    case "datePicker":
+      return (
+        <Datepicker
+          className="group"
+          name={element.name}
+          label={element.label}
+          placeholder={element.placeholder}
+          inputActions={() => fieldActions(element)}
+          formik={formikProp}
+        />
+      );
+    case "timePicker":
+      return (
+        <Timepicker
+          className="group"
+          name={element.name}
+          label={element.label}
+          placeholder={element.placeholder}
+          inputActions={() => fieldActions(element)}
+          formik={formikProp}
+        />
+      );
     default:
       return <p>not defined</p>;
   }

@@ -113,9 +113,9 @@ const Orders = () => {
                         );
                     }
                     if (
-                        atLeastOneMatch
+                        atLeastOneMatch && 
                         // data.permissions.canCompelete &&
-                        // row.step.global_step.description === "initialOrder"
+                        row.step.global_step.description !== "initialOrder"
                     ) {
                         actions.push({
                             icon: <Additem variant={"Bold"}/>,

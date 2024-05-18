@@ -17,6 +17,7 @@ type ButtonProps = {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
+  btnType?: "button" | "submit" | "reset";
 };
 const Button = ({
   type,
@@ -32,7 +33,8 @@ const Button = ({
   gray,
   disabled,
   loading,
-  className
+  className,
+  btnType,
 }: ButtonProps) => {
   const classNames = `w-full ${className} ${
     xs ? "h-[36px]" : sm ? "h-[38px]" : "h-12"
@@ -57,21 +59,37 @@ const Button = ({
       {href && (
         <Link to={href} className={classNames}>
           {!after && handleIcon()}
-          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
+          {loading ? (
+            <CircularProgress className="!text-white !w-[20px] !h-[20px]" />
+          ) : (
+            text
+          )}
           {after && handleIcon()}
         </Link>
       )}
       {type && (
         <button className={classNames} type={type}>
           {!after && handleIcon()}
-          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
+          {loading ? (
+            <CircularProgress className="!text-white !w-[20px] !h-[20px]" />
+          ) : (
+            text
+          )}
           {after && handleIcon()}
         </button>
       )}
       {onClick && (
-        <button className={classNames} onClick={onClick}>
+        <button
+          type={btnType || "button"}
+          className={classNames}
+          onClick={onClick}
+        >
           {!after && handleIcon()}
-          {loading ? <CircularProgress className="!text-white !w-[20px] !h-[20px]"/> : text}
+          {loading ? (
+            <CircularProgress className="!text-white !w-[20px] !h-[20px]" />
+          ) : (
+            text
+          )}
           {after && handleIcon()}
         </button>
       )}

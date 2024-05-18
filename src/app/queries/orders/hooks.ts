@@ -4,6 +4,7 @@ import {
   ordersList,
   orderDetail,
   gotoNextStep,
+  getStepInfo,
 } from "./services";
 
 const useOrderGroupsList = () => {
@@ -50,5 +51,27 @@ const useGotoNextStep = () => {
     loading: isPending,
   };
 };
+const useGetStepInfo = ({
+  stepId,
+  orderId,
+}: {
+  stepId: number;
+  orderId: number;
+}) => {
+  const { data } = useQuery({
+    queryKey: ["stepInfo", { stepId, orderId }],
+    queryFn: () => getStepInfo({ stepId, orderId }),
+    staleTime: 0,
+  });
+  return {
+    data,
+  };
+};
 
-export { useOrderGroupsList, useOrdersList, useOrdersDetail, useGotoNextStep };
+export {
+  useOrderGroupsList,
+  useOrdersList,
+  useOrdersDetail,
+  useGotoNextStep,
+  useGetStepInfo,
+};

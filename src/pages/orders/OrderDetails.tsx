@@ -167,7 +167,7 @@ const OrderDetails = () => {
                 {order.order.can_reject && (
                   <div className="w-[150px]">
                     <Button
-                      className="bg-error-primary"
+                      className="!bg-error-primary"
                       disabled={loading}
                       loading={loading}
                       text={t("rejectOrder")}

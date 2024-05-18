@@ -1,4 +1,4 @@
-import { ExportCurve, TextBlock, TickSquare } from "iconsax-react";
+import { Clock, ExportCurve, TextBlock, TickSquare } from "iconsax-react";
 import FormElementItem from "./FormElementItem";
 import { ReactComponent as Frame } from "../../../assets/icons/Frame.svg";
 import { ReactComponent as NumericField } from "../../../assets/icons/NumericField.svg";
@@ -45,6 +45,8 @@ const FormBuilderElementsTab = ({
         return <TickSquare />;
       case "DatePicker":
         return <DateRange />;
+      case "TimePicker":
+        return <Clock />;
       default:
         return <TextBlock />;
     }
@@ -71,7 +73,7 @@ const FormBuilderElementsTab = ({
               <Skeleton
                 key={index}
                 variant="rounded"
-                width={80}
+                width={"100%"}
                 height={80}
                 animation="wave"
               />
