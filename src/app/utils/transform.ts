@@ -4,25 +4,40 @@ import i18n from "i18n";
 export const pluralize = (count: number, noun: string, suffix = "s") =>
   `${count} ${noun}${count !== 1 ? suffix : ""}`;
 
-export const renderChatTime = (timestamp: number, percise?: boolean, onlyDate?: boolean) => {
+export const renderChatTime = (
+  timestamp: number,
+  percise?: boolean,
+  onlyDate?: boolean,
+  onlyTime?: boolean
+) => {
   let now = Math.floor(Date.now());
   if (percise) {
     if (onlyDate) {
-      return new Date(timestamp).toLocaleDateString("fa-IR")
+      return new Date(timestamp).toLocaleDateString("fa-IR");
+    }
+    if (onlyTime) {
+      return new Date(timestamp).toLocaleTimeString("fa-IR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     }
     //format :: ddmmyy h:i no seconds
-    return new Date(timestamp).toLocaleDateString("fa-IR") + " , " + new Date(timestamp).toLocaleTimeString("fa-IR").slice(0, 5);
+    return (
+      new Date(timestamp).toLocaleDateString("fa-IR") +
+      " , " +
+      new Date(timestamp).toLocaleTimeString("fa-IR").slice(0, 5)
+    );
     //return new Date(timestamp).toLocaleDateString("fa-IR") + " " + new Date(timestamp).toLocaleTimeString("fa-IR");
   }
   let diff = Math.floor((now - timestamp) / 1000);
   if (diff < 60) {
     return i18n.t("fewSecondsAgo");
   } else if (diff < 3600) {
-    return Math.floor(diff / 60) + " " + i18n.t("minutesAgo")
+    return Math.floor(diff / 60) + " " + i18n.t("minutesAgo");
   } else if (diff < 86400) {
-    return Math.floor(diff / 3600) + " " + i18n.t("hoursAgo")
+    return Math.floor(diff / 3600) + " " + i18n.t("hoursAgo");
   } else if (diff < 604800) {
-    return Math.floor(diff / 86400) + " " + i18n.t("daysAgo")
+    return Math.floor(diff / 86400) + " " + i18n.t("daysAgo");
   } else {
     return new Date(timestamp).toLocaleDateString("fa-IR");
   }
@@ -125,55 +140,53 @@ const toPersianDigitsPutCommas = (value: any, force?: boolean) => {
   } else {
     return val;
   }
-}
+};
 
 const convetToEnglishDigitsRemoveCommas = (value: any) => {
   const charCodeZero = "۰".charCodeAt(0);
   return String(value).replace(/[۰-۹]/g, (w) =>
     String.fromCharCode(w.charCodeAt(0) - charCodeZero + 48)
   );
-}
+};
 function toISOLocal(d: Date) {
-  var z = (n: any) => ('0' + n).slice(-2);
-  var zz = (n: any) => ('00' + n).slice(-3);
+  var z = (n: any) => ("0" + n).slice(-2);
+  var zz = (n: any) => ("00" + n).slice(-3);
   var off = d.getTimezoneOffset();
-  var sign = off > 0 ? '-' : '+';
+  var sign = off > 0 ? "-" : "+";
   off = Math.abs(off);
 
-  return d.getFullYear() + '-'
-    + z(d.getMonth() + 1) + '-' +
-    z(d.getDate())
+  return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
 
   //  + 'T' +
-  //  z(d.getHours()) + ':'  + 
+  //  z(d.getHours()) + ':'  +
   //  z(d.getMinutes()) + ':' +
   //  z(d.getSeconds()) + '.' +
   //  zz(d.getMilliseconds()) +
-  //  sign + z(off/60|0) + ':' + z(off%60); 
+  //  sign + z(off/60|0) + ':' + z(off%60);
 }
 
 const renderStatusStyle = (type: string) => {
   let style;
   switch (type) {
     case "success":
-      style = "bg-success-secondary text-success-primary "
+      style = "bg-success-secondary text-success-primary ";
       break;
     case "warning":
-      style = "bg-warning-secondary text-warning-text "
+      style = "bg-warning-secondary text-warning-text ";
       break;
     case "error":
-      style = "bg-error-secondary text-error-primary "
+      style = "bg-error-secondary text-error-primary ";
       break;
     case "info":
-      style = "bg-info-secondary text-info-primary "
+      style = "bg-info-secondary text-info-primary ";
       break;
     default:
-      style = "bg-text-300 text-text-600 "
+      style = "bg-text-300 text-text-600 ";
       break;
   }
 
   return style;
-}
+};
 export default {
   toISOLocal,
   pluralize,
@@ -187,5 +200,5 @@ export default {
   dateToTimestamp,
   renderChatTime,
   checkPermission,
-  convetToEnglishDigitsRemoveCommas
+  convetToEnglishDigitsRemoveCommas,
 };

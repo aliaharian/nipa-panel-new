@@ -55,7 +55,9 @@ const OrderDetails = () => {
             <div className="px-[20px] py-[30px] flex items-center justify-between border-b border-text-400 w-full">
               <div className="flex items-center gap-4">
                 {t("orderCode")} : {orderId}
-                <div className="px-3 py-2 bg-primary-main rounded-xl text-white">مرجله جاری: {order.order.step.step_name}</div>
+                <div className="px-3 py-2 bg-primary-main rounded-xl text-white">
+                  مرجله جاری: {order.order.step.step_name}
+                </div>
               </div>
               <div className="w-[150px]">
                 <Button
@@ -135,6 +137,15 @@ const OrderDetails = () => {
                             return transform.renderChatTime(
                               transform.dateToTimestamp(val.answer),
                               true,
+                              true
+                            );
+                          } else if (
+                            val.form_field.type.type === "timePicker"
+                          ) {
+                            return transform.renderChatTime(
+                              transform.dateToTimestamp(val.answer),
+                              true,
+                              false,
                               true
                             );
                           } else {
