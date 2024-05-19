@@ -22,6 +22,8 @@ import {
 import WarningPopup from "components/popup/WarningPopup";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddUserAnswer } from "app/queries/forms/hooks";
+import Accordion from "components/accordion/Accordion";
+import transform from "app/utils/transform";
 
 const ShowOrderStepForm = () => {
   const Navigate = useNavigate();
@@ -120,7 +122,7 @@ const ShowOrderStepForm = () => {
         answer: item.userAnswer,
         id: item.id,
         width: item.width,
-        alertType:item.alert_type,
+        alertType: item.alert_type,
         fromRelatedFields:
           item?.form?.id && item?.form?.id != response?.id ? true : false,
       };
@@ -201,6 +203,63 @@ const ShowOrderStepForm = () => {
           <div
             className={`w-full bg-white border border-text-300 h-min rounded-[6px] px-[20px] py-[24px]`}
           >
+            <div>
+              {stepInfo?.step?.prevSteps?.map((step: any) => {
+                return (
+                  <Accordion
+                    key={step.id}
+                    title={`اطلاعات مربوط به فرم ${step.step_name}`}
+                  >
+                    <div className="w-full grid grid-cols-4 gap-3 p-4">
+                    {step.answers?.filter((field:any)=>field.form_field_type!=="alert").map((data: any, index: number) => {
+                      return (
+                        <div className="flex items-center" key={index}>
+                          <p className="text-[14px] text-text-500">
+                            {data.label}:
+                          </p>
+                          <p className="text-[14px] text-text-700 ms-2">
+                            {data.form_field_type === "uploadFile" ? (
+                              <a
+                                href={
+                                  process.env.REACT_APP_BASE_URL +
+                                  "/files/" +
+                                  data.answer
+                                }
+                                className="text-white font-bold text-[14px] text-text-700 mx-2 bg-primary-main rounded-[8px] px-3 py-2"
+                                key={index}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                دانلود پیوست
+                              </a>
+                            ) : data.form_field_type === "datePicker" ? (
+                              transform.renderChatTime(
+                                transform.dateToTimestamp(data.answer),
+                                true,
+                                true
+                              )
+                            ) : data.form_field_type === "timePicker" ? (
+                              transform.renderChatTime(
+                                transform.dateToTimestamp(data.answer),
+                                true,
+                                false,
+                                true
+                              )
+                            ) : data.answerObject ? (
+                              data.answerObject.name || data.answerObject.label
+                            ) : (
+                              data.answer
+                            )}
+                          </p>
+                        </div>
+                      );
+                    })}
+                    </div>
+                   
+                  </Accordion>
+                );
+              })}
+            </div>
             <form onSubmit={formik.handleSubmit}>
               {pending && <FullscreenLoading />}
               <div className="grid grid-cols-4 gap-y-9 gap-x-4 mt-[30px]">
@@ -266,7 +325,13 @@ const ShowOrderStepForm = () => {
                   `}
                         key={index}
                       >
-                        {renderElement(element, () => {return <></>}, formik)}
+                        {renderElement(
+                          element,
+                          () => {
+                            return <></>;
+                          },
+                          formik
+                        )}
                       </div>
                     ) : (
                       <></>
