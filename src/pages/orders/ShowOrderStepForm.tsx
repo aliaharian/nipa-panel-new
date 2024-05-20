@@ -24,6 +24,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAddUserAnswer } from "app/queries/forms/hooks";
 import Accordion from "components/accordion/Accordion";
 import transform from "app/utils/transform";
+import { Skeleton } from "@mui/material";
 
 const ShowOrderStepForm = () => {
   const Navigate = useNavigate();
@@ -195,70 +196,120 @@ const ShowOrderStepForm = () => {
         }}
       />
       <div className="w-full h-full">
-        <Breadcrumb
-          title={stepInfo?.step?.step_name || ""}
-          handleBack={() => Navigate("/orders")}
-        />
+        {/* {!stepInfo && <FullscreenLoading />} */}
+        {stepInfo?.step?.step_name ? (
+          <Breadcrumb
+            title={stepInfo?.step?.step_name || ""}
+            handleBack={() => Navigate("/orders")}
+          />
+        ) : (
+          <div className="flex gap-4 mb-4">
+            <Skeleton
+              width={24}
+              height={24}
+              variant="rounded"
+              animation="wave"
+            />
+            <Skeleton
+              width={140}
+              height={24}
+              variant="rounded"
+              animation="wave"
+            />
+          </div>
+        )}
         <div className={`w-full flex gap-x-[20px]`}>
           <div
             className={`w-full bg-white border border-text-300 h-min rounded-[6px] px-[20px] py-[24px]`}
           >
             <div>
-              {stepInfo?.step?.prevSteps?.map((step: any) => {
-                return (
-                  <Accordion
-                    key={step.id}
-                    title={`اطلاعات مربوط به فرم ${step.step_name}`}
-                  >
-                    <div className="w-full grid grid-cols-4 gap-3 p-4">
-                    {step.answers?.filter((field:any)=>field.form_field_type!=="alert").map((data: any, index: number) => {
-                      return (
-                        <div className="flex items-center" key={index}>
-                          <p className="text-[14px] text-text-500">
-                            {data.label}:
-                          </p>
-                          <p className="text-[14px] text-text-700 ms-2">
-                            {data.form_field_type === "uploadFile" ? (
-                              <a
-                                href={
-                                  process.env.REACT_APP_BASE_URL +
-                                  "/files/" +
-                                  data.answer
-                                }
-                                className="text-white font-bold text-[14px] text-text-700 mx-2 bg-primary-main rounded-[8px] px-3 py-2"
-                                key={index}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                دانلود پیوست
-                              </a>
-                            ) : data.form_field_type === "datePicker" ? (
-                              transform.renderChatTime(
-                                transform.dateToTimestamp(data.answer),
-                                true,
-                                true
-                              )
-                            ) : data.form_field_type === "timePicker" ? (
-                              transform.renderChatTime(
-                                transform.dateToTimestamp(data.answer),
-                                true,
-                                false,
-                                true
-                              )
-                            ) : data.answerObject ? (
-                              data.answerObject.name || data.answerObject.label
-                            ) : (
-                              data.answer
-                            )}
-                          </p>
-                        </div>
-                      );
-                    })}
-                    </div>
-                   
-                  </Accordion>
-                );
-              })}
+              {stepInfo?.step?.prevSteps &&
+              fields.length > 0 &&
+              formik &&
+              formik?.values ? (
+                stepInfo.step.prevSteps.map((step: any) => {
+                  return (
+                    <Accordion
+                      key={step.id}
+                      title={`اطلاعات مربوط به فرم ${step.step_name}`}
+                    >
+                      <div className="w-full grid grid-cols-4 gap-3 p-4">
+                        {step.answers
+                          ?.filter(
+                            (field: any) => field.form_field_type !== "alert"
+                          )
+                          .map((data: any, index: number) => {
+                            return (
+                              <div className="flex items-center" key={index}>
+                                <p className="text-[14px] text-text-500">
+                                  {data.label}:
+                                </p>
+                                <p className="text-[14px] text-text-700 ms-2">
+                                  {data.form_field_type === "uploadFile" ? (
+                                    <a
+                                      href={
+                                        process.env.REACT_APP_BASE_URL +
+                                        "/files/" +
+                                        data.answer
+                                      }
+                                      className="text-white font-bold text-[14px] text-text-700 mx-2 bg-primary-main rounded-[8px] px-3 py-2"
+                                      key={index}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      دانلود پیوست
+                                    </a>
+                                  ) : data.form_field_type === "datePicker" ? (
+                                    transform.renderChatTime(
+                                      transform.dateToTimestamp(data.answer),
+                                      true,
+                                      true
+                                    )
+                                  ) : data.form_field_type === "timePicker" ? (
+                                    transform.renderChatTime(
+                                      transform.dateToTimestamp(data.answer),
+                                      true,
+                                      false,
+                                      true
+                                    )
+                                  ) : data.answerObject ? (
+                                    data.answerObject.name ||
+                                    data.answerObject.label
+                                  ) : (
+                                    data.answer
+                                  )}
+                                </p>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </Accordion>
+                  );
+                })
+              ) : (
+                <div className="w-full flex flex-col gap-4">
+                  <Skeleton
+                    width={"100%"}
+                    height={72}
+                    variant="rounded"
+                    animation="wave"
+                  />
+                  <div className="w-full grid grid-cols-2 gap-4">
+                    <Skeleton
+                      width={"100%"}
+                      height={40}
+                      variant="rounded"
+                      animation="wave"
+                    />
+                    <Skeleton
+                      width={"100%"}
+                      height={40}
+                      variant="rounded"
+                      animation="wave"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <form onSubmit={formik.handleSubmit}>
               {pending && <FullscreenLoading />}
@@ -340,14 +391,26 @@ const ShowOrderStepForm = () => {
               </div>
               <div className="mt-[32px] flex items-center gap-4">
                 <div className="w-[400px]">
-                  <Button
-                    after
-                    btnType="submit"
-                    onClick={handleSubmitForm}
-                    text={t("submitForm2")}
-                    disabled={loading}
-                    loading={loading}
-                  />
+                  {stepInfo?.step?.prevSteps &&
+                  fields.length > 0 &&
+                  formik &&
+                  formik?.values ? (
+                    <Button
+                      after
+                      btnType="submit"
+                      onClick={handleSubmitForm}
+                      text={t("submitForm2")}
+                      disabled={loading}
+                      loading={loading}
+                    />
+                  ) : (
+                    <Skeleton
+                      width={"100%"}
+                      height={40}
+                      variant="rounded"
+                      animation="wave"
+                    />
+                  )}
                 </div>
                 {formSubmitted && (
                   <div className="w-[220px]">
